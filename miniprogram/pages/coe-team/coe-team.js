@@ -1,21 +1,54 @@
 // miniprogram/pages/coe-team/coe-team.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-    roomTitle: '123123'
+    shopList: [{
+      name: '1221深度体验密室'
+    }, {
+      name: '关你鬼室'
+    }, {
+      name: '你敢脱吗'
+    }],
+    shopIndex: -1,
+
+    topicList: [{
+      name: '精神病怨',
+    }, {
+      name: '洗剪吹'
+    }, {
+      name: '监禁'
+    }],
+    topicIndex: -1,
+
+    date: '',
+
+    time: ''
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function(options) {
-
+    
   },
 
-  doSetData(e, key) {
-    console.log(e.detail.value);
+  bindShopChange(e) {
+    this.setData({
+      shopIndex: e.detail.value
+    });
+  },
+
+  bindTopicChange(e) {
+    this.setData({
+      topicIndex: e.detail.value
+    });
+  },
+
+  bindDateChange(e) {
+    this.setData({
+      date: e.detail.value
+    });
+  },
+
+  bindTimeChange(e) {
+    this.setData({
+      time: e.detail.value
+    });
   }
 })

@@ -1,1 +1,3 @@
-/* miniprogram/pages/coe-team/coe-team.wxss */
+.coe-team-form {
+	padding-top: 0;
+}
