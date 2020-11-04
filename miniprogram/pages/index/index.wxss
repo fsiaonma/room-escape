@@ -1,0 +1,65 @@
+/**index.wxss**/
+
+page {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.container {
+  width: 100%;
+}
+
+.userinfo {
+  position: fixed;
+  margin: 0 auto;
+  width: 100%;
+  background-color: white;
+}
+
+.userinfo-nickname-wrapper {
+  width: 100%;
+}
+
+.userinfo-nickname {
+  width: 100% !important;
+}
+
+.userinfo-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+  background-size: cover;
+  background-color: white;
+}
+
+.userinfo-avatar[size] {
+  width: 100rpx;
+}
+
+.userinfo-avatar:after {
+  border: none;
+}
+
+.team-list {
+  margin-top: 250rpx;
+  margin-bottom: 100rpx;
+}
+
+.team-item {
+  border: 1px solid black;
+  margin: 30rpx;
+}
+
+.create-btn-panel {
+  width: 100%;
+  height: 40rpx;
+}
+  
+.create-btn {
+  position: fixed;
+  bottom: 0;
+  width: 100% !important; 
+}

@@ -1,0 +1,50 @@
+<view class="page-body">
+  <view class="page-section">
+    <view class="weui-cells__title">密室主题</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input
+          value="{{roomTitle}}"
+          bindinput="doSetData"
+          class="weui-input"
+          auto-focus/>
+      </view>
+    </view>
+  </view>
+  <view class="page-section">
+    <view class="weui-cells__title">车队描述</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input
+          class="weui-input"
+          bindinput="doSetData"/>
+      </view>
+    </view>
+  </view>
+  <view class="page-section">
+    <view class="weui-cells__title">场次</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input class="weui-input"  bindinput="bindHideKeyboard" placeholder="输入123自动收起键盘" />
+      </view>
+    </view>
+  </view>
+  <view class="page-section">
+    <view class="weui-cells__title">发车人数</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input class="weui-input"  maxlength="10" bindinput="bindKeyInput" placeholder="输入同步到view中"/>
+      </view>
+    </view>
+  </view>
+  <view class="page-section">
+    <view class="weui-cells__title">封车人数</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input class="weui-input"  bindinput="bindReplaceInput" placeholder="连续的两个1会变成2" />
+      </view>
+    </view>
+  </view>
+
+  <button type="primary" class="create-btn" bindtap="onCreateTeam">发起车队</button>
+</view>
