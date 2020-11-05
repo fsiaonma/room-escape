@@ -3,47 +3,60 @@
     <div class="weui-form__control-area">
       <div class="weui-cells__group weui-cells__group_form">
         <div class="weui-cells">
-          <picker bindchange="bindShopChange" range-key="name" value="{{shopIndex}}" range="{{shopList}}">
-            <div class="weui-cell weui-cell_active weui-cell_access">
-              <div class="weui-cell__bd">店名</div>
-              <div class="weui-cell__ft">{{shopList[shopIndex].name}}</div>
+          <div class="weui-cell weui-cell_active weui-cell_access">
+            <div class="weui-cell__hd"><label class="weui-label">店铺名</label></div>
+            <div class="weui-cell__bd">
+              <input class="weui-input" value="{{shopName}}" bindchange="bindShopChange"/>
             </div>
-          </picker>
+          </div>
 
-          <picker bindchange="bindTopicChange" range-key="name" value="{{topicIndex}}" range="{{topicList}}">
-            <div class="weui-cell weui-cell_active weui-cell_access">
-              <div class="weui-cell__bd">主题</div>
-              <div class="weui-cell__ft">{{topicList[topicIndex].name}}</div>
+          <div class="weui-cell weui-cell_active weui-cell_access">
+             <div class="weui-cell__hd"><label class="weui-label">主题名</label></div>
+            <div class="weui-cell__bd">
+              <input class="weui-input" value="{{topicName}}" bindchange="bindTopicChange"/>
             </div>
-          </picker>
+          </div>
 
           <picker mode="date" value="{{date}}" bindchange="bindDateChange">
             <div class="weui-cell weui-cell_active weui-cell_access">
-              <div class="weui-cell__bd">日期</div>
-              <div class="weui-cell__ft">{{date}}</div>
+              <div class="weui-cell__hd"><label class="weui-label">活动日期</label></div>
+              <div class="weui-cell__bd">{{date}}</div>
             </div>
           </picker>
 
           <picker mode="time" value="{{time}}" bindchange="bindTimeChange">
             <div class="weui-cell weui-cell_active weui-cell_access">
-              <div class="weui-cell__bd">时间</div>
-              <div class="weui-cell__ft">{{time}}</div>
+              <div class="weui-cell__hd"><label class="weui-label">活动时间</label></div>
+              <div class="weui-cell__bd">{{time}}</div>
             </div>
           </picker>
 
-          <div class="weui-cell weui-cell_active">
-            <div class="weui-cell__hd"><label class="weui-label">卡号</label></div>
-            <div class="weui-cell__bd weui-flex">
-                <input id="js_input" class="weui-input" autofocus type="text" pattern="[0-9]*" placeholder="请输入16位数卡号" maxlength="16" />
-                <button id="js_input_clear" class="weui-btn_reset weui-btn_icon weui-btn_input-clear">
-                  <i class="weui-icon-clear"></i>
-                </button>
+          <div class="weui-cell weui-cell_active weui-cell_access">
+            <div class="weui-cell__hd"><label class="weui-label">发车人数</label></div>
+            <div class="weui-cell__bd">
+              <input type="number" class="weui-input" value="{{minPeopleAmount}}" bindchange="bindMinPeopleAmountChange"/>
+            </div>
+          </div>
+
+          <div class="weui-cell weui-cell_active weui-cell_access">
+            <div class="weui-cell__hd"><label class="weui-label">封车人数</label></div>
+            <div class="weui-cell__bd">
+              <input type="number" class="weui-input" value="{{maxPeopleAmount}}" bindchange="bindMaxPeopleAmountChange"/>
+            </div>
+          </div>
+
+          <div class="weui-cell weui-cell_active weui-cell_access">
+            <div class="weui-cell__hd"><label class="weui-label">微信号</label></div>
+            <div class="weui-cell__bd">
+              <input type="number" class="weui-input" value="{{wechatNo}}" bindchange="bindMaxPeopleAmountChange"/>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <button type="primary" class="create-btn" bindtap="onCreateTeam">发起车队</button>
 </div>
 
-<button type="primary" class="create-btn" bindtap="onCreateTeam">发起车队</button>
+
