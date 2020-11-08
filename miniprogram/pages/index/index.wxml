@@ -17,9 +17,9 @@
   <!-- 车队列表 -->
   <view class="team-list">
     <view wx:for="{{teamList}}" wx:key="index" class="team-item">
-      <view>{{item.title}}</view>
-      <view>{{item.desc}}</view>
-      <view>{{item.people_amount}}</view>
+      <view>{{item.shop_name}}</view>
+      <view>{{item.topic_name}}</view>
+      <view>{{item.date}}</view>
     </view>
   </view>
 

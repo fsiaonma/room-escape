@@ -30,7 +30,7 @@ exports.main = async (event, context) => {
   }).get();
 
   if (result) {
-    await db.collection('user').add({
+    db.collection('user').add({
       // data 字段表示需新增的 JSON 数据
       data: {
         openid: wxContext.OPENID,

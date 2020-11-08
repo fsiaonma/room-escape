@@ -66,6 +66,9 @@ Page({
       },
       success: res => {
         console.log('创建车队成功');
+        wx.redirectTo({
+          url: '../index/index'
+        });
       },
       fail: err => {
         console.error('创建车队失败', err)

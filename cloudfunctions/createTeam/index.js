@@ -8,14 +8,15 @@ cloud.init({
 
 exports.main = async (event, context) => {
 	const db = cloud.database();
+  const $ = db.command.aggregate;
+
  	await db.collection('team').add({
     // data 字段表示需新增的 JSON 数据
     data: {
       owner: event.open_id,
       shop_name: event.shop_name,
       topic_name: event.topic_name,
-      date: event.date,
-      time: event.time,
+      date: new Date(`${event.date} ${event.time}`).getTime(),
       min_people_amount: event.min_people_amount,
       max_people_amount: event.max_people_amount,
       people_list: [{

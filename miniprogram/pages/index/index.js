@@ -4,109 +4,13 @@ Page({
   data: {
     avatarUrl: './user-unlogin.png',
     userInfo: {},
-    teamList: [{
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }, {
-      title: '车队名称',
-      desc: '描述',
-      people_amount: '人数'
-    }],
+    teamList: [],
     logged: false,
     takeSession: false,
     requestResult: ''
   },
 
-  onLoad: function() {
+  async onLoad() {
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -135,7 +39,25 @@ Page({
           });
         }
       }
-    })
+    });
+
+    await this.loadTeamList();
+  },
+
+  async loadTeamList() {
+    wx.cloud.callFunction({
+      name: 'getTeamList',
+      data: {},
+      success: res => {
+        console.log(res);
+        this.setData({
+          teamList: res.result.team_list
+        });
+      },
+      fail: err => {
+        console.error('[云函数] [getTeamList] 调用失败', err)
+      }
+    });
   },
 
   onGetUserInfo: function(e) {
