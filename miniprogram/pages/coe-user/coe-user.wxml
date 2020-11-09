@@ -1,0 +1,21 @@
+<div class="page">
+  <div class="weui-form coe-team-form">
+    <div class="weui-form__text-area">
+      <h2 class="weui-form__title">用户信息</h2>
+    </div>
+    <mp-form>
+      <mp-cells title="微信号">
+        <mp-cell prop="" title="wechatNo">
+          <input value="{{wechatNo}}" bindchange="bindWeChangeNoChange"/>
+        </mp-cell>
+      </mp-cells>
+      <mp-cells title="喜好类型">
+        <mp-checkbox-group prop="checkbox" multi="{{true}}" bindchange="checkboxChange">
+          <mp-checkbox wx:for="{{checkboxItems}}" wx:key="value" label="{{item.name}}" value="{{item.value}}" checked="{{item.checked}}"></mp-checkbox>
+        </mp-checkbox-group>
+      </mp-cells>
+    </mp-form>
+  </div>
+</div>
+
+

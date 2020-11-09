@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/coe-user/coe-user",
     "pages/index/index",
     "pages/coe-team/coe-team"
   ],
