@@ -1,46 +1,115 @@
-// miniprogram/pages/coe-user/coe-user.js
-Page({
+const app = getApp()
 
+Page({
   /**
    * 页面的初始数据
    */
   data: {
-    wechatNo: '111',
-    checkboxItems: [
-      {name: 'standard is dealt for u.', value: '0', checked: true},
-      {name: 'standard is dealicient for u.', value: '1'}
+    error: '',
+
+    wechatNo: '',
+    tagList: [
+      { name: '强T', value: 0 },
+      { name: '怂T', value: 1 },
+      { name: '气氛组', value: 2 },
+      { name: '小白', value: 3 }
     ],
+
+    formData: {
+      wechatNo: '',
+      tagList: []
+    },
+
+    rules: [{
+      name: 'wechatNo',
+      rules: {
+        required: true,
+        message: '微信号为必填项'
+      },
+    }]
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  onLoad(options) {
+    this.getUser();
   },
 
-  checkChange: function (e) {
-      console.log('checkbox发生change事件，携带value值为：', e.detail.value);
-
-      var checkboxItems = this.data.checkboxItems, values = e.detail.value;
-      for (var i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
-          checkboxItems[i].checked = false;
-
-          for (var j = 0, lenJ = values.length; j < lenJ; ++j) {
-              if(checkboxItems[i].value == values[j]){
-                  checkboxItems[i].checked = true;
-                  break;
+  getUser() {
+    wx.cloud.callFunction({
+      name: 'getUser',
+      success: res => {
+        const { result } = res;
+        console.log(res);
+        this.setData({
+          wechatNo: result.wechat_no,
+          tagList: (() => {
+            const tagList = this.data.tagList;
+            const values = result.tag_list;
+            tagList.forEach(item => item.checked = false);
+            for (var i = 0; i < tagList.length; ++i) {
+              if (values.find(item => Number(item) === i)) {
+                tagList[i].checked = true;
               }
+            }
+            return tagList;
+          })(),
+          formData: {
+            wechatNo: result.wechat_no,
+            tagList: result.tag_list
           }
+        });
       }
-
-      this.setData({
-          checkboxItems: checkboxItems,
-          [`formData.checkbox`]: e.detail.value
-      });
+    });
   },
 
   bindWeChangeNoChange(e) {
+    this.setData({
+      wechatNo: e.detail.value,
+      [`formData.wechatNo`]: e.detail.value
+    });
+  },
 
-  }
+  checkboxChange: function (e) {
+    const tagList = this.data.tagList;
+    const values = e.detail.value;
+    tagList.forEach(item => item.checked = false);
+    for (var i = 0; i < tagList.length; ++i) {
+      if (values.find(item => Number(item) === i)) {
+        tagList[i].checked = true;
+      }
+    }
+    this.setData({
+      tagList: tagList,
+      [`formData.tagList`]: e.detail.value
+    });
+  },
+
+  async onSaveInfo(e) {
+    this.selectComponent('#form').validate((valid, errors) => {
+      if (!valid) {
+        const firstError = Object.keys(errors)
+        if (firstError.length) {
+          this.setData({
+            error: errors[firstError[0]].message
+          })
+        }
+      } else {
+        wx.cloud.callFunction({
+          name: 'updateUser',
+          data: {
+            openid: app.globalData.openid,
+            wechat_no: this.data.formData.wechatNo,
+            tag_list: this.data.formData.tagList
+          },
+          success: res => {
+            wx.redirectTo({
+              url: '../index/index'
+            });
+          },
+          fail: err => {
+            console.error('更新用户失败', err)
+          }
+        });
+      }
+    });
+  } 
 })

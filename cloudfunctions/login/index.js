@@ -29,7 +29,7 @@ exports.main = async (event, context) => {
     openid: _.eq(wxContext.OPENID)
   }).get();
 
-  if (result) {
+  if (!result) {
     db.collection('user').add({
       // data 字段表示需新增的 JSON 数据
       data: {

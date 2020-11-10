@@ -1,21 +1,26 @@
-<div class="page">
-  <div class="weui-form coe-team-form">
-    <div class="weui-form__text-area">
-      <h2 class="weui-form__title">用户信息</h2>
-    </div>
-    <mp-form>
-      <mp-cells title="微信号">
-        <mp-cell prop="" title="wechatNo">
-          <input value="{{wechatNo}}" bindchange="bindWeChangeNoChange"/>
-        </mp-cell>
-      </mp-cells>
-      <mp-cells title="喜好类型">
-        <mp-checkbox-group prop="checkbox" multi="{{true}}" bindchange="checkboxChange">
-          <mp-checkbox wx:for="{{checkboxItems}}" wx:key="value" label="{{item.name}}" value="{{item.value}}" checked="{{item.checked}}"></mp-checkbox>
-        </mp-checkbox-group>
-      </mp-cells>
-    </mp-form>
-  </div>
-</div>
+<mp-toptips msg="{{error}}" type="error" show="{{error}}"></mp-toptips>
+<mp-form-page title="个人信息">
+  <mp-form id="form" rules="{{rules}}" models="{{formData}}">
+    <mp-cells title="基础信息">
+      <mp-cell prop="wechatNo" title="微信号">
+        <input value="{{wechatNo}}" bindchange="bindWeChangeNoChange"/>
+      </mp-cell>
+    </mp-cells>
+    <mp-cells title="我的标签">
+      <mp-checkbox-group prop="tagList" multi="{{true}}" bindchange="checkboxChange">
+        <mp-checkbox
+          wx:for="{{tagList}}"
+          wx:key="value"
+          label="{{item.name}}"
+          value="{{item.value}}"
+          checked="{{item.checked}}"
+        ></mp-checkbox>
+      </mp-checkbox-group>
+    </mp-cells>
+  </mp-form>
+  <view slot="button">
+    <button type="primary" bindtap="onSaveInfo">保存信息</button>
+  </view>
+</mp-form-page>
 
 
