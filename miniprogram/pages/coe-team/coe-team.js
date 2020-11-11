@@ -20,6 +20,7 @@ Page({
   },
 
   bindTopicChange(e) {
+    console.log(123);
     this.setData({
       topicName: e.detail.value
     });

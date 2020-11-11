@@ -17,11 +17,12 @@
   <!-- 车队列表 -->
   <view class="team-list">
     <view wx:for="{{teamList}}" wx:key="index" class="team-item" bindtap="onShowTeam">
-      <view class="weui-flex">
-        <view class="weui-flex">店名 {{item.shop_name}}</view>
-        <view class="weui-flex">店名 {{item.shop_name}}</view>
-        <view class="weui-flex">店名 {{item.shop_name}}</view>
+      <view class="weui-flex item-title">
+        <view class="item-topic-name">{{item.topic_name}}</view>
+        <view class="item-shop-name">【{{item.shop_name}}】</view>
       </view>
+      <view class="item-people">已有 {{item.people.current}} 人，{{item.people.min}} 人发车，{{item.people.max}} 人封车。</view>
+      <view class="item-date">{{item.date}}</view>
     </view>
   </view>
 

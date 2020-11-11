@@ -10,15 +10,9 @@ exports.main = async (event, context) => {
 	const db = cloud.database();
   const _ = db.command
 
-  console.log(1604764800000, Date.now(), 1604764800000 > Date.now());
-
  	const res = await db.collection('team').where({
     date: _.gte(Date.now())
   }).get();
 
-  console.log(res);
-
-  return {
-    team_list: res.data
-  }
+  return res.data;
 }

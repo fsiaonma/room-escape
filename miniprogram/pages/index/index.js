@@ -49,9 +49,39 @@ Page({
       name: 'getTeamList',
       data: {},
       success: res => {
-        console.log(res);
+        const teamList = res.result;
+
+        console.log(teamList);
+
+        let dtoTeamList = [];
+        if (teamList && teamList.length > 0) {
+          dtoTeamList = teamList.map(item => {
+            return {
+              shop_name: item.shop_name,
+              topic_name: item.topic_name,
+              people: {
+                current: item.people_list ? item.people_list.length : 0,
+                min: item.min_people_amount,
+                max: item.max_people_amount
+              },
+              date: (() => {
+                const date = new Date(item.date);
+                const year = date.getFullYear();
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+                const hours = date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`;
+                const minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
+                const seconds = date.getSeconds() >= 10 ? date.getSeconds() : `0${date.getSeconds()}`;
+                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+              })()
+            }
+          });
+        }
+
+        console.log(dtoTeamList);
+
         this.setData({
-          teamList: res.result.team_list
+          teamList: dtoTeamList
         });
       },
       fail: err => {

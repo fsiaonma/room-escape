@@ -53,7 +53,30 @@ page {
   border: 1px;
   border-radius: 3px;
   box-shadow: 1px 1px 3px #888888;
-  padding: 10rpx;
+  padding: 20rpx 30rpx;
+}
+
+.item-title {
+  margin-bottom: 15rpx;
+  line-height: 60rpx;
+}
+
+.item-topic-name {
+  font-size: 45rpx;
+  font-weight: 500;
+}
+
+.item-shop-name {
+  margin-left: 20rpx;
+  font-size: 35rpx;
+}
+
+.item-people {
+
+}
+
+.item-date {
+
 }
 
 .create-btn {
