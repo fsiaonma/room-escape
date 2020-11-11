@@ -49,8 +49,11 @@ page {
 }
 
 .team-item {
-  border: 1px solid black;
   margin: 30rpx;
+  border: 1px;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px #888888;
+  padding: 10rpx;
 }
 
 .create-btn {

@@ -74,5 +74,9 @@ Page({
     wx.redirectTo({
       url: '../coe-team/coe-team'
     });
+  },
+
+  onShowTeam() {
+    console.log(123123123);
   }
 })

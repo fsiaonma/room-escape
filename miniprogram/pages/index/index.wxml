@@ -16,13 +16,15 @@
 
   <!-- 车队列表 -->
   <view class="team-list">
-    <view wx:for="{{teamList}}" wx:key="index" class="team-item">
-      <view>{{item.shop_name}}</view>
-      <view>{{item.topic_name}}</view>
-      <view>{{item.date}}</view>
+    <view wx:for="{{teamList}}" wx:key="index" class="team-item" bindtap="onShowTeam">
+      <view class="weui-flex">
+        <view class="weui-flex">店名 {{item.shop_name}}</view>
+        <view class="weui-flex">店名 {{item.shop_name}}</view>
+        <view class="weui-flex">店名 {{item.shop_name}}</view>
+      </view>
     </view>
   </view>
 
   <!-- 发车按钮 -->
-  <button type="primary" bindtap="onSaveClick">发起车队</button>
+  <button type="primary" bindtap="onCreateTeamClick">发起车队</button>
 </view>

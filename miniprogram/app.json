@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/coe-user/coe-user",
     "pages/index/index",
+    "pages/coe-user/coe-user",
     "pages/coe-team/coe-team"
   ],
   "window": {
