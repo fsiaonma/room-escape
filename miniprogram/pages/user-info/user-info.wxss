@@ -1,0 +1,42 @@
+page {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.container {
+  width: 100%;
+}
+
+.userinfo {
+  position: fixed;
+  margin: 0 auto;
+  width: 100%;
+  background-color: white;
+}
+
+.userinfo-nickname-wrapper {
+  width: 100%;
+}
+
+.userinfo-nickname {
+  width: 100% !important;
+}
+
+.userinfo-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+  background-size: cover;
+  background-color: white;
+}
+
+.userinfo-avatar[size] {
+  width: 100rpx;
+}
+
+.userinfo-avatar:after {
+  border: none;
+}

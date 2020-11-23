@@ -1,62 +1,45 @@
-<div class="page">
-  <div class="weui-form coe-team-form">
-    <div class="weui-form__control-area">
-      <div class="weui-cells__group weui-cells__group_form">
-        <div class="weui-cells">
-          <div class="weui-cell weui-cell_active weui-cell_access">
-            <div class="weui-cell__hd"><label class="weui-label">店铺名</label></div>
-            <div class="weui-cell__bd">
-              <input class="weui-input" value="{{shopName}}" bindchange="bindShopChange"/>
-            </div>
-          </div>
+<mp-toptips msg="{{error}}" type="error" show="{{error}}"></mp-toptips>
+<mp-form-page title="车队信息">
+  <mp-form id="form" rules="{{rules}}" models="{{formData}}">
+    <mp-cells title="主题信息">
+      <mp-cell prop="shopName" title="店铺名">
+        <input value="{{shopName}}" bindchange="bindShopChange"/>
+      </mp-cell>
+      <mp-cell prop="topicName" title="主题名">
+        <input value="{{topicName}}" bindchange="bindTopicChange"/>
+      </mp-cell>
+      <picker mode="date" value="{{date}}" bindchange="bindDateChange">
+        <mp-cell mode="date" prop="date" title="日期">
+          <div class="weui-cell__bd">{{date}}</div>
+        </mp-cell>
+      </picker>
+      <picker mode="time" value="{{time}}" bindchange="bindTimeChange">
+        <mp-cell prop="time" title="场次">
+          <div class="weui-cell__bd">{{time}}</div>
+        </mp-cell>
+      </picker>
+      <mp-cell prop="needMemberAmount" title="发车人数">
+        <input type="number" value="{{needMemberAmount}}" bindchange="bindNeedMemberAmountChange"/>
+      </mp-cell>
+    </mp-cells>
+    <mp-cells title="携带人员">
+      <mp-cell prop="maleFriendAmount" title="男">
+        <input type="number" value="{{maleFriendAmount}}" bindchange="bindMaleFriendAmountChange"/>
+      </mp-cell>
+      <mp-cell prop="femaleFriendAmount" title="女">
+        <input type="number" value="{{femaleFriendAmount}}" bindchange="bindFemaleFriendAmountChange"/>
+      </mp-cell>
+    </mp-cells>
+  </mp-form>
+  <view slot="button">
+    <button type="primary" bindtap="onCreateTeam">发起车队</button>
+  </view>
+</mp-form-page>
 
-          <div class="weui-cell weui-cell_active weui-cell_access">
-             <div class="weui-cell__hd"><label class="weui-label">主题名</label></div>
-            <div class="weui-cell__bd">
-              <input class="weui-input" value="{{topicName}}" bindchange="bindTopicChange"/>
-            </div>
-          </div>
 
-          <picker mode="date" value="{{date}}" bindchange="bindDateChange">
-            <div class="weui-cell weui-cell_active weui-cell_access">
-              <div class="weui-cell__hd"><label class="weui-label">活动日期</label></div>
-              <div class="weui-cell__bd">{{date}}</div>
-            </div>
-          </picker>
 
-          <picker mode="time" value="{{time}}" bindchange="bindTimeChange">
-            <div class="weui-cell weui-cell_active weui-cell_access">
-              <div class="weui-cell__hd"><label class="weui-label">活动时间</label></div>
-              <div class="weui-cell__bd">{{time}}</div>
-            </div>
-          </picker>
 
-          <div class="weui-cell weui-cell_active weui-cell_access">
-            <div class="weui-cell__hd"><label class="weui-label">发车人数</label></div>
-            <div class="weui-cell__bd">
-              <input type="number" class="weui-input" value="{{minPeopleAmount}}" bindchange="bindMinPeopleAmountChange"/>
-            </div>
-          </div>
 
-          <div class="weui-cell weui-cell_active weui-cell_access">
-            <div class="weui-cell__hd"><label class="weui-label">封车人数</label></div>
-            <div class="weui-cell__bd">
-              <input type="number" class="weui-input" value="{{maxPeopleAmount}}" bindchange="bindMaxPeopleAmountChange"/>
-            </div>
-          </div>
 
-          <div class="weui-cell weui-cell_active weui-cell_access">
-            <div class="weui-cell__hd"><label class="weui-label">微信号</label></div>
-            <div class="weui-cell__bd">
-              <input type="number" class="weui-input" value="{{wechatNo}}" bindchange="bindMaxPeopleAmountChange"/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <button type="primary" class="create-btn" bindtap="onCreateTeam">发起车队</button>
-</div>
 
 

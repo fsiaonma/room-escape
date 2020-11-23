@@ -9,18 +9,21 @@ cloud.init({
 exports.main = async (event, context) => {
 	const db = cloud.database();
   const $ = db.command.aggregate;
-
+  const wxContext = cloud.getWXContext();
  	await db.collection('team').add({
     // data 字段表示需新增的 JSON 数据
     data: {
-      owner: event.open_id,
+      owner: wxContext.OPENID,
       shop_name: event.shop_name,
       topic_name: event.topic_name,
-      date: new Date(`${event.date} ${event.time}`).getTime(),
-      min_people_amount: event.min_people_amount,
-      max_people_amount: event.max_people_amount,
-      people_list: [{
-      	open_id: event.user_info
+      date: event.date,
+      time: event.time,
+      datetime: new Date(`${event.date} ${event.time}`).getTime(),
+      need_member_amount: event.need_member_amount,
+      member_list: [{
+        openid: wxContext.OPENID,
+        male_friend_amount: event.male_friend_amount,
+        female_friend_amount: event.female_friend_amount
       }]
     }
   });

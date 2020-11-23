@@ -1,31 +1,44 @@
-<!--index.wxml-->
-<view class="container" data-weui-theme="dark">
-  <!-- 用户 openid -->
-  <view class="userinfo">
+<view class="userinfo">
+  <view wx:if="{{avatarUrl === '' || nickName === ''}}">
     <button 
-      open-type="getUserInfo" 
+      open-type="getUserInfo"
       bindgetuserinfo="onGetUserInfo"
+      size="default"
+      style="margin: 100rpx auto"
+    >点我授权</button>
+  </view>
+  <view wx:else>
+    <button
+      bindtap="onAvatarTap"
       class="userinfo-avatar"
       style="background-image: url({{avatarUrl}})"
       size="default"
     ></button>
     <view class="userinfo-nickname-wrapper">
-      <button class="userinfo-nickname">{{userInfo.nickName}}</button>
+      <button class="userinfo-nickname">{{nickName}}</button>
     </view>
   </view>
-
-  <!-- 车队列表 -->
-  <view class="team-list">
-    <view wx:for="{{teamList}}" wx:key="index" class="team-item" bindtap="onShowTeam">
-      <view class="weui-flex item-title">
-        <view class="item-topic-name">{{item.topic_name}}</view>
-        <view class="item-shop-name">【{{item.shop_name}}】</view>
-      </view>
-      <view class="item-people">已有 {{item.people.current}} 人，{{item.people.min}} 人发车，{{item.people.max}} 人封车。</view>
-      <view class="item-date">{{item.date}}</view>
-    </view>
-  </view>
-
-  <!-- 发车按钮 -->
-  <button type="primary" bindtap="onCreateTeamClick">发起车队</button>
 </view>
+
+<view class="team-list">
+  <mp-loading show="{{teamLoading}}" type="circle" tips="加载中" ext-class="team-loading-tips"></mp-loading>
+  <view wx:for="{{teamList}}" wx:key="index" class="team-item" bindtap="onShowTeam" data-team-id="{{item.team_id}}">
+    <view class="weui-flex item-title">
+      <view class="item-topic-name">{{item.topic_name}}</view>
+      <view class="item-shop-name">【{{item.shop_name}}】</view>
+    </view>
+    <view class="item-date">日期：{{item.date}}</view>
+    <view class="item-time">场次：{{item.time}}</view>
+    <view class="item-people">
+      队员：{{item.people.need}} 人发车 |【{{item.people.male_amount}}男{{item.people.female_amount}}女】等【{{item.people.wait_for_amount}}】
+    </view>
+    <view class="weui-flex">
+      <view wx:for="{{item.avatar_list}}" wx:key="index" class="item-member weui-flex">
+        <view style="background-image: url({{item.avatar}})" class="item-people-avatar"></view>
+        <view wx:if="{{item.member_amount > 1}}"class="item-member-amount"> x{{ item.member_amount }}</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<button type="primary" bindtap="onCreateTeamClick" class="create-btn">发起车队</button>

@@ -7,8 +7,14 @@ cloud.init({
 });
 
 exports.main = async (event, context) => {
-  const { openid } = event;
   const db = cloud.database();
-  const res = await db.collection('user').where({ openid }).limit(1).get();
-  return res.data[0];
+  const _ = db.command;
+  const wxContext = cloud.getWXContext();
+  return await db.collection('team').doc(event.team_doc_id).update({
+    data: {
+      people_list: _.push({
+        openid: wxContext.OPENID
+      })
+    }
+  });
 }

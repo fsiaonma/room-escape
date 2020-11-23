@@ -7,7 +7,7 @@ Page({
   data: {
     error: '',
 
-    wechatNo: '',
+    wechat: '',
     tagList: [
       { name: '强T', value: 0 },
       { name: '怂T', value: 1 },
@@ -16,12 +16,12 @@ Page({
     ],
 
     formData: {
-      wechatNo: '',
+      wechat: '',
       tagList: []
     },
 
     rules: [{
-      name: 'wechatNo',
+      name: 'wechat',
       rules: {
         required: true,
         message: '微信号为必填项'
@@ -34,37 +34,42 @@ Page({
   },
 
   getUser() {
+    wx.showLoading();
     wx.cloud.callFunction({
       name: 'getUser',
+      data: {
+        openid: app.globalData.openid
+      },
       success: res => {
+        if (!res || !res.result) { return; }
         const { result } = res;
-        console.log(res);
         this.setData({
-          wechatNo: result.wechat_no,
+          wechat: result.wechat,
           tagList: (() => {
             const tagList = this.data.tagList;
             const values = result.tag_list;
             tagList.forEach(item => item.checked = false);
             for (var i = 0; i < tagList.length; ++i) {
-              if (values.find(item => Number(item) === i)) {
+              if (values && values.find(item => Number(item) === i)) {
                 tagList[i].checked = true;
               }
             }
             return tagList;
           })(),
           formData: {
-            wechatNo: result.wechat_no,
+            wechat: result.wechat,
             tagList: result.tag_list
           }
         });
+        wx.hideLoading();
       }
     });
   },
 
   bindWeChangeNoChange(e) {
     this.setData({
-      wechatNo: e.detail.value,
-      [`formData.wechatNo`]: e.detail.value
+      wechat: e.detail.value,
+      [`formData.wechat`]: e.detail.value
     });
   },
 
@@ -97,8 +102,9 @@ Page({
           name: 'updateUser',
           data: {
             openid: app.globalData.openid,
-            wechat_no: this.data.formData.wechatNo,
-            tag_list: this.data.formData.tagList
+            wechat: this.data.formData.wechat,
+            tag_list: this.data.formData.tagList,
+            user_info: app.globalData.userInfo
           },
           success: res => {
             wx.redirectTo({

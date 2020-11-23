@@ -1,0 +1,74 @@
+.team-info-page {
+  margin: 50rpx 30rpx;
+}
+
+.base-info-title {
+  margin-bottom: 10rpx;
+  font-size: 35rpx;
+}
+
+.base-info-item {
+  margin-bottom: 50rpx;
+  border: 1px;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px #888888;
+  padding: 20rpx 30rpx;
+}
+
+.item-title {
+  margin-bottom: 15rpx;
+  line-height: 60rpx;
+}
+
+.item-topic-name {
+  font-size: 45rpx;
+  font-weight: 500;
+}
+
+.item-shop-name {
+  margin-left: 20rpx;
+  font-size: 35rpx;
+}
+
+.item-date {
+  font-size: 30rpx;
+}
+
+.item-time {
+  font-size: 30rpx;
+}
+
+.team-member-title {
+  margin-bottom: 10rpx;
+  font-size: 35rpx;
+}
+
+.team-member-item {
+  margin-bottom: 60rpx;
+}
+
+.member-item {
+  margin-bottom: 15rpx;
+  border: 1px;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px #888888;
+  padding: 20rpx 30rpx;
+}
+
+.member-item-avatar {
+  margin-right: 10rpx;
+  border-radius: 50%;
+  line-height: 50rpx;
+  width: 50rpx;
+  height: 50rpx;
+  background-size: 50rpx 50rpx;
+}
+
+.member-item-wechat {
+  margin-left: 10rpx;
+}
+
+.member-item-friend {
+  margin-left: auto;
+  margin-right: 10rpx;
+}

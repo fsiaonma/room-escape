@@ -7,14 +7,32 @@ cloud.init({
 });
 
 exports.main = async (event, context) => {
+  const {
+    user_info: userInfo,
+    wechat,
+    tag_list: tagList
+  } = event;
+
   const db = cloud.database();
-  const wxContext = cloud.getWXContext(); 
+  const wxContext = cloud.getWXContext();
+
+  let updateData = {};
+  if (userInfo) {
+    updateData = {
+      ...updateData,
+      ...userInfo
+    }
+  }
+  if (wechat) {
+    updateData.wechat = wechat;
+  }
+  if (tagList) {
+    updateData.tag_list = tagList;
+  }
+
   return await db.collection('user').where({
     openid: wxContext.OPENID
   }).update({
-    data: {
-      wechat_no: event.wechat_no,
-      tag_list: event.tag_list      
-    }
+    data: updateData
   });
 }
