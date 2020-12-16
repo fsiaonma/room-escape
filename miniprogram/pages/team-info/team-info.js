@@ -1,3 +1,5 @@
+import scriptTypesEnum from '../../common/enums/script-types';
+
 const app = getApp();
 
 Page({
@@ -6,15 +8,20 @@ Page({
     btnType: null,
     teamDocId: null,
     owner: null,
-    shopName: '',
-    topicName: '',
+    scriptTypes: '',
+    topic: '',
+    shop: '',
     date: '',
     time: '',
-    needMemberAmount: '',
-    memberList: []
+    price: '',
+    remark: '',
+    people: '',
+    itemBackground: '',
+    memberList: [],
   },
 
-  onLoad: function (options) {
+  async onLoad(options) {
+    await app.init();
     wx.showShareMenu();
     const { team_id: teamId } = options;
     this.setData({ teamId });
@@ -23,9 +30,15 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: `${this.data.topicName} ${this.data.date} ${this.dataf.time}`,
+      title: `${this.data.topic} ${this.data.date} ${this.dataf.time}`,
       path: `/pages/team-info/team-info?team_id=${this.data.teamId}`
     };
+  },
+
+  copyWechat() {
+    wx.setClipboardData({
+      data: this.data.wechat
+    });
   },
 
   getTeam(teamId) {
@@ -38,49 +51,36 @@ Page({
       success: res => {
         const { result } = res;
 
-        const memberList = result.member_list ? result.member_list : [];
-        let maleAmount = 0;
-        let femaleAmount = 0;
-        for (let i = 0; i < memberList.length; ++i) {
-          const {
-            gender,
-            male_friend_amount: maleFriendAmount,
-            female_friend_amount: femaleFriendAmount
-          } = memberList[i];
-
-          if (gender === 1) {
-            ++maleAmount;
-          } else {
-            ++femaleAmount;
-          }
-          if (maleFriendAmount) { maleAmount += Number(maleFriendAmount); }
-          if (femaleFriendAmount) { femaleAmount += Number(femaleFriendAmount); }
-        }
-
         this.setData({
           teamDocId: result._id,
           owner: result.owner,
           btnType: (() => {
             if (result.member_list.length > 0) {
-              if (result.member_list.find(item => app.globalData && app.globalData.openid && item.openid === app.globalData.openid)) {
-                  return 'left';
-              } else {
-                const currentMembersAmount = result.member_list.reduce((current, nextItem) => {
-                  const femaleAmount = nextItem.female_friend_amount ? Number(nextItem.female_friend_amount) : 0;
-                  const maleAmount = nextItem.male_friend_amount ? Number(nextItem.male_friend_amount) : 0;
-                  return current + 1 + femaleAmount + maleAmount;
-                }, 0);
-
-                if (currentMembersAmount >= Number(result.need_member_amount)) {
-                  return null
-                } else {
-                  return 'join';
-                }
+              if (result.owner === app.globalData.openid) {
+                return 'edit';
+              } else if (result.member_list.find(item => app.globalData && app.globalData.openid && item.openid === app.globalData.openid)) {
+                return 'left';
+              } else if (result.member_list.length < Number(result.male_amount) + Number(result.female_amount)) {
+                return 'join';
               }
             }
           })(),
-          shopName: result.shop_name,
-          topicName: result.topic_name,
+          topic: result.topic,
+          scriptTypes: (() => {
+            const scriptTypes = [];
+
+            if (result.script_types && result.script_types.length > 0) {
+              result.script_types.forEach(typeValue => {
+                const enumItem = scriptTypesEnum.find(item => item.value === typeValue);
+                scriptTypes.push(enumItem.name);
+              });
+            }
+
+            return scriptTypes.join(',');
+          })(),
+          shop: result.shop,
+          address: result.address,
+          wechat: result.wechat,
           date: (() => {
             const date = new Date(result.datetime);
             const year = date.getFullYear();
@@ -95,8 +95,22 @@ Page({
             const seconds = date.getSeconds() >= 10 ? date.getSeconds() : `0${date.getSeconds()}`;
             return `${hours}:${minutes}:${seconds}`;
           })(),
-          needMemberAmount: result.need_member_amount,
-          memberList: result.member_list
+          price: result.price,
+          remark: result.remark,
+          memberList: (() => {
+            const resList = [];
+
+            const memberList = result.member_list;
+            for (let i = 0; i < memberList.length; ++i) {
+              resList.push(memberList[i]);
+            }
+
+            for (let i = 0; i < Number(result.male_amount) + Number(result.female_amount) - memberList.length; ++i) {
+              resList.push({});
+            }
+
+            return resList;
+          })()
         });
 
         wx.hideLoading();
@@ -105,20 +119,32 @@ Page({
   },
 
   onUserItemTap(event) {
-    const { openid } = event.currentTarget.dataset;
+    // const { openid } = event.currentTarget.dataset;
+    // wx.redirectTo({
+    //   url: `../user-info/user-info?openid=${openid}`
+    // });
+  },
+
+  onEditTeam() {
     wx.redirectTo({
-      url: `../user-info/user-info?openid=${openid}`
+      url: `../coe-team/coe-team?team_id=${this.data.teamId}`
     });
   },
 
   async onJoinTeam() {
+    wx.showLoading();
     wx.cloud.callFunction({
       name: 'joinTeam',
       data: {
         team_doc_id: this.data.teamDocId
       },
       success: res => {
-        console.log('加入车队成功');
+        wx.hideLoading();
+        wx.showToast({
+          title: '上车成功',
+          icon: 'success',
+          duration: 2000
+        });
         this.onLoad({
           team_id: this.data.teamId
         });
@@ -127,17 +153,29 @@ Page({
   },
 
   async onLeftTeam() {
+    wx.showLoading();
     wx.cloud.callFunction({
       name: 'leftTeam',
       data: {
         team_doc_id: this.data.teamDocId
       },
       success: res => {
-        console.log('退出车队成功');
+        wx.hideLoading();
+        wx.showToast({
+          title: '下车成功',
+          icon: 'success',
+          duration: 2000
+        });
         this.onLoad({
           team_id: this.data.teamId
         });
       }
+    });
+  },
+
+  gotoIndex() {
+    wx.redirectTo({
+      url: '../index/index'
     });
   }
 })

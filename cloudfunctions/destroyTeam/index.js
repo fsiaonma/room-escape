@@ -8,13 +8,7 @@ cloud.init({
 
 exports.main = async (event, context) => {
   const db = cloud.database();
-  const _ = db.command;
-  const wxContext = cloud.getWXContext();
-  return await db.collection('team').doc(event.team_doc_id).update({
-    data: {
-      member_list: _.push({
-        openid: wxContext.OPENID
-      })
-    }
-  });
+  return await db.collection('team').where({
+    _id: event.team_doc_id
+  }).remove();
 }

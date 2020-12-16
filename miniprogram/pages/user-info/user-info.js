@@ -16,10 +16,12 @@ Page({
       },
       success: res => {
         const { result } = res;
-        this.setData({
-          avatarUrl: result.avatarUrl,
-          nickName: result.nickName
-        });
+        if (result) {
+          this.setData({
+            avatarUrl: result.avatarUrl,
+            nickName: result.nickName
+          });
+        }
         wx.hideLoading();
       }
     });

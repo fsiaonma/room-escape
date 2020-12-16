@@ -14,7 +14,7 @@ exports.main = async (event, context) => {
 
   const res = await db.collection('team').doc(event.team_doc_id).update({
     data: {
-      people_list: _.pull({
+      member_list: _.pull({
         openid: _.eq(wxContext.OPENID)
       })
     }

@@ -2,37 +2,128 @@
 <mp-form-page title="车队信息">
   <mp-form id="form" rules="{{rules}}" models="{{formData}}">
     <mp-cells title="主题信息">
-      <mp-cell prop="shopName" title="店铺名">
-        <input value="{{shopName}}" bindchange="bindShopChange"/>
+      <mp-cell prop="topic">
+        <view slot="title" class="weui-label">
+          <text class="required-icon">* </text><text>剧本</text>
+        </view>
+        <input value="{{topic}}" bindchange="bindTopicChange"/>
       </mp-cell>
-      <mp-cell prop="topicName" title="主题名">
-        <input value="{{topicName}}" bindchange="bindTopicChange"/>
+      <mp-cell prop="shop" bindtap="bindShopTap">
+        <view slot="title" class="weui-label">
+          <text class="required-icon">* </text><text>店铺</text>
+        </view>
+        <div class="weui-cell__bd">{{shop}}</div>
       </mp-cell>
       <picker mode="date" value="{{date}}" bindchange="bindDateChange">
-        <mp-cell mode="date" prop="date" title="日期">
+        <mp-cell mode="date" prop="date">
+          <view slot="title" class="weui-label">
+            <text class="required-icon">* </text><text>日期</text>
+          </view>
           <div class="weui-cell__bd">{{date}}</div>
         </mp-cell>
       </picker>
       <picker mode="time" value="{{time}}" bindchange="bindTimeChange">
-        <mp-cell prop="time" title="场次">
+        <mp-cell prop="time">
+          <view slot="title" class="weui-label">
+            <text class="required-icon">* </text><text>时间</text>
+          </view>
           <div class="weui-cell__bd">{{time}}</div>
         </mp-cell>
       </picker>
-      <mp-cell prop="needMemberAmount" title="发车人数">
-        <input type="number" value="{{needMemberAmount}}" bindchange="bindNeedMemberAmountChange"/>
+      <mp-cell prop="pice" title="人均价格">
+        <input value="{{price}}" bindchange="bindPriceChange"/>
+      </mp-cell>
+      <mp-cell prop="remark" title="备注">
+        <input value="{{remark}}" bindchange="bindRemarkChange"/>
       </mp-cell>
     </mp-cells>
-    <mp-cells title="携带人员">
-      <mp-cell prop="maleFriendAmount" title="男">
-        <input type="number" value="{{maleFriendAmount}}" bindchange="bindMaleFriendAmountChange"/>
+    <mp-cells title="人数要求">
+      <mp-cell prop="maleAmount">
+        <view slot="title" class="weui-label">
+          <text class="required-icon">* </text><text>小哥哥</text>
+        </view>
+        <input type="number" value="{{maleAmount}}" bindchange="bindMaleAmountChange"/>
       </mp-cell>
-      <mp-cell prop="femaleFriendAmount" title="女">
-        <input type="number" value="{{femaleFriendAmount}}" bindchange="bindFemaleFriendAmountChange"/>
+      <mp-cell prop="femaleAmount">
+        <view slot="title" class="weui-label">
+          <text class="required-icon">* </text><text>小姐姐</text>
+        </view>
+        <input type="number" value="{{femaleAmount}}" bindchange="bindFemaleAmountChange"/>
+      </mp-cell>
+    </mp-cells>
+    <mp-cells title="剧本类型">
+      <mp-checkbox-group prop="types" multi="{{true}}" bindchange="bindScriptTypesChange">
+        <mp-checkbox wx:for="{{scriptTypeItems}}" wx:key="value" label="{{item.name}}" value="{{item.value}}" checked="{{item.checked}}"></mp-checkbox>
+      </mp-checkbox-group>
+    </mp-cells>
+    <mp-cells title="车主信息">
+      <mp-cell prop="wechat">
+        <view slot="title" class="weui-label">
+          <text class="required-icon">* </text><text>车主微信</text>
+        </view>
+        <input value="{{wechat}}" bindchange="bindWechatChange"/>
+      </mp-cell>
+      <picker 
+        mode="selector"
+        range="{{teamTypeEnums}}"
+        range-key="label"
+        value="{{teamTypeValue}}"
+        disabled="{{teamDocId}}"
+        bindchange="bindTeamTypeChange"
+      >
+        <mp-cell prop="teamTypeValue">
+          <view slot="title" class="weui-label">
+            <text class="required-icon">* </text><text>发车方式</text>
+          </view>
+          <div class="weui-cell__bd">{{teamTypeLabel}}</div>
+        </mp-cell>
+      </picker>
+      <mp-cell wx:if="{{teamTypeValue === '1'}}" prop="leaderNickName">
+        <view slot="title" class="weui-label">
+          <text>车主昵称</text>
+        </view>
+        <input value="{{leaderNickName}}" bindchange="bindLeaderNickNameChange" disabled="{{teamDocId}}"/>
+      </mp-cell>
+      <picker 
+        wx:if="{{teamTypeValue === '1'}}"
+        mode="selector"
+        range="{{leaderGenderEnmus}}"
+        range-key="label"
+        value="{{teamTypeValue}}"
+        disabled="{{teamDocId}}"
+        bindchange="bindLeaderGenderChange"
+      >
+        <mp-cell prop="leaderGenderValue">
+          <view slot="title" class="weui-label">
+            <text>车主性别</text>
+          </view>
+          <div class="weui-cell__bd">{{leaderGenderLabel}}</div>
+        </mp-cell>
+      </picker>
+    </mp-cells>
+    <mp-cells title="已有人数">
+      <mp-cell prop="initialMaleAmount">
+        <view slot="title" class="weui-label">
+          <text>小哥哥</text>
+        </view>
+        <input type="number" value="{{initialMaleAmount}}" bindchange="bindInitialMaleAmountChange"/>
+      </mp-cell>
+      <mp-cell prop="initialFeMaleAmount">
+        <view slot="title" class="weui-label">
+          <text>小姐姐</text>
+        </view>
+        <input type="number" value="{{initialFeMaleAmount}}" bindchange="bindInitialFemaleAmountChange"/>
       </mp-cell>
     </mp-cells>
   </mp-form>
   <view slot="button">
-    <button type="primary" bindtap="onCreateTeam">发起车队</button>
+    <view wx:if="{{!teamDocId}}">
+      <button type="primary" bindtap="onCreateTeam" class="save-btn">发起车队</button>
+    </view>
+    <view wx:else>
+      <button type="primary" bindtap="onUpdateTeam" class="save-btn">更新车队</button>
+      <button type="warn" bindtap="onDestroyTeam" style="margin-top: 30rpx">解散车队</button>
+    </view>
   </view>
 </mp-form-page>
 

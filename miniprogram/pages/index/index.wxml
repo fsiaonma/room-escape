@@ -1,44 +1,54 @@
 <view class="userinfo">
-  <view wx:if="{{avatarUrl === '' || nickName === ''}}">
-    <button 
+  <view wx:if="{{!logged}}">
+    <button
       open-type="getUserInfo"
       bindgetuserinfo="onGetUserInfo"
       size="default"
-      style="margin: 100rpx auto"
+      style="margin: 20rpx auto"
     >点我授权</button>
   </view>
-  <view wx:else>
-    <button
-      bindtap="onAvatarTap"
-      class="userinfo-avatar"
-      style="background-image: url({{avatarUrl}})"
-      size="default"
-    ></button>
+  <view wx:else class="weui-flex">
+    <view style="background-image: url({{avatarUrl}})" class="avatar"></view>
     <view class="userinfo-nickname-wrapper">
-      <button class="userinfo-nickname">{{nickName}}</button>
+      {{nickName}}
     </view>
   </view>
 </view>
 
 <view class="team-list">
   <mp-loading show="{{teamLoading}}" type="circle" tips="加载中" ext-class="team-loading-tips"></mp-loading>
-  <view wx:for="{{teamList}}" wx:key="index" class="team-item" bindtap="onShowTeam" data-team-id="{{item.team_id}}">
+  <view wx:for="{{teamList}}" wx:key="index" class="team-item" bindtap="onTeamItemTap" data-team-id="{{item.team_id}}">
     <view class="weui-flex item-title">
-      <view class="item-topic-name">{{item.topic_name}}</view>
-      <view class="item-shop-name">【{{item.shop_name}}】</view>
+      <view class="item-topic">{{item.topic ? item.topic : '待定'}}</view>
+      <view class="item-script-types">【{{item.script_types}}】</view>
     </view>
     <view class="item-date">日期：{{item.date}}</view>
     <view class="item-time">场次：{{item.time}}</view>
-    <view class="item-people">
-      队员：{{item.people.need}} 人发车 |【{{item.people.male_amount}}男{{item.people.female_amount}}女】等【{{item.people.wait_for_amount}}】
+    <view class="item-shop">店铺：{{item.shop ? item.shop : '待定'}}</view>
+    <!-- <view class="item-address">地址：{{item.address}}</view> -->
+    <view wx:if="{{item.price}}" class="item-price">价格：{{item.price}} / 位</view>
+    <view wx:if="{{item.remark}}" class="item-remark">备注：{{item.remark}}</view>
+    <view class="item-member-status">
+    {{item.people.male_amount > 0 ? item.people.male_amount + '男' : ''}}
+    {{item.people.female_amount > 0 ? item.people.female_amount + '女' : ''}}
+    {{item.people.is_full ? '（封车）' : '='}}
+    {{!item.people.is_full && item.people.wait_for_male_amount > 0 ? item.people.wait_for_male_amount + '男' : ''}}
+    {{!item.people.is_full && item.people.wait_for_female_amount > 0 ? item.people.wait_for_female_amount + '女' : ''}}
     </view>
     <view class="weui-flex">
-      <view wx:for="{{item.avatar_list}}" wx:key="index" class="item-member weui-flex">
-        <view style="background-image: url({{item.avatar}})" class="item-people-avatar"></view>
-        <view wx:if="{{item.member_amount > 1}}"class="item-member-amount"> x{{ item.member_amount }}</view>
+      队员：
+      <view wx:for="{{item.member_list}}" wx:key="index" class="item-member weui-flex">
+        <view wx:if="{{item.avatar}}" style="background-image: url({{item.avatar}})" class="item-member-avatar"></view>
+        <view wx:elif="{{item.nick_name}}" class="item-member-nick-name">{{item.nick_name}}</view>
+        <view wx:if="{{item.member_amount}}" class="item-member-amount"> x {{item.member_amount}}</view>
       </view>
     </view>
   </view>
 </view>
 
-<button type="primary" bindtap="onCreateTeamClick" class="create-btn">发起车队</button>
+<button
+  open-type="getUserInfo"
+  bindgetuserinfo="onCreateTeamClick"
+  type="primary"
+  class="create-btn"
+>发起车队</button>

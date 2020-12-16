@@ -7,7 +7,7 @@ cloud.init({
 });
 
 exports.main = async (event, context) => {
-	const db = cloud.database();
+  const db = cloud.database();
   const wxContext = cloud.getWXContext();
 
   const {
@@ -38,18 +38,18 @@ exports.main = async (event, context) => {
     leaderGender = event.leader_gender ? event.leader_gender : 1;
   }
 
-  const memberList = [];
+  const teamRes = await db.collection('team').where({
+    _id: event.team_doc_id
+  }).get();
+  const teamInfo = teamRes.data[0];
 
-  memberList.push({
-    ...baseMemberInfo,
-    nickName: leaderNickName,
-    gender: leaderGender
-  });
+  const { member_list: memberList } = teamInfo;
+  const filterMemberList = memberList.filter(item => item.type !== 'friend');
 
   if (initialMaleAmount > 0) {
     const maleMemberAmount = leaderGender === 1 ? initialMaleAmount - 1 : initialMaleAmount;
     for (let i = 0; i < maleMemberAmount; ++i) {
-      memberList.push({
+      filterMemberList.push({
         ...baseMemberInfo,
         type: 'friend',
         nickName: `${leaderNickName} 朋友`,
@@ -61,7 +61,7 @@ exports.main = async (event, context) => {
   if (initialFemaleAmount > 0) {
     const femaleMemberAmount = leaderGender === 2 ? initialFemaleAmount - 1 : initialFemaleAmount;
     for (let i = 0; i < femaleMemberAmount; ++i) {
-      memberList.push({
+      filterMemberList.push({
         ...baseMemberInfo,
         type: 'friend',
         nickName: `${leaderNickName} 朋友`,
@@ -70,9 +70,10 @@ exports.main = async (event, context) => {
     }
   }
 
- 	await db.collection('team').add({
+  return await db.collection('team').where({
+    _id: event.team_doc_id
+  }).update({
     data: {
-      owner: wxContext.OPENID,
       topic: event.topic,
       shop: event.shop,
       address: event.address,
@@ -83,16 +84,13 @@ exports.main = async (event, context) => {
       price: event.price,
       remark: event.remark,
       team_type: event.team_type,
-      leader_nick_name: event.leader_nick_name,
       leader_gender: event.leader_gender,
       male_amount: event.male_amount,
       female_amount: event.female_amount,
       initial_male_amount: initialMaleAmount,
       initial_female_amount: initialFemaleAmount,
       script_types: event.script_types,
-      member_list: memberList
+      member_list: filterMemberList
     }
   });
-
-  return true;
 }

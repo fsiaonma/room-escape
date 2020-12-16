@@ -23,10 +23,12 @@ exports.main = async (event, context) => {
     const memberInfoList = memberInfoListRes.data;
 
     for (let i = 0; i < memberList.length; ++i) {
-      const memberInfo = memberInfoList.find(item => item.openid === memberList[i].openid);
-      memberList[i] = {
-        ...memberList[i],
-        ...memberInfo
+      if (memberList[i].type !== 'friend') {
+        const memberInfo = memberInfoList.find(item => item.openid === memberList[i].openid);
+        memberList[i] = {
+          ...memberList[i],
+          ...memberInfo
+        }
       }
     }
 

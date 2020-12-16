@@ -1,3 +1,11 @@
 .coe-team-form {
 	padding-top: 0;
 }
+
+.required-icon {
+  color: red;
+}
+
+.save-btn {
+  background-color: #3a3030 !important;
+}

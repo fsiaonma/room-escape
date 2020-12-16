@@ -9,10 +9,12 @@ Page({
 
     wechat: '',
     tagList: [
-      { name: '强T', value: 0 },
-      { name: '怂T', value: 1 },
-      { name: '气氛组', value: 2 },
-      { name: '小白', value: 3 }
+      { name: '情感', value: '0' },
+      { name: '恐怖', value: '1' },
+      { name: '硬核', value: '2' },
+      { name: '机制', value: '3' },
+      { name: '欢乐', value: '4' },
+      { name: '喝酒', value: '5' }
     ],
 
     formData: {
@@ -98,6 +100,7 @@ Page({
           })
         }
       } else {
+        wx.showLoading();
         wx.cloud.callFunction({
           name: 'updateUser',
           data: {
@@ -107,11 +110,23 @@ Page({
             user_info: app.globalData.userInfo
           },
           success: res => {
+            wx.hideLoading();
+            wx.showToast({
+              title: '保存成功',
+              icon: 'success',
+              duration: 2000
+            });
             wx.redirectTo({
               url: '../index/index'
             });
           },
           fail: err => {
+            wx.hideLoading();
+            wx.showToast({
+              title: '保存失败',
+              icon: 'none',
+              duration: 2000
+            });
             console.error('更新用户失败', err)
           }
         });

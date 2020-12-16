@@ -12,10 +12,13 @@ exports.main = async (event, context) => {
     const _ = db.command;
     const $ = db.command.aggregate;
 
-   	const teamListRes = await db.collection('team').where({
+   	const teamListRes = await db.collection('team').aggregate().match({
       datetime: _.gte(Date.now())
-    }).get();
-    const teamList = teamListRes.data;
+    }).sort({
+      datetime: 1
+    }).end();
+
+    const teamList = teamListRes.list;
 
     let openidList = [];
     teamList.forEach(teamItem => {
@@ -30,8 +33,8 @@ exports.main = async (event, context) => {
       const { member_list: memberList } = teamList[i];
       for (let j = 0; j < memberList.length; ++j) {
         const memberInfo = memberInfoList.find(item => item.openid === memberList[j].openid);
-        memberList[i] = {
-          ...memberList[i],
+        memberList[j] = {
+          ...memberList[j],
           ...memberInfo
         };
       }

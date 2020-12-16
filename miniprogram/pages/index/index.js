@@ -1,12 +1,13 @@
-//index.js
+import scriptTypesEnum from '../../common/enums/script-types';
+
 const app = getApp()
 Page({
   data: {
+    logged: false,
     avatarUrl: '',
     nickName: '',
     teamLoading: false,
     teamList: [],
-    logged: false,
     takeSession: false,
     requestResult: ''
   },
@@ -14,9 +15,12 @@ Page({
   async onLoad() {
     await app.init();
 
+    wx.showShareMenu();
+
     const { userInfo } = app.globalData;
     if (userInfo) {
       this.setData({
+        logged: true,
         avatarUrl: userInfo.avatarUrl,
         nickName: userInfo.nickName
       });
@@ -45,24 +49,37 @@ Page({
             let femaleAmount = 0;
             for (let i = 0; i < memberList.length; ++i) {
               const {
-                gender,
-                male_friend_amount: maleFriendAmount,
-                female_friend_amount: femaleFriendAmount
+                gender
               } = memberList[i];
-
               if (gender === 1) {
                 ++maleAmount;
               } else {
                 ++femaleAmount;
               }
-              if (maleFriendAmount) { maleAmount += Number(maleFriendAmount); }
-              if (femaleFriendAmount) { femaleAmount += Number(femaleFriendAmount); }
             }
+
+            const isFull = maleAmount + femaleAmount >= Number(item.male_amount) + Number(item.female_amount);
 
             return {
               team_id: item._id,
-              shop_name: item.shop_name,
-              topic_name: item.topic_name,
+              owner: item.owner,
+              shop: item.shop,
+              topic: item.topic,
+              script_types: (() => {
+                const scriptTypeList = [];
+
+                if (item.script_types && item.script_types.length > 0) {
+                  item.script_types.forEach(typeValue => {
+                    const enumItem = scriptTypesEnum.find(item => item.value === typeValue);
+                    if (enumItem) {
+                      scriptTypeList.push(enumItem.name);
+                    }
+                  });
+                }
+
+                return scriptTypeList.join(',');
+              })(),
+              address: item.address,
               date: (() => {
                 const date = new Date(item.datetime);
                 const year = date.getFullYear();
@@ -77,22 +94,37 @@ Page({
                 const seconds = date.getSeconds() >= 10 ? date.getSeconds() : `0${date.getSeconds()}`;
                 return `${hours}:${minutes}:${seconds}`;
               })(),
+              price: item.price,
+              remark: item.remark,
               people: {
+                is_full: isFull,
                 current: memberList.length,
-                need: item.need_member_amount,
+                need: Number(item.male_amount) + Number(item.female_amount),
                 male_amount: maleAmount,
                 female_amount: femaleAmount,
-                wait_for_amount: Math.max(item.need_member_amount - maleAmount - femaleAmount, 0)
+                wait_for_male_amount: Math.max(Number(item.male_amount) - maleAmount, 0),
+                wait_for_female_amount: Math.max(Number(item.female_amount) - femaleAmount, 0)
               },
-              avatar_list: (() => {
+              member_list: (() => {
                 const result = [];
                 for (let i = 0; i < memberList.length; ++i) {
                   const memberItem = memberList[i];
-                  const memberAmount = 1 + Number(memberItem.male_friend_amount) + Number(memberItem.female_friend_amount);
-                  result.push({
-                    avatar: memberItem.avatarUrl,
-                    member_amount: memberAmount > 1 ? memberAmount : ''
-                  })
+
+                  let memberAmount = 1;
+                  for (let j = 0; j < memberList.length; ++j) {
+                    const jMemberItem = memberList[j];
+                    if (memberItem.type !== 'friend' && jMemberItem.type === 'friend' && (jMemberItem.openid === memberItem.openid || jMemberItem.nickName === memberItem.nickName)) {
+                      ++memberAmount; 
+                    }
+                  }
+
+                  if (memberItem.type !== 'friend') {
+                    result.push({
+                      avatar: memberItem.avatarUrl,
+                      nick_name: memberItem.nickName,
+                      member_amount: memberAmount > 1 ? memberAmount : null
+                    });
+                  }
                 }
                 return result;
               })()
@@ -115,28 +147,34 @@ Page({
   },
 
   async onGetUserInfo(e) {
-    if (!this.data.logged && e.detail.userInfo) {
+    if (!this.data.logged) {
       this.setData({
-        logged: true,
-        avatarUrl: e.detail.userInfo.avatarUrl,
-        nickName: e.detail.userInfo.nickName
-      })
+        logged: true
+      });
+      await this.onLoad();
     }
   },
 
   async onAvatarTap() {
     wx.redirectTo({
-      url: `../user-info/user-info?openid=${app.globalData.openid}`
+      url: '../coe-user/coe-user'
     });
   },
 
-  onCreateTeamClick() {
-    wx.redirectTo({
-      url: '../coe-team/coe-team'
-    });
+  async onCreateTeamClick(e) {
+    if (!this.data.logged) {
+      this.setData({
+        logged: true
+      });
+      await this.onLoad();
+    } else {
+      wx.redirectTo({
+        url: '../coe-team/coe-team'
+      });
+    }
   },
 
-  onShowTeam(event) {
+  onTeamItemTap(event) {
     const { teamId } = event.currentTarget.dataset;
     wx.redirectTo({
       url: `../team-info/team-info?team_id=${teamId}`

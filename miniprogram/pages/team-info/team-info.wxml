@@ -1,36 +1,66 @@
 <view class="team-info-page">
-  <view class="base-info-title">基础信息</view>
   <view class="base-info-item">
     <view class="weui-flex item-title">
-      <view class="item-topic-name">{{topicName}}</view>
-      <view wx:if="{{shopName}}" class="item-shop-name">【{{shopName}}】</view>
+      <view class="item-topic">{{topic ? topic : '待定'}}</view>
+      <view class="item-types">【{{scriptTypes}}】</view>
     </view>
     <view class="item-date">日期：{{date}}</view>
     <view class="item-time">场次：{{time}}</view>
-    <view class="item-time">人数：{{needMemberAmount}}</view>
+    <view class="item-shop">店铺：{{shop ? shop : '待定'}}</view>
+    <view class="item-address">地址：{{address ? address : '待定'}}</view>
+    <view class="item-wechat">车主微信：{{wechat}}
+      <a href="javascipt:void(0)" bindtap="copyWechat" class="copy-text">复制</a>
+    </view>
+    <view wx:if="{{price}}" class="item-price">价格：{{price}} / 位</view>
+    <view wx:if="{{remark}}" class="item-remark">备注：{{remark}}</view>
   </view>
 
   <view class="team-member-title">成员信息</view>
   <view class="team-member-item">
-    <view wx:for="{{memberList}}" wx:key="index">
-      <view class="member-item weui-flex" data-openid="{{item.openid}}" bindtap="onUserItemTap">
+    <view wx:for="{{memberList}}" wx:key="index" class="{{ item.gender === 1 ? 'male-background' : item.gender === 2 ? 'female-background' : '' }}">
+      <view
+        wx:if="{{item.avatarUrl || item.nickName}}"
+        data-openid="{{item.openid}}"
+        class="member-item weui-flex"
+        bindtap="onUserItemTap"
+      >
         <view
+          wx:if="{{item.avatarUrl}}"
           style="background-image: url({{item.avatarUrl}})"
           class="member-item-avatar"
         ></view>
-        <view class="member-item-wechat">{{item.wechat}}</view>
-        <view wx:if="{{item.male_friend_amount > 0 || item.female_friend_amount > 0}}" class="member-item-friend">
-          <span>带</span>
-          <span wx:if="{{item.male_friend_amount > 0}}">{{item.male_friend_amount}}男</span>
-          <span wx:if="{{item.female_friend_amount > 0}}">{{item.female_friend_amount}}女</span>
-        </view>
+        <view class="member-item-wechat">{{item.nickName ? item.nickName : ''}} {{index === 0 ? '（车长）' : ''}}</view>
+      </view>
+      <view wx:else class="member-item weui-flex">
+      （空位）
       </view>
     </view>
   </view>
 
   <view slot="button">
-    <button wx:if="{{btnType === 'join'}}" type="primary" bindtap="onJoinTeam">加入车队</button>
-    <button wx:if="{{btnType === 'left'}}" type="warn" bindtap="onLeftTeam">退出车队</button>
+    <button
+      wx:if="{{btnType === 'edit'}}"
+      bindtap="onEditTeam"
+      type="primary"
+      class="edit-btn"
+    >编辑车队</button>
+    <button
+      wx:if="{{btnType === 'join'}}"
+      open-type="getUserInfo"
+      bindgetuserinfo="onJoinTeam"
+      type="primary"
+      class="join-btn"
+    >加入车队</button>
+    <button
+      wx:if="{{btnType === 'left'}}"
+      type="warn"
+      bindtap="onLeftTeam"
+    >退出车队</button>
+    <button
+      bindtap="gotoIndex"
+      type="primary"
+      class="goto-index-btn"
+    >查看全部车队</button>
   </view>
 </view>
 

@@ -1,10 +1,8 @@
 .team-info-page {
-  margin: 50rpx 30rpx;
-}
-
-.base-info-title {
-  margin-bottom: 10rpx;
-  font-size: 35rpx;
+  margin-top: 110rpx;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  margin-bottom: 30rpx;
 }
 
 .base-info-item {
@@ -20,13 +18,13 @@
   line-height: 60rpx;
 }
 
-.item-topic-name {
+.item-topic {
   font-size: 45rpx;
   font-weight: 500;
 }
 
-.item-shop-name {
-  margin-left: 20rpx;
+.item-types {
+  margin-left: 15rpx;
   font-size: 35rpx;
 }
 
@@ -38,6 +36,33 @@
   font-size: 30rpx;
 }
 
+.item-shop {
+  font-size: 30rpx;
+}
+
+.item-address {
+  font-size: 30rpx;
+}
+
+.item-wechat {
+  font-size: 30rpx;
+}
+
+.copy-text {
+  color: #6175da;
+  font-weight: 400;
+}
+
+.item-remark {
+  font-size: 30rpx;
+}
+
+.item-people {
+  margin: 15rpx 0;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
 .team-member-title {
   margin-bottom: 10rpx;
   font-size: 35rpx;
@@ -45,6 +70,14 @@
 
 .team-member-item {
   margin-bottom: 60rpx;
+}
+
+.male-background {
+  background-color: #d7ebff;
+}
+
+.female-background {
+  background-color: #ffbb9d;
 }
 
 .member-item {
@@ -71,4 +104,17 @@
 .member-item-friend {
   margin-left: auto;
   margin-right: 10rpx;
+}
+
+.edit-btn {
+  background-color: #3a3030 !important;
+}
+
+.join-btn {
+  background-color: #3a3030 !important;
+}
+
+.goto-index-btn {
+  margin-top: 30rpx;
+  background-color: #3a3030 !important;
 }

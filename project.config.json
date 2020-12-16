@@ -54,13 +54,60 @@
     "game": {
       "list": []
     },
+    "gamePlugin": {
+      "current": -1,
+      "list": []
+    },
     "miniprogram": {
       "current": 0,
       "list": [
         {
           "id": -1,
           "name": "db guide",
-          "pathName": "pages/databaseGuide/databaseGuide"
+          "pathName": "pages/databaseGuide/databaseGuide",
+          "query": ""
+        },
+        {
+          "id": 1,
+          "name": "pages/coe-team/coe-team",
+          "pathName": "pages/coe-team/coe-team",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/coe-team/coe-team",
+          "pathName": "pages/coe-team/coe-team",
+          "query": "team_id=0a4429175fd9bf2b0192253802226a61",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/team-info/team-info",
+          "pathName": "pages/team-info/team-info",
+          "query": "team_id=0a4429175fd9bf2b0192253802226a61",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/coe-team/coe-team",
+          "pathName": "pages/coe-team/coe-team",
+          "query": "team_id=0a4429175fd9bf2b0192253802226a61",
+          "scene": null
+        },
+        {
+          "id": 5,
+          "name": "pages/coe-team/coe-team",
+          "pathName": "pages/coe-team/coe-team",
+          "query": "team_id=e62469b25fd9df6901cf7970091a0c04",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/team-info/team-info",
+          "pathName": "pages/team-info/team-info",
+          "query": "team_id=eb0c51035fda0cb900018530448e77d7",
+          "scene": null
         }
       ]
     }

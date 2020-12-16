@@ -15,11 +15,24 @@ page {
   position: fixed;
   margin: 0 auto;
   width: 100%;
-  background-color: #dceaff;
+  background-color: #3a3030;
+}
+
+.avatar {
+  margin: 20rpx 0 20rpx 30rpx;
+  border-radius: 50%;
+  line-height: 25px;
+  width: 60rpx;
+  height: 60rpx;
+  background-size: 60rpx 60rpx;
 }
 
 .userinfo-nickname-wrapper {
-  width: 100%;
+  line-height: 100rpx;
+  margin-left: 20rpx;
+  font-size: 45rpx;
+  font-weight: bold;
+  color: #fff;
 }
 
 .userinfo-nickname {
@@ -47,8 +60,8 @@ page {
 }
 
 .team-list {
-  margin-top: 250rpx;
-  margin-bottom: 100rpx;
+  margin-top: 110rpx;
+  margin-bottom: 120rpx;
 }
 
 .team-item {
@@ -64,13 +77,13 @@ page {
   line-height: 60rpx;
 }
 
-.item-topic-name {
+.item-topic {
   font-size: 45rpx;
   font-weight: 500;
 }
 
-.item-shop-name {
-  margin-left: 20rpx;
+.item-script-types {
+  margin-left: 15rpx;
   font-size: 35rpx;
 }
 
@@ -82,22 +95,46 @@ page {
   font-size: 30rpx;
 }
 
-.item-people {
+.item-shop {
   font-size: 30rpx;
-  margin-bottom: 15rpx;
+}
+
+.item-address {
+  font-size: 30rpx;
+}
+
+.item-price {
+  font-size: 30rpx;
+}
+
+.item-remark {
+  font-size: 30rpx;
+}
+
+.item-member-status {
+  margin: 15rpx 0;
+  font-size: 30rpx;
+  font-weight: bold;
 }
 
 .item-member {
   margin-right: 10rpx;
 }
 
-.item-people-avatar {
+.item-member-avatar {
   margin-right: 10rpx;
   border-radius: 50%;
   line-height: 50rpx;
   width: 50rpx;
   height: 50rpx;
   background-size: 50rpx 50rpx;
+}
+
+.item-member-nick-name {
+  margin-right: 10rpx;
+  line-height: 50rpx;
+  height: 50rpx;
+  font-size: 35rpx;
 }
 
 .item-member-amount {
@@ -112,4 +149,5 @@ page {
   width: 100% !important;
   height: 120rpx !important;
   line-height: 90rpx !important;
+  background-color: #3a3030 !important;
 }

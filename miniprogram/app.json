@@ -10,8 +10,13 @@
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "密室拼团",
+    "navigationBarTitleText": "剧本杀拼团",
     "navigationBarTextStyle": "black"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序定位"
+    }
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2"

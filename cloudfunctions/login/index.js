@@ -29,7 +29,6 @@ exports.main = async (event, context) => {
     openid: _.eq(wxContext.OPENID)
   }).get();
 
-  let isNewUser = false;
   if (!result || !result.data || result.data.length <= 0) {
     await db.collection('user').add({
       // data 字段表示需新增的 JSON 数据
@@ -40,14 +39,9 @@ exports.main = async (event, context) => {
         ...event.user_info
       }
     });
-    isNewUser = true;
-  }
-  if (result && result.data && result.data[0] && !result.data[0].wechat) {
-    isNewUser = true;
   }
 
   return {
-    is_new_user: isNewUser,
     event,
     openid: wxContext.OPENID,
     appid: wxContext.APPID,

@@ -14,73 +14,69 @@ App({
         traceUser: true,
       })
     }
+    this.globalData = {};
   },
 
   async init() {
-    this.globalData = {}
-
-    wx.showLoading();
-
-    // 授权
-    const settingRes = await new Promise(resolve => {
-      wx.getSetting({
-        success: res => {
-          resolve(res);
-        },
-        fail: err => {
-          resolve(err);
-        }
+    if (!this.globalData.userInfo) {
+      // 授权
+      wx.showLoading();
+      const settingRes = await new Promise(resolve => {
+        wx.getSetting({
+          success: res => {
+            resolve(res);
+          },
+          fail: err => {
+            resolve(err);
+          }
+        });
       });
-    });
-    if (!settingRes || !settingRes.authSetting || !settingRes.authSetting['scope.userInfo']) {
       wx.hideLoading();
-      return;
-    }
+      if (!settingRes || !settingRes.authSetting || !settingRes.authSetting['scope.userInfo']) {
+        return;
+      }
 
-    // 用户信息
-    const userRes = await new Promise(resolve => {
-      wx.getUserInfo({
-        success: res => {
-          resolve(res);
-        },
-        fail: err => {
-          resolve(err);
-        }
+      // 用户信息
+      wx.showLoading();
+      const userRes = await new Promise(resolve => {
+        wx.getUserInfo({
+          success: res => {
+            resolve(res);
+          },
+          fail: err => {
+            resolve(err);
+          }
+        });
       });
-    });
-    if (!userRes || !userRes.userInfo) {
       wx.hideLoading();
-      return;
+      if (!userRes || !userRes.userInfo) {
+        return;
+      }
+      this.globalData.userInfo = userRes.userInfo;
     }
-    this.globalData.userInfo = userRes.userInfo;
 
     // 用户登录
-    const loginRes = await new Promise(resolve => {
-      wx.cloud.callFunction({
-        name: 'login',
-        data: {
-          user_info: this.globalData.userInfo
-        },
-        success: res => {
-          resolve(res);
-        },
-        fail: err => {
-          resolve(err);
-        }
+    if (!this.globalData.openid) {
+      wx.showLoading();
+      const loginRes = await new Promise(resolve => {
+        wx.cloud.callFunction({
+          name: 'login',
+          data: {
+            user_info: this.globalData.userInfo
+          },
+          success: res => {
+            resolve(res);
+          },
+          fail: err => {
+            resolve(err);
+          }
+        });
       });
-    });
-    if (!loginRes || !loginRes.result || !loginRes.result.openid) {
       wx.hideLoading();
-      return;
-    }
-    this.globalData.openid = loginRes.result.openid;
-
-    wx.hideLoading();
-
-    if (loginRes.result.is_new_user) {
-      wx.redirectTo({
-        url: '../coe-user/coe-user'
-      });
+      if (!loginRes || !loginRes.result || !loginRes.result.openid) {
+        return;
+      }
+      this.globalData.openid = loginRes.result.openid;
     }
   }
 })
