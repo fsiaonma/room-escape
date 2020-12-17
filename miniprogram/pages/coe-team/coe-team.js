@@ -16,10 +16,10 @@ Page({
     price: '',
     remark: '',
 
-    teamTypeLabel: '自己上车',
+    teamTypeLabel: '我是车主',
     teamTypeValue: '0',
     teamTypeEnums: [{
-      label: '自己发车',
+      label: '我是车主',
       value: '0'
     }, {
       label: '替人发车',
@@ -218,11 +218,13 @@ Page({
 
   bindTeamTypeChange(e) {
     const index = e.detail.value;
-    const teamTypeIteam = this.data.teamTypeEnums[index];
+    console.log(index);
+    const teamTypeItem = this.data.teamTypeEnums[index];
+    console.log(teamTypeItem);
     this.setData({
-      teamTypeLabel: teamTypeIteam.label,
-      teamTypeValue: teamTypeIteam.value,
-      [`formData.teamTypeValue`]: teamTypeIteam.value
+      teamTypeLabel: teamTypeItem.label,
+      teamTypeValue: teamTypeItem.value,
+      [`formData.teamTypeValue`]: teamTypeItem.value
     });
   },
 
@@ -235,7 +237,9 @@ Page({
 
   bindLeaderGenderChange(e) {
     const index = e.detail.value;
+    console.log(index);
     const leaderGenderIteam = this.data.leaderGenderEnmus[index];
+    console.log(leaderGenderIteam);
     this.setData({
       leaderGenderLabel: leaderGenderIteam.label,
       leaderGenderValue: leaderGenderIteam.value,
@@ -413,6 +417,7 @@ Page({
             address: this.data.address,
             date: this.data.formData.date,
             time: this.data.formData.time,
+            datatime: new Date(`${this.data.formData.date} ${this.data.formData.time}`).getTime(),
             wechat: this.data.formData.wechat,
             price: this.data.formData.price,
             remark: this.data.formData.remark,
@@ -470,6 +475,7 @@ Page({
             address: this.data.address,
             date: this.data.formData.date,
             time: this.data.formData.time,
+            datatime: new Date(`${this.data.formData.date} ${this.data.formData.time}`).getTime(),
             wechat: this.data.formData.wechat,
             price: this.data.formData.price,
             remark: this.data.formData.remark,

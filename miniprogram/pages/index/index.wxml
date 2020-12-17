@@ -29,11 +29,11 @@
     <view wx:if="{{item.price}}" class="item-price">价格：{{item.price}} / 位</view>
     <view wx:if="{{item.remark}}" class="item-remark">备注：{{item.remark}}</view>
     <view class="item-member-status">
-    {{item.people.male_amount > 0 ? item.people.male_amount + '男' : ''}}
-    {{item.people.female_amount > 0 ? item.people.female_amount + '女' : ''}}
-    {{item.people.is_full ? '（封车）' : '='}}
-    {{!item.people.is_full && item.people.wait_for_male_amount > 0 ? item.people.wait_for_male_amount + '男' : ''}}
-    {{!item.people.is_full && item.people.wait_for_female_amount > 0 ? item.people.wait_for_female_amount + '女' : ''}}
+    {{item.member_detail.current_male_amount > 0 ? item.member_detail.current_male_amount + '男' : ''}}
+    {{item.member_detail.current_female_amount > 0 ? item.member_detail.current_female_amount + '女' : ''}}
+    {{item.member_detail.is_full ? '（封车）' : '='}}
+    {{!item.member_detail.is_full && item.member_detail.wait_for_male_amount > 0 ? item.member_detail.wait_for_male_amount + '男' : ''}}
+    {{!item.member_detail.is_full && item.member_detail.wait_for_female_amount > 0 ? item.member_detail.wait_for_female_amount + '女' : ''}}
     </view>
     <view class="weui-flex">
       队员：

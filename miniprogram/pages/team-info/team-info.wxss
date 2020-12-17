@@ -1,5 +1,5 @@
 .team-info-page {
-  margin-top: 110rpx;
+  margin-top: 70rpx;
   margin-left: 30rpx;
   margin-right: 30rpx;
   margin-bottom: 30rpx;
@@ -116,5 +116,6 @@
 
 .goto-index-btn {
   margin-top: 30rpx;
+  margin-bottom: 30rpx;
   background-color: #3a3030 !important;
 }

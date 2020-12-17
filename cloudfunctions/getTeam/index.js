@@ -32,6 +32,26 @@ exports.main = async (event, context) => {
       }
     }
 
+    // 整理等待情况
+    let currentMaleAmount = 0;
+    let currentFemaleAmount = 0;
+    memberList.forEach(item => {
+      item.gender === 2 ? (++currentFemaleAmount) : (++currentMaleAmount);
+    });
+
+    const totalMaleAmount = Number(teamData.male_amount);
+    const totalFemaleAmount = Number(teamData.female_amount);
+
+    const needTotal = Math.max((totalMaleAmount + totalFemaleAmount) - (currentMaleAmount + currentFemaleAmount), 0);
+
+    teamData.member_detail = {
+      is_full: needTotal === 0,
+      current_male_amount: currentMaleAmount,
+      current_female_amount: currentFemaleAmount,
+      wait_for_male_amount: Math.max(Math.min(totalMaleAmount - currentMaleAmount, needTotal), 0),
+      wait_for_female_amount: Math.max(Math.min(totalFemaleAmount - currentFemaleAmount, needTotal), 0)
+    };
+
     return teamData;
   } catch (e) {
     return {

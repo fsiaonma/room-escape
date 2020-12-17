@@ -30,14 +30,37 @@ exports.main = async (event, context) => {
     const memberInfoList = memberInfoListRes.data;
 
     for (let i = 0; i < teamList.length; ++i) {
+      // 整理朋友非朋友数据
       const { member_list: memberList } = teamList[i];
       for (let j = 0; j < memberList.length; ++j) {
-        const memberInfo = memberInfoList.find(item => item.openid === memberList[j].openid);
-        memberList[j] = {
-          ...memberList[j],
-          ...memberInfo
-        };
+        if (memberList[j].type !== 'friend') {
+          const memberInfo = memberInfoList.find(item => item.openid === memberList[j].openid);
+          memberList[j] = {
+            ...memberList[j],
+            ...memberInfo
+          };
+        }
       }
+
+      // 整理等待情况
+      let currentMaleAmount = 0;
+      let currentFemaleAmount = 0;
+      memberList.forEach(item => {
+        item.gender === 2 ? (++currentFemaleAmount) : (++currentMaleAmount);
+      });
+
+      const totalMaleAmount = Number(teamList[i].male_amount);
+      const totalFemaleAmount = Number(teamList[i].female_amount);
+
+      const needTotal = Math.max((totalMaleAmount + totalFemaleAmount) - (currentMaleAmount + currentFemaleAmount), 0);
+
+      teamList[i].member_detail = {
+        is_full: needTotal === 0,
+        current_male_amount: currentMaleAmount,
+        current_female_amount: currentFemaleAmount,
+        wait_for_male_amount: Math.max(Math.min(totalMaleAmount - currentMaleAmount, needTotal), 0),
+        wait_for_female_amount: Math.max(Math.min(totalFemaleAmount - currentFemaleAmount, needTotal), 0)
+      };  
     }
 
     return teamList;

@@ -37,7 +37,7 @@
         <input value="{{remark}}" bindchange="bindRemarkChange"/>
       </mp-cell>
     </mp-cells>
-    <mp-cells title="人数要求">
+    <mp-cells wx:if="{{!teamDocId}}" title="人数要求">
       <mp-cell prop="maleAmount">
         <view slot="title" class="weui-label">
           <text class="required-icon">* </text><text>小哥哥</text>
@@ -64,11 +64,11 @@
         <input value="{{wechat}}" bindchange="bindWechatChange"/>
       </mp-cell>
       <picker 
+        wx:if="{{!teamDocId}}"
         mode="selector"
         range="{{teamTypeEnums}}"
         range-key="label"
         value="{{teamTypeValue}}"
-        disabled="{{teamDocId}}"
         bindchange="bindTeamTypeChange"
       >
         <mp-cell prop="teamTypeValue">
@@ -78,19 +78,18 @@
           <div class="weui-cell__bd">{{teamTypeLabel}}</div>
         </mp-cell>
       </picker>
-      <mp-cell wx:if="{{teamTypeValue === '1'}}" prop="leaderNickName">
+      <mp-cell wx:if="{{!teamDocId && teamTypeValue === '1'}}" prop="leaderNickName">
         <view slot="title" class="weui-label">
           <text>车主昵称</text>
         </view>
-        <input value="{{leaderNickName}}" bindchange="bindLeaderNickNameChange" disabled="{{teamDocId}}"/>
+        <input value="{{leaderNickName}}" bindchange="bindLeaderNickNameChange"/>
       </mp-cell>
       <picker 
-        wx:if="{{teamTypeValue === '1'}}"
+        wx:if="{{!teamDocId && teamTypeValue === '1'}}"
         mode="selector"
         range="{{leaderGenderEnmus}}"
         range-key="label"
-        value="{{teamTypeValue}}"
-        disabled="{{teamDocId}}"
+        value="{{leaderGenderValue - 1}}"
         bindchange="bindLeaderGenderChange"
       >
         <mp-cell prop="leaderGenderValue">
@@ -101,7 +100,7 @@
         </mp-cell>
       </picker>
     </mp-cells>
-    <mp-cells title="已有人数">
+    <mp-cells wx:if="{{!teamDocId}}" title="初始人数">
       <mp-cell prop="initialMaleAmount">
         <view slot="title" class="weui-label">
           <text>小哥哥</text>

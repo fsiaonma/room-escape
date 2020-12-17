@@ -29,6 +29,10 @@ Page({
     await this.loadTeamList();
   },
 
+  async onPullDownRefresh() {
+    await this.loadTeamList();
+  },
+
   async loadTeamList() {
     this.setData({
       teamLoading: true
@@ -43,23 +47,6 @@ Page({
         let dtoTeamList = [];
         if (teamList && teamList.length > 0) {
           dtoTeamList = teamList.map(item => {
-            const memberList = item.member_list ? item.member_list : [];
-
-            let maleAmount = 0;
-            let femaleAmount = 0;
-            for (let i = 0; i < memberList.length; ++i) {
-              const {
-                gender
-              } = memberList[i];
-              if (gender === 1) {
-                ++maleAmount;
-              } else {
-                ++femaleAmount;
-              }
-            }
-
-            const isFull = maleAmount + femaleAmount >= Number(item.male_amount) + Number(item.female_amount);
-
             return {
               team_id: item._id,
               owner: item.owner,
@@ -96,17 +83,11 @@ Page({
               })(),
               price: item.price,
               remark: item.remark,
-              people: {
-                is_full: isFull,
-                current: memberList.length,
-                need: Number(item.male_amount) + Number(item.female_amount),
-                male_amount: maleAmount,
-                female_amount: femaleAmount,
-                wait_for_male_amount: Math.max(Number(item.male_amount) - maleAmount, 0),
-                wait_for_female_amount: Math.max(Number(item.female_amount) - femaleAmount, 0)
-              },
+              member_detail: item.member_detail,
               member_list: (() => {
                 const result = [];
+
+                const memberList = item.member_list ? item.member_list : [];
                 for (let i = 0; i < memberList.length; ++i) {
                   const memberItem = memberList[i];
 
@@ -126,6 +107,7 @@ Page({
                     });
                   }
                 }
+
                 return result;
               })()
             }

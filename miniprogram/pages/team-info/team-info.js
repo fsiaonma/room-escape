@@ -15,7 +15,7 @@ Page({
     time: '',
     price: '',
     remark: '',
-    people: '',
+    memberDetail: '',
     itemBackground: '',
     memberList: [],
   },
@@ -29,8 +29,17 @@ Page({
   },
 
   onShareAppMessage() {
+    const { memberDetail } = this.data;
+
+    let memberDetailStr = '';
+    memberDetailStr += memberDetail.current_male_amount > 0 ? memberDetail.current_male_amount + '男' : '';
+    memberDetailStr += memberDetail.current_female_amount > 0 ? memberDetail.current_female_amount + '女' : '';
+    memberDetailStr += memberDetail.is_full ? '（封车）' : '=';
+    memberDetailStr += !memberDetail.is_full && memberDetail.wait_for_male_amount > 0 ? memberDetail.wait_for_male_amount + '男' : '';
+    memberDetailStr += !memberDetail.is_full && memberDetail.wait_for_female_amount > 0 ? memberDetail.wait_for_female_amount + '女' : '';
+
     return {
-      title: `${this.data.topic} ${this.data.date} ${this.dataf.time}`,
+      title: `【${this.data.topic}】【${this.data.date}】【${this.data.time} ${memberDetailStr}】`,
       path: `/pages/team-info/team-info?team_id=${this.data.teamId}`
     };
   },
@@ -97,6 +106,7 @@ Page({
           })(),
           price: result.price,
           remark: result.remark,
+          memberDetail: result.member_detail,
           memberList: (() => {
             const resList = [];
 
