@@ -73,6 +73,13 @@
           "pathName": "pages/team-info/team-info",
           "query": "team_id=73f70d5c5fdb381c000b9ad130f29c44",
           "scene": null
+        },
+        {
+          "id": 2,
+          "name": "pages/team-info/team-info",
+          "pathName": "pages/team-info/team-info",
+          "query": "scene=eb0c51035fe0c307005634ff1ef0228b",
+          "scene": null
         }
       ]
     }

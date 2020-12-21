@@ -8,15 +8,27 @@ cloud.init({
 
 exports.main = async (event, context) => {
   try {
+    const {
+      page = 1,
+      size = 50
+    } = event;
+
   	const db = cloud.database();
     const _ = db.command;
     const $ = db.command.aggregate;
 
-   	const teamListRes = await db.collection('team').aggregate().match({
+   	let query = db.collection('team').aggregate().match({
       datetime: _.gte(Date.now())
     }).sort({
       datetime: 1
-    }).end();
+    });
+
+    if (page !== undefined && size !== undefined) {
+      const offset = (page - 1) * size;
+      query = query.skip(offset).limit(size);
+    }
+    
+    const teamListRes = await query.end();
 
     const teamList = teamListRes.list;
 

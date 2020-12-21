@@ -117,11 +117,21 @@
   </mp-form>
   <view slot="button">
     <view wx:if="{{!teamDocId}}">
-      <button type="primary" bindtap="onCreateTeam" class="save-btn">发起车队</button>
+      <button
+        type="primary"
+        bindtap="onCreateTeam"
+        class="save-btn"
+        disabled="{{btnDisabled}}"
+      >发起车队</button>
     </view>
     <view wx:else>
-      <button type="primary" bindtap="onUpdateTeam" class="save-btn">更新车队</button>
-      <!-- <button type="warn" bindtap="onDestroyTeam" style="margin-top: 30rpx">解散车队</button> -->
+      <button
+        type="primary"
+        bindtap="onUpdateTeam"
+        class="save-btn"
+        disabled="{{btnDisabled}}"
+      >更新车队</button>
+      <button type="warn" bindtap="onDestroyTeam" style="margin-top: 30rpx">人不够，碎车了</button>
     </view>
   </view>
 </mp-form-page>

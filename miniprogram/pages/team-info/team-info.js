@@ -6,10 +6,13 @@ const app = getApp();
 
 Page({
   data: {
+    btnDisabled: false,
+
     teamId: null,
     btnType: null,
     teamDocId: null,
-    owner: null,
+    owner: '',
+    isOwner: null,
     scriptTypes: '',
     topic: '',
     shop: '',
@@ -69,6 +72,7 @@ Page({
         this.setData({
           teamDocId: result._id,
           owner: result.owner,
+          isOwner: result.owner === app.globalData.openid,
           btnType: (() => {
             if (result.member_list.length > 0) {
               if (result.owner === app.globalData.openid) {
@@ -141,6 +145,41 @@ Page({
     // });
   },
 
+  removeMember(event) {
+    const { openid: memberOpenid } = event.currentTarget.dataset;
+    this.setData({ btnDisabled: true });
+    wx.showLoading();
+    wx.cloud.callFunction({
+      name: 'removeMember',
+      data: {
+        team_doc_id: this.data.teamDocId,
+        openid: memberOpenid
+      },
+      success: res => {
+        wx.hideLoading();
+        wx.showToast({
+          title: '踢下车成功',
+          icon: 'success',
+          duration: 2000
+        });
+        this.onLoad({
+          scene: this.data.teamId
+        });
+        this.setData({ btnDisabled: false });
+      },
+      fail: err => {
+        wx.showToast({
+          title: '踢下车失败',
+          icon: 'none',
+          duration: 2000
+        });
+        console.error('踢下车失败', err);
+        wx.hideLoading();
+        this.setData({ btnDisabled: false });
+      }
+    });
+  },
+
   onEditTeam() {
     wx.redirectTo({
       url: `../coe-team/coe-team?team_id=${this.data.teamId}`
@@ -148,6 +187,7 @@ Page({
   },
 
   async onJoinTeam() {
+    this.setData({ btnDisabled: true });
     wx.showLoading();
     wx.cloud.callFunction({
       name: 'joinTeam',
@@ -162,13 +202,25 @@ Page({
           duration: 2000
         });
         this.onLoad({
-          team_id: this.data.teamId
+          scene: this.data.teamId
         });
+        this.setData({ btnDisabled: false });
+      },
+      fail: err => {
+        wx.showToast({
+          title: '上车失败',
+          icon: 'none',
+          duration: 2000
+        });
+        console.error('上车失败', err);
+        wx.hideLoading();
+        this.setData({ btnDisabled: false });
       }
     });
   },
 
   async onLeftTeam() {
+    this.setData({ btnDisabled: true });
     wx.showLoading();
     wx.cloud.callFunction({
       name: 'leftTeam',
@@ -183,8 +235,19 @@ Page({
           duration: 2000
         });
         this.onLoad({
-          team_id: this.data.teamId
+          scene: this.data.teamId
         });
+        this.setData({ btnDisabled: false });
+      },
+      fail: err => {
+        wx.showToast({
+          title: '下车失败',
+          icon: 'none',
+          duration: 2000
+        });
+        console.error('下车失败', err);
+        wx.hideLoading();
+        this.setData({ btnDisabled: false });
       }
     });
   },
@@ -195,11 +258,46 @@ Page({
     });
   },
 
+  lockTeam() {
+    this.setData({ btnDisabled: true });
+    wx.showLoading();
+    wx.cloud.callFunction({
+      name: 'lockTeam',
+      data: {
+        team_doc_id: this.data.teamDocId
+      },
+      success: res => {
+        wx.hideLoading();
+        wx.showToast({
+          title: '封车成功',
+          icon: 'success',
+          duration: 2000
+        });
+        this.onLoad({
+          scene: this.data.teamId
+        });
+        this.setData({ btnDisabled: false });
+      },
+      fail: err => {
+        wx.showToast({
+          title: '封车失败',
+          icon: 'none',
+          duration: 2000
+        });
+        console.error('封车失败', err);
+        wx.hideLoading();
+        this.setData({ btnDisabled: false });
+      }
+    });
+  },
+
   async getPostCard() {
     const self = this;
     this.setData({
       showPostCard: true
     });
+    this.setData({ btnDisabled: true });
+    wx.showLoading();
     wx.cloud.callFunction({
       name: 'getQRCode',
       data: {
@@ -207,11 +305,12 @@ Page({
         page: 'pages/team-info/team-info'
       },
       success(res) {
+        wx.hideLoading();
         self.setData({
           wxQRCode: res.result.tempFileURL
         });
         self.widget = self.selectComponent('.widget');
-        const p1 = self.widget.renderToCanvas({
+        self.widget.renderToCanvas({
           wxml: wxml({
             topic: self.data.topic,
             shop: self.data.shop,
@@ -225,6 +324,7 @@ Page({
           }), 
           style
         });
+        self.setData({ btnDisabled: false });
       }
     });    
   },

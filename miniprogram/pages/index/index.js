@@ -31,6 +31,7 @@ Page({
 
   async onPullDownRefresh() {
     await this.loadTeamList();
+    wx.stopPullDownRefresh();
   },
 
   async loadTeamList() {

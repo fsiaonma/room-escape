@@ -101,14 +101,18 @@
   margin-left: 10rpx;
 }
 
-.member-item-friend {
-  margin-left: auto;
+.member-remove-btn {
   margin-right: 10rpx;
+  margin-left: auto;
+  border: 1px solid #ff2525;
+  padding: 0rpx 10rpx !important;
+  color: #ff2525;
+  font-weight: 400;
+  height: 50rpx;
+  line-height: 44rpx !important;
 }
 
-.edit-btn {
-  background-color: #3a3030 !important;
-}
+.edit-btn {}
 
 .join-btn {
   background-color: #3a3030 !important;
@@ -118,6 +122,18 @@
 
 .goto-index-btn {
   margin-left: 30rpx !important;
+}
+
+.lock-btn {
+  margin-top: 30rpx;
+  width: 100% !important;
+  background-color: #3a3030 !important;
+}
+
+.unlock-btn {
+  margin-top: 30rpx;
+  width: 100% !important;
+  background-color: #3a3030 !important;
 }
 
 .get-postcard-btn {

@@ -2,6 +2,7 @@ import scriptTypesEnum from '../../common/enums/script-types';
 
 Page({
   data: {
+    btnDisabled: false,
     error: '',
 
     teamId: '',
@@ -404,6 +405,7 @@ Page({
           })
         }
       } else {
+        this.setData({ btnDisabled: true });
         wx.showLoading();
         wx.cloud.callFunction({
           name: 'createTeam',
@@ -440,6 +442,7 @@ Page({
               url: '../index/index'
             });
             wx.hideLoading();
+            this.setData({ btnDisabled: false });
           },
           fail: err => {
             wx.showToast({
@@ -449,6 +452,7 @@ Page({
             });
             console.error('创建车队失败', err);
             wx.hideLoading();
+            this.setData({ btnDisabled: false });
           }
         });
       }
@@ -465,6 +469,7 @@ Page({
           })
         }
       } else {
+        this.setData({ btnDisabled: true });
         wx.showLoading();
         wx.cloud.callFunction({
           name: 'updateTeam',
@@ -502,6 +507,7 @@ Page({
               url: '../index/index'
             });
             wx.hideLoading();
+            this.setData({ btnDisabled: false });
           },
           fail: err => {
             wx.showToast({
@@ -511,6 +517,7 @@ Page({
             });
             console.error('更新车队失败', err);
             wx.hideLoading();
+            this.setData({ btnDisabled: false });
           }
         });
       }
