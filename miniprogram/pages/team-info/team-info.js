@@ -1,5 +1,7 @@
 import scriptTypesEnum from '../../common/enums/script-types';
 
+import { wxml, style } from './postcard.js'
+
 const app = getApp();
 
 Page({
@@ -16,16 +18,20 @@ Page({
     price: '',
     remark: '',
     memberDetail: '',
-    itemBackground: '',
     memberList: [],
+
+    showPostCard: false,
+    wxQRCode: ''
   },
 
   async onLoad(options) {
     await app.init();
     wx.showShareMenu();
-    const { team_id: teamId } = options;
-    this.setData({ teamId });
-    this.getTeam(teamId);
+    const teamId = options.scene ? options.scene : null;
+    if (teamId) {
+      this.setData({ teamId });
+      this.getTeam(teamId);
+    }
   },
 
   onShareAppMessage() {
@@ -39,8 +45,8 @@ Page({
     memberDetailStr += !memberDetail.is_full && memberDetail.wait_for_female_amount > 0 ? memberDetail.wait_for_female_amount + '女' : '';
 
     return {
-      title: `【${this.data.topic}】【${this.data.date}】【${this.data.time} ${memberDetailStr}】`,
-      path: `/pages/team-info/team-info?team_id=${this.data.teamId}`
+      title: `【${memberDetailStr}】`,
+      path: `/pages/team-info/team-info?scene=${this.data.teamId}`
     };
   },
 
@@ -187,5 +193,58 @@ Page({
     wx.redirectTo({
       url: '../index/index'
     });
+  },
+
+  async getPostCard() {
+    const self = this;
+    this.setData({
+      showPostCard: true
+    });
+    wx.cloud.callFunction({
+      name: 'getQRCode',
+      data: {
+        scene: this.data.teamId,
+        page: 'pages/team-info/team-info'
+      },
+      success(res) {
+        self.setData({
+          wxQRCode: res.result.tempFileURL
+        });
+        self.widget = self.selectComponent('.widget');
+        const p1 = self.widget.renderToCanvas({
+          wxml: wxml({
+            topic: self.data.topic,
+            shop: self.data.shop,
+            price: self.data.price,
+            scriptTypes: self.data.scriptTypes,
+            memberList: self.data.memberList,
+            date: self.data.date,
+            time: self.data.time,
+            memberDetail: self.data.memberDetail,
+            wxQRCode: res.result.tempFileURL
+          }), 
+          style
+        });
+      }
+    });    
+  },
+
+  downLoadPostCard() {
+    const self = this;
+    this.widget.canvasToTempFilePath().then(res => {
+      wx.saveImageToPhotosAlbum({
+        filePath: res.tempFilePath,
+        success(res) {
+          wx.showToast({
+            title: '保存成功',
+            icon: 'success',
+            duration: 2000
+          });
+          self.setData({
+            showPostCard: false
+          });
+        }
+      });
+    })
   }
 })

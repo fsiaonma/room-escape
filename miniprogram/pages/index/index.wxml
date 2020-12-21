@@ -43,6 +43,7 @@
         <view wx:if="{{item.member_amount}}" class="item-member-amount"> x {{item.member_amount}}</view>
       </view>
     </view>
+    <image wx:if="{{item.member_detail.is_full}}" src="./asserts/full.png" class="full-icon"></image>
   </view>
 </view>
 

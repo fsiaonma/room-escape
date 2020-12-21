@@ -37,7 +37,7 @@
         <input value="{{remark}}" bindchange="bindRemarkChange"/>
       </mp-cell>
     </mp-cells>
-    <mp-cells wx:if="{{!teamDocId}}" title="人数要求">
+    <mp-cells wx:if="{{!teamDocId}}" title="剧本角色配置">
       <mp-cell prop="maleAmount">
         <view slot="title" class="weui-label">
           <text class="required-icon">* </text><text>小哥哥</text>
@@ -100,7 +100,7 @@
         </mp-cell>
       </picker>
     </mp-cells>
-    <mp-cells wx:if="{{!teamDocId}}" title="初始人数">
+    <mp-cells title="车队已有人数">
       <mp-cell prop="initialMaleAmount">
         <view slot="title" class="weui-label">
           <text>小哥哥</text>
@@ -121,7 +121,7 @@
     </view>
     <view wx:else>
       <button type="primary" bindtap="onUpdateTeam" class="save-btn">更新车队</button>
-      <button type="warn" bindtap="onDestroyTeam" style="margin-top: 30rpx">解散车队</button>
+      <!-- <button type="warn" bindtap="onDestroyTeam" style="margin-top: 30rpx">解散车队</button> -->
     </view>
   </view>
 </mp-form-page>

@@ -12,7 +12,7 @@ Page({
     requestResult: ''
   },
 
-  async onLoad() {
+  async onLoad(options) {
     await app.init();
 
     wx.showShareMenu();
@@ -159,7 +159,7 @@ Page({
   onTeamItemTap(event) {
     const { teamId } = event.currentTarget.dataset;
     wx.redirectTo({
-      url: `../team-info/team-info?team_id=${teamId}`
+      url: `../team-info/team-info?scene=${teamId}`
     });
   }
 })

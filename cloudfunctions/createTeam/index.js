@@ -78,7 +78,7 @@ exports.main = async (event, context) => {
       address: event.address,
       date: event.date,
       time: event.time,
-      datetime: event.datatime ? event.datatime : new Date(`${event.date} ${event.time}`).getTime(),
+      datetime: event.datetime ? event.datetime : new Date(`${event.date} ${event.time}`).getTime(),
       wechat: event.wechat,
       price: event.price,
       remark: event.remark,

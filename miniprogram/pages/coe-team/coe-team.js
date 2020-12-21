@@ -218,9 +218,7 @@ Page({
 
   bindTeamTypeChange(e) {
     const index = e.detail.value;
-    console.log(index);
     const teamTypeItem = this.data.teamTypeEnums[index];
-    console.log(teamTypeItem);
     this.setData({
       teamTypeLabel: teamTypeItem.label,
       teamTypeValue: teamTypeItem.value,
@@ -237,9 +235,7 @@ Page({
 
   bindLeaderGenderChange(e) {
     const index = e.detail.value;
-    console.log(index);
     const leaderGenderIteam = this.data.leaderGenderEnmus[index];
-    console.log(leaderGenderIteam);
     this.setData({
       leaderGenderLabel: leaderGenderIteam.label,
       leaderGenderValue: leaderGenderIteam.value,
@@ -417,7 +413,11 @@ Page({
             address: this.data.address,
             date: this.data.formData.date,
             time: this.data.formData.time,
-            datatime: new Date(`${this.data.formData.date} ${this.data.formData.time}`).getTime(),
+            datetime: (() => {
+              const dateStr = `${this.data.formData.date} ${this.data.formData.time}`;
+              const datetime = dateStr.replace(/\-/g, "/") ;
+              return new Date(datetime).getTime();
+            })(),
             wechat: this.data.formData.wechat,
             price: this.data.formData.price,
             remark: this.data.formData.remark,
@@ -475,7 +475,11 @@ Page({
             address: this.data.address,
             date: this.data.formData.date,
             time: this.data.formData.time,
-            datatime: new Date(`${this.data.formData.date} ${this.data.formData.time}`).getTime(),
+            datetime: (() => {
+              const dateStr = `${this.data.formData.date} ${this.data.formData.time}`;
+              const datetime = dateStr.replace(/\-/g, "/");
+              return new Date(datetime).getTime()
+            })(),
             wechat: this.data.formData.wechat,
             price: this.data.formData.price,
             remark: this.data.formData.remark,

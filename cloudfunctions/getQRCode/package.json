@@ -1,16 +1,14 @@
 {
-  "name": "miniprogram",
+  "name": "getqrcode",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "weui-miniprogram": "^1.0.6",
-    "widget-ui": "^1.0.2",
-    "wxml-to-canvas": "^1.1.1"
+    "wx-server-sdk": "^2.3.2"
   }
 }

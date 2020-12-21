@@ -14,7 +14,9 @@ App({
         traceUser: true,
       })
     }
-    this.globalData = {};
+    this.globalData = {
+      sysInfo: wx.getSystemInfoSync()
+    };
   },
 
   async init() {
@@ -78,5 +80,10 @@ App({
       }
       this.globalData.openid = loginRes.result.openid;
     }
+  },
+
+  rpxToPx(rpx) {
+    let ratio = 750 / this.globalData.sysInfo.screenWidth;
+    return rpx / ratio;
   }
 })

@@ -38,29 +38,46 @@
   </view>
 
   <view slot="button">
+    <view class="weui-flex">
+      <button
+        wx:if="{{btnType === 'edit'}}"
+        bindtap="onEditTeam"
+        type="primary"
+        class="edit-btn"
+      >编辑车队</button>
+      <button
+        wx:if="{{btnType === 'join'}}"
+        open-type="getUserInfo"
+        bindgetuserinfo="onJoinTeam"
+        type="primary"
+        class="join-btn"
+      >加入车队</button>
+      <button
+        wx:if="{{btnType === 'left'}}"
+        type="warn"
+        bindtap="onLeftTeam"
+        class="left-btn"
+      >退出车队</button>
+      <button
+        bindtap="gotoIndex"
+        class="goto-index-btn"
+      >查看全部车队</button>
+    </view>
     <button
-      wx:if="{{btnType === 'edit'}}"
-      bindtap="onEditTeam"
+      bindtap="getPostCard"
       type="primary"
-      class="edit-btn"
-    >编辑车队</button>
-    <button
-      wx:if="{{btnType === 'join'}}"
-      open-type="getUserInfo"
-      bindgetuserinfo="onJoinTeam"
-      type="primary"
-      class="join-btn"
-    >加入车队</button>
-    <button
-      wx:if="{{btnType === 'left'}}"
-      type="warn"
-      bindtap="onLeftTeam"
-    >退出车队</button>
-    <button
-      bindtap="gotoIndex"
-      type="primary"
-      class="goto-index-btn"
-    >查看全部车队</button>
+      class="get-postcard-btn"
+    >分享到朋友圈</button>
   </view>
+
+  <view wx:if="{{showPostCard}}" class="postcard">
+    <wxml-to-canvas class="widget" width="400" height="550"></wxml-to-canvas>
+    <button
+      bindtap="downLoadPostCard"
+      class="donwload-btn"
+    >保存图片并分享</button>
+  </view>
+
+  <view style="width: 100%; height: 60rpx;"></view>
 </view>
 

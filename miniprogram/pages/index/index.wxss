@@ -15,6 +15,7 @@ page {
   position: fixed;
   margin: 0 auto;
   width: 100%;
+  z-index: 100;
   background-color: #3a3030;
 }
 
@@ -65,6 +66,7 @@ page {
 }
 
 .team-item {
+  position: relative;
   margin: 30rpx;
   border: 1px;
   border-radius: 3px;
@@ -141,6 +143,14 @@ page {
   line-height: 50rpx;
   height: 50rpx;
   font-size: 35rpx;
+}
+
+.full-icon {
+  position: absolute;
+  width: 300rpx;
+  height: 280rpx;
+  top: 30rpx;
+  left: 350rpx;
 }
 
 .create-btn {
