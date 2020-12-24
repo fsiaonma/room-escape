@@ -26,8 +26,8 @@ exports.main = async (event, context) => {
       if (memberList[i].type !== 'friend') {
         const memberInfo = memberInfoList.find(item => item.openid === memberList[i].openid);
         memberList[i] = {
-          ...memberList[i],
-          ...memberInfo
+          ...memberInfo,
+          ...memberList[i]
         }
       }
     }
@@ -51,6 +51,9 @@ exports.main = async (event, context) => {
       wait_for_male_amount: Math.max(Math.min(totalMaleAmount - currentMaleAmount, needTotal), 0),
       wait_for_female_amount: Math.max(Math.min(totalFemaleAmount - currentFemaleAmount, needTotal), 0)
     };
+
+    teamData.leader_nick_name = memberList[0].nickName;
+    teamData.leader_gender = memberList[0].gender;
 
     return teamData;
   } catch (e) {

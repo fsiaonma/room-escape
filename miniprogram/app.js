@@ -17,6 +17,8 @@ App({
     this.globalData = {
       sysInfo: wx.getSystemInfoSync()
     };
+
+    this.globalData.isIpx = this.globalData.sysInfo.model.indexOf('iPhone X') != -1;
   },
 
   async init() {

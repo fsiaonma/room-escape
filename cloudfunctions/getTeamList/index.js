@@ -48,8 +48,8 @@ exports.main = async (event, context) => {
         if (memberList[j].type !== 'friend') {
           const memberInfo = memberInfoList.find(item => item.openid === memberList[j].openid);
           memberList[j] = {
-            ...memberList[j],
-            ...memberInfo
+            ...memberInfo,
+            ...memberList[j]
           };
         }
       }

@@ -1,0 +1,44 @@
+<mp-form-page title="队友信息">
+  <mp-form id="form" rules="{{rules}}" models="{{formData}}">
+    <mp-cells>
+      <mp-cell prop="memberNickName">
+        <view slot="title" class="weui-label">
+          <text class="required-icon">* </text><text>队友昵称</text>
+        </view>
+        <input value="{{memberNickName}}" bindinput="bindMemberNickNameChange"/>
+      </mp-cell>
+      <picker
+        mode="selector"
+        range="{{memberGenderEnmus}}"
+        range-key="label"
+        value="{{memberGenderValue - 1}}"
+        bindchange="bindMemberGenderChange"
+      >
+        <mp-cell prop="memberGenderValue">
+          <view slot="title" class="weui-label">
+            <text class="required-icon">* </text><text>队友性别</text>
+          </view>
+          <div class="weui-cell__bd">{{memberGenderLabel}}</div>
+        </mp-cell>
+      </picker>
+    </mp-cells>
+  </mp-form>
+  <view slot="button">
+    <view wx:if="{{!memberId}}">
+      <button
+        type="primary"
+        bindtap="onCreateMember"
+        class="save-btn"
+        disabled="{{btnDisabled}}"
+      >添加队员</button>
+    </view>
+    <view wx:else>
+      <button
+        type="primary"
+        bindtap="onUpdateMember"
+        class="save-btn"
+        disabled="{{btnDisabled}}"
+      >更新队员信息</button>
+    </view>
+  </view>
+</mp-form-page>

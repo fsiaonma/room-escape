@@ -92,11 +92,14 @@ Page({
                 for (let i = 0; i < memberList.length; ++i) {
                   const memberItem = memberList[i];
 
-                  let memberAmount = 1;
-                  for (let j = 0; j < memberList.length; ++j) {
-                    const jMemberItem = memberList[j];
-                    if (memberItem.type !== 'friend' && jMemberItem.type === 'friend' && (jMemberItem.openid === memberItem.openid || jMemberItem.nickName === memberItem.nickName)) {
-                      ++memberAmount; 
+                  let friendAmount;
+                  if (i === 0) {
+                    friendAmount = 1;
+                    for (let j = 0; j < memberList.length; ++j) {
+                      const jMemberItem = memberList[j];
+                      if (jMemberItem.type === 'friend') {
+                        ++friendAmount;
+                      }
                     }
                   }
 
@@ -104,7 +107,7 @@ Page({
                     result.push({
                       avatar: memberItem.avatarUrl,
                       nick_name: memberItem.nickName,
-                      member_amount: memberAmount > 1 ? memberAmount : null
+                      member_amount: friendAmount > 1 ? friendAmount : null
                     });
                   }
                 }
@@ -139,7 +142,7 @@ Page({
   },
 
   async onAvatarTap() {
-    wx.redirectTo({
+    wx.navigateTo({
       url: '../coe-user/coe-user'
     });
   },
@@ -151,7 +154,7 @@ Page({
       });
       await this.onLoad();
     } else {
-      wx.redirectTo({
+      wx.navigateTo({
         url: '../coe-team/coe-team'
       });
     }
@@ -159,7 +162,7 @@ Page({
 
   onTeamItemTap(event) {
     const { teamId } = event.currentTarget.dataset;
-    wx.redirectTo({
+    wx.navigateTo({
       url: `../team-info/team-info?scene=${teamId}`
     });
   }

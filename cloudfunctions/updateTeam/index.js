@@ -11,8 +11,6 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
 
   const {
-    initial_male_amount: initialMaleAmount,
-    initial_female_amount: initialFemaleAmount,
     team_type: teamType,
     wechat
   } = event;
@@ -31,7 +29,7 @@ exports.main = async (event, context) => {
       openid: wxContext.OPENID,
       avatarUrl: userInfo.avatarUrl
     };
-    leaderNickName = userInfo.nickName;
+    leaderNickName = event.leader_nick_name ? event.leader_nick_name : userInfo.nickName;
     leaderGender = userInfo.gender;
   } else if (teamType === '1') { // 替人发车
     leaderNickName = event.leader_nick_name ? event.leader_nick_name : event.wechat;
@@ -44,31 +42,8 @@ exports.main = async (event, context) => {
   const teamInfo = teamRes.data[0];
 
   const { member_list: memberList } = teamInfo;
-  const filterMemberList = memberList.filter(item => item.type !== 'friend');
-
-  if (initialMaleAmount > 0) {
-    const maleMemberAmount = leaderGender === 1 ? initialMaleAmount - 1 : initialMaleAmount;
-    for (let i = 0; i < maleMemberAmount; ++i) {
-      filterMemberList.push({
-        ...baseMemberInfo,
-        type: 'friend',
-        nickName: `${leaderNickName} 朋友`,
-        gender: 1
-      });
-    }
-  }
-
-  if (initialFemaleAmount > 0) {
-    const femaleMemberAmount = leaderGender === 2 ? initialFemaleAmount - 1 : initialFemaleAmount;
-    for (let i = 0; i < femaleMemberAmount; ++i) {
-      filterMemberList.push({
-        ...baseMemberInfo,
-        type: 'friend',
-        nickName: `${leaderNickName} 朋友`,
-        gender: 2
-      });
-    }
-  }
+  memberList[0].nickName = leaderNickName;
+  memberList[0].gender = leaderGender;
 
   return await db.collection('team').where({
     _id: event.team_doc_id
@@ -84,13 +59,10 @@ exports.main = async (event, context) => {
       price: event.price,
       remark: event.remark,
       team_type: event.team_type,
-      leader_gender: event.leader_gender,
       male_amount: event.male_amount,
       female_amount: event.female_amount,
-      initial_male_amount: initialMaleAmount,
-      initial_female_amount: initialFemaleAmount,
       script_types: event.script_types,
-      member_list: filterMemberList
+      member_list: memberList
     }
   });
 }

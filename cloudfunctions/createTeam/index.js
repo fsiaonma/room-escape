@@ -1,4 +1,5 @@
-const cloud = require('wx-server-sdk')
+const uuid = require('uuid/v4');
+const cloud = require('wx-server-sdk');
 
 // 初始化 cloud
 cloud.init({
@@ -18,6 +19,7 @@ exports.main = async (event, context) => {
   } = event;
 
   let baseMemberInfo = {};
+  let leaderOpenId;
   let leaderNickName;
   let leaderGender;
 
@@ -28,12 +30,13 @@ exports.main = async (event, context) => {
     const userInfo = userRes.data[0];
 
     baseMemberInfo = {
-      openid: wxContext.OPENID,
       avatarUrl: userInfo.avatarUrl
     };
-    leaderNickName = userInfo.nickName;
+    leaderOpenId = wxContext.OPENID;
+    leaderNickName = event.leader_nick_name ? event.leader_nick_name : userInfo.nickName;
     leaderGender = userInfo.gender;
   } else if (teamType === '1') { // 替人发车
+    leaderOpenId = uuid().replace(/-/g, '');
     leaderNickName = event.leader_nick_name ? event.leader_nick_name : event.wechat;
     leaderGender = event.leader_gender ? event.leader_gender : 1;
   }
@@ -42,6 +45,7 @@ exports.main = async (event, context) => {
 
   memberList.push({
     ...baseMemberInfo,
+    openid: leaderOpenId,
     nickName: leaderNickName,
     gender: leaderGender
   });
@@ -51,8 +55,9 @@ exports.main = async (event, context) => {
     for (let i = 0; i < maleMemberAmount; ++i) {
       memberList.push({
         ...baseMemberInfo,
+        openid: uuid().replace(/-/g, ''),
         type: 'friend',
-        nickName: `${leaderNickName} 朋友`,
+        nickName: `${leaderNickName} 的朋友`,
         gender: 1
       });
     }
@@ -63,8 +68,9 @@ exports.main = async (event, context) => {
     for (let i = 0; i < femaleMemberAmount; ++i) {
       memberList.push({
         ...baseMemberInfo,
+        openid: uuid().replace(/-/g, ''),
         type: 'friend',
-        nickName: `${leaderNickName} 朋友`,
+        nickName: `${leaderNickName} 的朋友`,
         gender: 2
       });
     }
@@ -83,8 +89,6 @@ exports.main = async (event, context) => {
       price: event.price,
       remark: event.remark,
       team_type: event.team_type,
-      leader_nick_name: event.leader_nick_name,
-      leader_gender: event.leader_gender,
       male_amount: event.male_amount,
       female_amount: event.female_amount,
       initial_male_amount: initialMaleAmount,

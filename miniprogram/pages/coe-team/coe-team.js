@@ -3,7 +3,6 @@ import scriptTypesEnum from '../../common/enums/script-types';
 Page({
   data: {
     btnDisabled: false,
-    error: '',
 
     teamId: '',
     teamDocId: '',
@@ -42,7 +41,7 @@ Page({
     maleAmount: '',
     femaleAmount: '',
     initialMaleAmount: '',
-    initialFeMaleAmount: '',
+    initialFemaleAmount: '',
     scriptTypeItems: [],
 
     formData: {
@@ -59,7 +58,7 @@ Page({
       maleAmount: '',
       femaleAmount: '',
       initialMaleAmount: '',
-      initialFeMaleAmount: '',
+      initialFemaleAmount: '',
       scriptTypes: []
     },
 
@@ -104,7 +103,7 @@ Page({
     }, {
       name: 'teamTypeValue',
       rules: {
-        required: true
+        required: false
       },
     }, {
       name: 'leaderNickName',
@@ -134,7 +133,7 @@ Page({
         required: false
       },
     }, {
-      name: 'initialFeMaleAmount',
+      name: 'initialFemaleAmount',
       rules: {
         required: false
       },
@@ -236,11 +235,11 @@ Page({
 
   bindLeaderGenderChange(e) {
     const index = e.detail.value;
-    const leaderGenderIteam = this.data.leaderGenderEnmus[index];
+    const leaderGenderItem = this.data.leaderGenderEnmus[index];
     this.setData({
-      leaderGenderLabel: leaderGenderIteam.label,
-      leaderGenderValue: leaderGenderIteam.value,
-      [`formData.leaderGenderValue`]: leaderGenderIteam.value
+      leaderGenderLabel: leaderGenderItem.label,
+      leaderGenderValue: leaderGenderItem.value,
+      [`formData.leaderGenderValue`]: leaderGenderItem.value
     });
   },
 
@@ -267,8 +266,8 @@ Page({
 
   bindInitialFemaleAmountChange(e) {
     this.setData({
-      initialFeMaleAmount: e.detail.value,
-      [`formData.initialFeMaleAmount`]: e.detail.value
+      initialFemaleAmount: e.detail.value,
+      [`formData.initialFemaleAmount`]: e.detail.value
     });
   },
 
@@ -363,11 +362,7 @@ Page({
           maleAmount: result.male_amount,
           [`formData.maleAmount`]: result.male_amount,
           femaleAmount: result.female_amount,
-          [`formData.femaleAmount`]: result.female_amount,
-          initialMaleAmount: result.initial_male_amount,
-          [`formData.initialMaleAmount`]: result.initial_male_amount,
-          initialFeMaleAmount: result.initial_female_amount,
-          [`formData.initialFeMaleAmount`]: result.initial_female_amount
+          [`formData.femaleAmount`]: result.female_amount
         });
 
 
@@ -400,11 +395,25 @@ Page({
       if (!valid) {
         const firstError = Object.keys(errors)
         if (firstError.length) {
-          this.setData({
-            error: errors[firstError[0]].message
-          })
+          wx.showToast({
+            title: `创建失败：${errors[firstError[0]].message}`,
+            icon: 'none',
+            duration: 2000
+          });
         }
       } else {
+        const dateStr = `${this.data.formData.date} ${this.data.formData.time}`;
+        const datetime = new Date(dateStr.replace(/\-/g, "/")).getTime();
+
+        if (datetime <= Date.now()) {
+          wx.showToast({
+            title: `创建失败：发车时间不能早于当前时间`,
+            icon: 'none',
+            duration: 2000
+          });
+          return;
+        }
+
         this.setData({ btnDisabled: true });
         wx.showLoading();
         wx.cloud.callFunction({
@@ -415,11 +424,7 @@ Page({
             address: this.data.address,
             date: this.data.formData.date,
             time: this.data.formData.time,
-            datetime: (() => {
-              const dateStr = `${this.data.formData.date} ${this.data.formData.time}`;
-              const datetime = dateStr.replace(/\-/g, "/") ;
-              return new Date(datetime).getTime();
-            })(),
+            datetime,
             wechat: this.data.formData.wechat,
             price: this.data.formData.price,
             remark: this.data.formData.remark,
@@ -429,7 +434,7 @@ Page({
             male_amount: this.data.formData.maleAmount ? this.data.formData.maleAmount : 0,
             female_amount: this.data.formData.femaleAmount ? this.data.formData.femaleAmount : 0,
             initial_male_amount: this.data.formData.initialMaleAmount ? this.data.formData.initialMaleAmount : 0,
-            initial_female_amount: this.data.formData.initialFeMaleAmount ? this.data.formData.initialFeMaleAmount : 0, 
+            initial_female_amount: this.data.formData.initialFemaleAmount ? this.data.formData.initialFemaleAmount : 0, 
             script_types: this.data.formData.scriptTypes,
           },
           success: res => {
@@ -464,11 +469,25 @@ Page({
       if (!valid) {
         const firstError = Object.keys(errors)
         if (firstError.length) {
-          this.setData({
-            error: errors[firstError[0]].message
-          })
+          wx.showToast({
+            title: `更新失败：${errors[firstError[0]].message}`,
+            icon: 'none',
+            duration: 2000
+          });
         }
       } else {
+        const dateStr = `${this.data.formData.date} ${this.data.formData.time}`;
+        const datetime = new Date(dateStr.replace(/\-/g, "/")).getTime();
+
+        if (datetime <= Date.now()) {
+          wx.showToast({
+            title: `创建失败：发车时间不能早于当前时间`,
+            icon: 'none',
+            duration: 2000
+          });
+          return;
+        }
+
         this.setData({ btnDisabled: true });
         wx.showLoading();
         wx.cloud.callFunction({
@@ -480,11 +499,7 @@ Page({
             address: this.data.address,
             date: this.data.formData.date,
             time: this.data.formData.time,
-            datetime: (() => {
-              const dateStr = `${this.data.formData.date} ${this.data.formData.time}`;
-              const datetime = dateStr.replace(/\-/g, "/");
-              return new Date(datetime).getTime()
-            })(),
+            datetime,
             wechat: this.data.formData.wechat,
             price: this.data.formData.price,
             remark: this.data.formData.remark,
@@ -493,8 +508,6 @@ Page({
             leader_gender: this.data.formData.leaderGenderValue,
             male_amount: this.data.formData.maleAmount ? this.data.formData.maleAmount : 0,
             female_amount: this.data.formData.femaleAmount ? this.data.formData.femaleAmount : 0,
-            initial_male_amount: this.data.formData.initialMaleAmount ? this.data.formData.initialMaleAmount : 0,
-            initial_female_amount: this.data.formData.initialFeMaleAmount ? this.data.formData.initialFeMaleAmount : 0, 
             script_types: this.data.formData.scriptTypes
           },
           success: res => {
@@ -504,7 +517,7 @@ Page({
               duration: 2000
             });
             wx.redirectTo({
-              url: '../index/index'
+              url: `../team-info/team-info?scene=${this.data.teamId}`
             });
             wx.hideLoading();
             this.setData({ btnDisabled: false });

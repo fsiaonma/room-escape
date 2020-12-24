@@ -139,10 +139,24 @@ Page({
   },
 
   onUserItemTap(event) {
-    // const { openid } = event.currentTarget.dataset;
-    // wx.redirectTo({
-    //   url: `../user-info/user-info?openid=${openid}`
-    // });
+    const {
+      openid,
+      type
+    } = event.currentTarget.dataset;
+
+    if (this.data.isOwner && type === 'friend') {
+      wx.navigateTo({
+        url: `../coe-member/coe-member?team_id=${this.data.teamId}&member_id=${openid}`
+      });
+    }
+  },
+
+  addMember() {
+    if (this.data.isOwner) {
+      wx.navigateTo({
+        url: `../coe-member/coe-member?team_id=${this.data.teamId}`
+      });
+    }
   },
 
   removeMember(event) {
@@ -181,7 +195,7 @@ Page({
   },
 
   onEditTeam() {
-    wx.redirectTo({
+    wx.navigateTo({
       url: `../coe-team/coe-team?team_id=${this.data.teamId}`
     });
   },
@@ -264,7 +278,7 @@ Page({
     wx.cloud.callFunction({
       name: 'lockTeam',
       data: {
-        team_doc_id: this.data.teamDocId
+        team_id: this.data.teamId
       },
       success: res => {
         wx.hideLoading();
@@ -346,5 +360,12 @@ Page({
         }
       });
     })
+  },
+
+  hidePostcard() {
+    this.setData({
+      showPostCard: false,
+      btnDisabled: false
+    });
   }
 })

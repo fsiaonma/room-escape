@@ -13,6 +13,13 @@
     </view>
     <view wx:if="{{price}}" class="item-price">价格：{{price}} / 位</view>
     <view wx:if="{{remark}}" class="item-remark">备注：{{remark}}</view>
+    <view class="item-member-status">
+    {{memberDetail.current_male_amount > 0 ? memberDetail.current_male_amount + '男' : ''}}
+    {{memberDetail.current_female_amount > 0 ? memberDetail.current_female_amount + '女' : ''}}
+    {{memberDetail.is_full ? '（封车）' : '='}}
+    {{!memberDetail.is_full && memberDetail.wait_for_male_amount > 0 ? memberDetail.wait_for_male_amount + '男' : ''}}
+    {{!memberDetail.is_full && memberDetail.wait_for_female_amount > 0 ? memberDetail.wait_for_female_amount + '女' : ''}}
+    </view>
   </view>
 
   <view class="team-member-title">成员信息</view>
@@ -20,12 +27,13 @@
     <view wx:for="{{memberList}}" wx:key="index" class="{{ item.gender === 1 ? 'male-background' : item.gender === 2 ? 'female-background' : '' }}">
       <view
         wx:if="{{item.avatarUrl || item.nickName}}"
+        data-type="{{item.type}}"
         data-openid="{{item.openid}}"
         class="member-item weui-flex"
         bindtap="onUserItemTap"
       >
         <view
-          wx:if="{{item.avatarUrl}}"
+          wx:if="{{item.type !== 'friend' && item.avatarUrl}}"
           style="background-image: url({{item.avatarUrl}})"
           class="member-item-avatar"
         ></view>
@@ -35,12 +43,12 @@
           size="mini"
           class="member-remove-btn"
           disabled="{{btnDisabled}}"
-          bindtap="removeMember"
+          catchtap="removeMember"
           data-openid="{{item.openid}}"
         >踢下车</button>
       </view>
-      <view wx:else class="member-item weui-flex">
-      （空位）
+      <view wx:else class="member-item weui-flex" bindtap="addMember">
+        {{isOwner ? '+添加队员' : '（空位）'}}
       </view>
     </view>
   </view>
@@ -73,24 +81,24 @@
       >查看全部车队</button>
     </view>
     <button
-      bindtap="getPostCard"
-      type="primary"
-      class="get-postcard-btn"
-      disabled="{{btnDisabled}}"
-    >分享到朋友圈</button>
-    <!-- <button
       wx:if="{{isOwner && !memberDetail.is_full}}"
       type="primary"
       class="lock-btn"
       disabled="{{btnDisabled}}"
       bindtap="lockTeam"
-    >人组齐了，封车</button> -->
+    >人组齐了，一键封车</button>
+    <button
+      bindtap="getPostCard"
+      type="primary"
+      class="get-postcard-btn"
+      disabled="{{btnDisabled}}"
+    >分享到朋友圈</button>
   </view>
 
-  <view wx:if="{{showPostCard}}" class="postcard">
+  <view wx:if="{{showPostCard}}" class="postcard" bindtap="hidePostcard">
     <wxml-to-canvas class="widget" width="400" height="550"></wxml-to-canvas>
     <button
-      bindtap="downLoadPostCard"
+      catchtap="downLoadPostCard"
       class="donwload-btn"
     >保存图片并分享</button>
   </view>
