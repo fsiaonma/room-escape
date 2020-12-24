@@ -14,9 +14,7 @@ Page({
 
   async onLoad(options) {
     await app.init();
-
     wx.showShareMenu();
-
     const { userInfo } = app.globalData;
     if (userInfo) {
       this.setData({
@@ -25,8 +23,17 @@ Page({
         nickName: userInfo.nickName
       });
     }
+  },
 
+  async onShow() {
     await this.loadTeamList();
+  },
+
+  onShareAppMessage() {
+    return {
+      title: `【拼团】最新车队列表`,
+      path: '/pages/index/index'
+    };
   },
 
   async onPullDownRefresh() {
@@ -45,9 +52,9 @@ Page({
       success: res => {
         const teamList = res.result;
 
-        let dtoTeamList = [];
+        let resTeamList = [];
         if (teamList && teamList.length > 0) {
-          dtoTeamList = teamList.map(item => {
+          const dtoTeamList = teamList.map(item => {
             return {
               team_id: item._id,
               owner: item.owner,
@@ -116,10 +123,24 @@ Page({
               })()
             }
           });
+
+          for (let i = 0; i < dtoTeamList.length; ++i) {
+            const { date: teamDate } = dtoTeamList[i];
+
+            if (!resTeamList.find(item => item.key === teamDate)) {
+              resTeamList.push({
+                key: teamDate,
+                list: []
+              })
+            }
+
+            const targetItem = resTeamList.find(item => item.key === teamDate);
+            targetItem.list.push(dtoTeamList[i]);
+          }
         }
 
         this.setData({
-          teamList: dtoTeamList,
+          teamList: resTeamList,
           teamLoading: false
         });
       },
@@ -143,7 +164,7 @@ Page({
 
   async onAvatarTap() {
     wx.navigateTo({
-      url: '../coe-user/coe-user'
+      url: `../user-info/user-info?openid=${app.globalData.openid}`
     });
   },
 

@@ -143,11 +143,9 @@ Page({
               icon: 'success',
               duration: 2000
             });
-            wx.redirectTo({
-              url: `../team-info/team-info?scene=${this.data.teamId}`
-            });
             wx.hideLoading();
             this.setData({ btnDisabled: false });
+            wx.navigateBack();
           },
           fail: err => {
             wx.showToast({
@@ -192,11 +190,9 @@ Page({
               icon: 'success',
               duration: 2000
             });
-            wx.redirectTo({
-              url: `../team-info/team-info?scene=${this.data.teamId}`
-            });
             wx.hideLoading();
             this.setData({ btnDisabled: false });
+            wx.navigateBack();
           },
           fail: err => {
             wx.showToast({

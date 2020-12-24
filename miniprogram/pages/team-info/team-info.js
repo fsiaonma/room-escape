@@ -31,10 +31,12 @@ Page({
     await app.init();
     wx.showShareMenu();
     const teamId = options.scene ? options.scene : null;
-    if (teamId) {
-      this.setData({ teamId });
-      this.getTeam(teamId);
-    }
+    this.setData({ teamId });
+    await this.getTeam();
+  },
+
+  async onShow() {
+    await this.getTeam();
   },
 
   onShareAppMessage() {
@@ -48,7 +50,7 @@ Page({
     memberDetailStr += !memberDetail.is_full && memberDetail.wait_for_female_amount > 0 ? memberDetail.wait_for_female_amount + '女' : '';
 
     return {
-      title: `【${memberDetailStr}】`,
+      title: `【拼团】${memberDetailStr}`,
       path: `/pages/team-info/team-info?scene=${this.data.teamId}`
     };
   },
@@ -59,12 +61,14 @@ Page({
     });
   },
 
-  getTeam(teamId) {
+  getTeam() {
+    if (!this.data.teamId) { return; }
+
     wx.showLoading();
     wx.cloud.callFunction({
       name: 'getTeam',
       data: {
-        team_id: teamId
+        team_id: this.data.teamId ? this.data.teamId : ''
       },
       success: res => {
         const { result } = res;

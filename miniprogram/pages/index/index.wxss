@@ -65,6 +65,17 @@ page {
   margin-bottom: 120rpx;
 }
 
+.date-line {
+  margin-top: 50rpx;
+  margin-left: 36rpx;
+  margin-right: 36rpx;
+  text-align: left;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #712525;
+  border-bottom: 1px solid #712525;
+}
+
 .team-item {
   position: relative;
   margin: 30rpx;
@@ -80,25 +91,30 @@ page {
 }
 
 .item-topic {
-  font-size: 45rpx;
+  font-size: 40rpx;
   font-weight: 500;
 }
 
 .item-script-types {
   margin-left: 15rpx;
-  font-size: 35rpx;
+  font-size: 30rpx;
+  line-height: 66rpx;
+  color: #735b5b;
 }
 
 .item-date {
   font-size: 30rpx;
+  color: #4c4a4a;
 }
 
 .item-time {
   font-size: 30rpx;
+  color: #4c4a4a;
 }
 
 .item-shop {
   font-size: 30rpx;
+  color: #4c4a4a;
 }
 
 .item-address {
@@ -107,20 +123,28 @@ page {
 
 .item-price {
   font-size: 30rpx;
+  color: #4c4a4a;
 }
 
 .item-remark {
   font-size: 30rpx;
+  color: #4c4a4a;
 }
 
 .item-member-status {
-  margin: 15rpx 0;
+  margin-top: 5rpx;
+  margin-bottom: 15rpx;
   font-size: 30rpx;
   font-weight: bold;
 }
 
 .item-member {
   margin-right: 10rpx;
+}
+
+.item-member-tile {
+  font-size: 30rpx;
+  color: #4c4a4a;
 }
 
 .item-member-avatar {
@@ -147,10 +171,10 @@ page {
 
 .full-icon {
   position: absolute;
-  width: 300rpx;
-  height: 280rpx;
-  top: 30rpx;
-  left: 350rpx;
+  width: 200rpx;
+  height: 180rpx;
+  bottom: 30rpx;
+  right: 30rpx;
 }
 
 .create-btn {
