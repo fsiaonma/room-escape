@@ -21,6 +21,30 @@ App({
     this.globalData.isIpx = this.globalData.sysInfo.model.indexOf('iPhone X') != -1;
   },
 
+  onShow(options) {
+    // const { shareTicket } = options;
+    // if (shareTicket) {
+    //   wx.getShareInfo({
+    //     shareTicket: shareTicket,
+    //     success: (res) => {
+    //       console.log('=====', res);
+    //       wx.cloud.callFunction({
+    //         name: 'getGroupInfo',
+    //         data: {
+    //           groupData: wx.cloud.CloudID(res.cloudID)
+    //         },
+    //         success(res) {
+    //           console.log(res);
+    //         },
+    //         error(err) {
+    //           console.log(err);
+    //         }
+    //       });
+    //     }
+    //   });
+    // }
+  },
+
   async init() {
     if (!this.globalData.userInfo) {
       // 授权

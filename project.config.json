@@ -80,6 +80,13 @@
           "pathName": "pages/team-info/team-info",
           "query": "scene=eb0c51035fe0c307005634ff1ef0228b",
           "scene": null
+        },
+        {
+          "id": -1,
+          "name": "用户详情页面",
+          "pathName": "pages/user-info/user-info",
+          "query": "",
+          "scene": null
         }
       ]
     }

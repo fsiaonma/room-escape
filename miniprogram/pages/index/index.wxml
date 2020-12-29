@@ -33,7 +33,6 @@
       <view class="item-date">日期：{{item.date}} {{item.time}}</view>
       <view class="item-shop">店铺：{{item.shop ? item.shop : '待定'}}</view>
       <view wx:if="{{item.price}}" class="item-price">价格：{{item.price}} / 位</view>
-      <!-- <view class="item-address">地址：{{item.address}}</view> -->
       <view wx:if="{{item.remark}}" class="item-remark">备注：{{item.remark}}</view>
       <view class="item-member-status">
       {{item.member_detail.current_male_amount > 0 ? item.member_detail.current_male_amount + '男' : ''}}

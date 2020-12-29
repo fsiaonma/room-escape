@@ -116,7 +116,7 @@ Page({
               icon: 'success',
               duration: 2000
             });
-            wx.redirectTo({
+            wx.switchTab({
               url: '../index/index'
             });
           },

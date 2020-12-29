@@ -1,28 +1,106 @@
-//index.js
-const app = getApp()
+import wxCharts from '../../utils/wxcharts/wxcharts.js';
+import scriptTypesEnum from '../../common/enums/script-types';
+
+const app = getApp();
 Page({
   data: {
     avatarUrl: './user-unlogin.png',
-    nickName: ''
+    nickName: '',
+    genderIcon: '',
+    city: '',
+    createTeamList: [],
+    joinTeamList: [],
+    profile: {}
   },
 
   async onLoad(options) {
-    const { openid } = options;
-    wx.showLoading();
-    wx.cloud.callFunction({
-      name: 'getUser',
-      data: {
-        openid
-      },
-      success: res => {
-        const { result } = res;
-        if (result) {
-          this.setData({
-            avatarUrl: result.avatarUrl,
-            nickName: result.nickName
-          });
+    await app.init();
+
+    const openid = options.openid ? options.openid : app.globalData.openid
+
+    if (openid) {
+      wx.showLoading();
+      wx.cloud.callFunction({
+        name: 'getUserInfo',
+        data: {
+          openid
+        },
+        success: res => {
+          const { result } = res;
+          if (result) {
+            this.setData({
+              avatarUrl: result.avatarUrl,
+              nickName: result.nickName,
+              genderIcon: result.gender === 1 ? '/images/male.png' : '/images/female.png',
+              city: result.city,
+              createTeamList: result.create_team_list,
+              joinTeamList: result.join_team_list,
+              profile: result.profile
+            });
+            this.renderRadar();
+          }
+          wx.hideLoading();
+        },
+        fail: err => {
+          console.log(err);
+          wx.hideLoading();
         }
-        wx.hideLoading();
+      });
+    }
+  },
+
+  onTeamItemTap(event) {
+    const { teamId } = event.currentTarget.dataset;
+    wx.navigateTo({
+      url: `../team-info/team-info?scene=${teamId}`
+    });
+  },
+
+  renderRadar() {
+    let windowWidth = 320;
+    try {
+      const res = wx.getSystemInfoSync();
+      windowWidth = res.windowWidth;
+    } catch (e) {
+      console.error('getSystemInfoSync failed!');
+    }
+
+    const scriptTypesProfile = {
+      '0': 40,
+      '1': 40,
+      '2': 40,
+      '3': 40,
+      '4': 40,
+    }
+    if (this.data.profile && this.data.profile.script_types) {
+      for (const key in this.data.profile.script_types) {
+        scriptTypesProfile[key] += this.data.profile.script_types[key];
+      }
+    }
+
+    const radarChart = new wxCharts({
+      canvasId: 'radarCanvas',
+      type: 'radar',
+      categories: scriptTypesEnum.map(item => item.name),
+      series: [{
+        name: '类型偏向',
+        color: '#712525',
+        data: [
+          scriptTypesProfile['0'],
+          scriptTypesProfile['1'],
+          scriptTypesProfile['2'],
+          scriptTypesProfile['3'],
+          scriptTypesProfile['4']
+        ]
+      }],
+      width: windowWidth - app.rpxToPx(72),
+      height: 200,
+      extra: {
+        radar: {
+          max: 100,
+          labelColor: '#712525',
+          gridColor: '#9c9c9c'
+        }
       }
     });
   }

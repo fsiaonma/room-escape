@@ -14,7 +14,11 @@ Page({
 
   async onLoad(options) {
     await app.init();
-    wx.showShareMenu();
+
+    wx.showShareMenu({
+      withShareTicket: true
+    });
+
     const { userInfo } = app.globalData;
     if (userInfo) {
       this.setData({
@@ -25,7 +29,7 @@ Page({
     }
   },
 
-  async onShow() {
+  async onShow(options) {
     await this.loadTeamList();
   },
 

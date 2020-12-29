@@ -39,8 +39,6 @@ exports.main = async (event, context) => {
     });
     fileObj = getURLReault.fileList[0];
     fileObj.fromCache = false;
-
-    console.log(fileObj);
  
     return fileObj;
   } catch (err) {

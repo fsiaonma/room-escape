@@ -15,6 +15,22 @@
     "navigationBarTextStyle": "black",
     "enablePullDownRefresh": true
   },
+  "tabBar": {
+    "color": "#7F8389",
+    "selectedColor": "#3a3030",
+    "borderStyle": "black",
+    "list": [{
+      "pagePath": "pages/index/index",
+      "text": "首页",
+      "selectedIconPath": "images/home-select.png",
+      "iconPath": "images/home.png"
+    }, {
+      "pagePath": "pages/user-info/user-info",
+      "text": "我的",
+      "selectedIconPath": "images/me-select.png",
+      "iconPath": "images/me.png"
+    }]
+  },
   "permission": {
     "scope.userLocation": {
       "desc": "你的位置信息将用于小程序定位"

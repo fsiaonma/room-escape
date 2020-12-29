@@ -271,7 +271,7 @@ Page({
   },
 
   gotoIndex() {
-    wx.redirectTo({
+    wx.switchTab({
       url: '../index/index'
     });
   },
