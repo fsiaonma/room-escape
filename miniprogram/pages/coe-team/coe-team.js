@@ -1,5 +1,7 @@
 import scriptTypesEnum from '../../common/enums/script-types';
+import utils from '../../utils/utils';
 
+const app = getApp();
 Page({
   data: {
     btnDisabled: false,
@@ -16,10 +18,10 @@ Page({
     price: '',
     remark: '',
 
-    teamTypeLabel: '我是车主',
+    teamTypeLabel: '亲自上车',
     teamTypeValue: '0',
     teamTypeEnums: [{
-      label: '我是车主',
+      label: '亲自上车',
       value: '0'
     }, {
       label: '替人发车',
@@ -27,16 +29,6 @@ Page({
     }],
 
     leaderNickName: '',
-
-    leaderGenderLabel: '小哥哥',
-    leaderGenderValue: 1,
-    leaderGenderEnmus: [{
-      label: '小哥哥',
-      value: 1
-    }, {
-      label: '小姐姐',
-      value: 2
-    }],
 
     maleAmount: '',
     femaleAmount: '',
@@ -54,7 +46,6 @@ Page({
       remark: '',
       teamTypeValue: '0',
       leaderNickName: '',
-      leaderGenderValue: 1,
       maleAmount: '',
       femaleAmount: '',
       initialMaleAmount: '',
@@ -111,11 +102,6 @@ Page({
         required: false
       },
     }, {
-      name: 'leaderGenderValue',
-      rules: {
-        required: false
-      },
-    }, {
       name: 'maleAmount',
       rules: {
         required: true,
@@ -154,6 +140,14 @@ Page({
         });
       })()
     });
+
+    const nickName = utils.fetchObjValue(app, 'globalData.userInfo.nickName');
+    if (nickName) {
+      this.setData({
+        leaderNickName: nickName,
+        [`formData.leaderNickName`]: nickName
+      });
+    }
 
     const { team_id: teamId } = options;
     if (teamId) {
@@ -230,16 +224,6 @@ Page({
     this.setData({
       leaderNickName: e.detail.value,
       [`formData.leaderNickName`]: e.detail.value
-    });
-  },
-
-  bindLeaderGenderChange(e) {
-    const index = e.detail.value;
-    const leaderGenderItem = this.data.leaderGenderEnmus[index];
-    this.setData({
-      leaderGenderLabel: leaderGenderItem.label,
-      leaderGenderValue: leaderGenderItem.value,
-      [`formData.leaderGenderValue`]: leaderGenderItem.value
     });
   },
 
@@ -353,12 +337,6 @@ Page({
           [`formData.teamTypeValue`]: result.team_type,
           leaderNickName: result.leader_nick_name,
           [`formData.leaderNickName`]: result.leader_nick_name,
-          leaderGenderLabel: (() => {
-            const leaderGenderItem = this.data.leaderGenderEnmus.find(tItem => tItem.value === result.leader_gender);
-            return leaderGenderItem ? leaderGenderItem.label : '';
-          })(),
-          leaderGenderValue: result.leader_gender,
-          [`formData.leaderGenderValue`]: result.leader_gender,
           maleAmount: result.male_amount,
           [`formData.maleAmount`]: result.male_amount,
           femaleAmount: result.female_amount,
@@ -430,7 +408,6 @@ Page({
             remark: this.data.formData.remark,
             team_type: this.data.formData.teamTypeValue,
             leader_nick_name: this.data.formData.leaderNickName,
-            leader_gender: this.data.formData.leaderGenderValue,
             male_amount: this.data.formData.maleAmount ? this.data.formData.maleAmount : 0,
             female_amount: this.data.formData.femaleAmount ? this.data.formData.femaleAmount : 0,
             initial_male_amount: this.data.formData.initialMaleAmount ? this.data.formData.initialMaleAmount : 0,
@@ -505,7 +482,6 @@ Page({
             remark: this.data.formData.remark,
             team_type: this.data.formData.teamTypeValue,
             leader_nick_name: this.data.formData.leaderNickName,
-            leader_gender: this.data.formData.leaderGenderValue,
             male_amount: this.data.formData.maleAmount ? this.data.formData.maleAmount : 0,
             female_amount: this.data.formData.femaleAmount ? this.data.formData.femaleAmount : 0,
             script_types: this.data.formData.scriptTypes

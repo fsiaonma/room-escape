@@ -14,9 +14,13 @@
     <view wx:if="{{price}}" class="item-price">价格：{{price}} / 位</view>
     <view wx:if="{{remark}}" class="item-remark">备注：{{remark}}</view>
     <view class="item-member-status">
-    {{memberDetail.current_male_amount > 0 ? memberDetail.current_male_amount + '男' : ''}}
-    {{memberDetail.current_female_amount > 0 ? memberDetail.current_female_amount + '女' : ''}}
+    {{memberDetail.is_empty ? '（空车）' : ''}}
+
+    {{!memberDetail.is_empty && memberDetail.current_male_amount > 0 ? memberDetail.current_male_amount + '男' : ''}}
+    {{!memberDetail.is_empty && memberDetail.current_female_amount > 0 ? memberDetail.current_female_amount + '女' : ''}}
+
     {{memberDetail.is_full ? '（封车）' : '='}}
+
     {{!memberDetail.is_full && memberDetail.wait_for_male_amount > 0 ? memberDetail.wait_for_male_amount + '男' : ''}}
     {{!memberDetail.is_full && memberDetail.wait_for_female_amount > 0 ? memberDetail.wait_for_female_amount + '女' : ''}}
     </view>
@@ -26,7 +30,7 @@
   <view class="team-member-item">
     <view wx:for="{{memberList}}" wx:key="index" class="{{ item.gender === 1 ? 'male-background' : item.gender === 2 ? 'female-background' : '' }}">
       <view
-        wx:if="{{item.avatarUrl || item.nickName}}"
+        wx:if="{{item.openid}}"
         data-type="{{item.type}}"
         data-openid="{{item.openid}}"
         class="member-item weui-flex"
@@ -37,7 +41,7 @@
           style="background-image: url({{item.avatarUrl}})"
           class="member-item-avatar"
         ></view>
-        <view class="member-item-wechat">{{item.nickName ? item.nickName : ''}} {{index === 0 ? '（车长）' : ''}}</view>
+        <view class="member-item-wechat">{{item.nickName ? item.nickName : '玩家'}}</view>
         <button
           wx:if="{{isOwner && item.openid && item.openid !== owner}}"
           size="mini"
@@ -92,7 +96,7 @@
       type="primary"
       class="get-postcard-btn"
       disabled="{{btnDisabled}}"
-    >分享到朋友圈</button>
+    >生成海报</button>
   </view>
 
   <view wx:if="{{showPostCard}}" class="postcard" bindtap="hidePostcard">
@@ -100,7 +104,7 @@
     <button
       catchtap="downLoadPostCard"
       class="donwload-btn"
-    >保存图片并分享</button>
+    >保存海报</button>
   </view>
 
   <view style="width: 100%; height: 80rpx;"></view>

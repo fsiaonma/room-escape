@@ -59,15 +59,6 @@ exports.main = async (event, context) => {
         }
       });
 
-      // 画像归一化处理
-      let total = 0;
-      for (const key in scriptTypesProfile) {
-        total += scriptTypesProfile[key];
-      }
-      for (const key in scriptTypesProfile) {
-        scriptTypesProfile[key] = Math.round(Math.max(1, scriptTypesProfile[key]) / total * 60);
-      }
-
       userData.create_team_list = createTeamList;
       userData.join_team_list = joinTeamList;
       userData.profile = {

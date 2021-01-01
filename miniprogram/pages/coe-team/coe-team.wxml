@@ -60,7 +60,7 @@
         <view slot="title" class="weui-label">
           <text class="required-icon">* </text><text>车主微信</text>
         </view>
-        <input value="{{wechat}}" bindinput="bindWechatChange"/>
+        <input value="{{wechat}}" bindinput="bindWechatChange" />
       </mp-cell>
       <mp-cell prop="leaderNickName">
         <view slot="title" class="weui-label">
@@ -83,32 +83,17 @@
           <div class="weui-cell__bd">{{teamTypeLabel}}</div>
         </mp-cell>
       </picker>
-      <picker 
-        wx:if="{{!teamDocId && teamTypeValue === '1'}}"
-        mode="selector"
-        range="{{leaderGenderEnmus}}"
-        range-key="label"
-        value="{{leaderGenderValue - 1}}"
-        bindchange="bindLeaderGenderChange"
-      >
-        <mp-cell prop="leaderGenderValue">
-          <view slot="title" class="weui-label">
-            <text>车主性别</text>
-          </view>
-          <div class="weui-cell__bd">{{leaderGenderLabel}}</div>
-        </mp-cell>
-      </picker>
     </mp-cells>
     <mp-cells wx:if="{{!teamDocId}}" title="车队已有人数">
       <mp-cell prop="initMaleAmount">
         <view slot="title" class="weui-label">
-          <text class="required-icon">* </text><text>小哥哥</text>
+          <text>小哥哥</text>
         </view>
         <input type="number" value="{{initMaleAmount}}" bindinput="bindInitialMaleAmountChange"/>
       </mp-cell>
       <mp-cell prop="initialFeMaleAmount">
         <view slot="title" class="weui-label">
-          <text class="required-icon">* </text><text>小姐姐</text>
+          <text>小姐姐</text>
         </view>
         <input type="number" value="{{initialFeMaleAmount}}" bindinput="bindInitialFemaleAmountChange"/>
       </mp-cell>

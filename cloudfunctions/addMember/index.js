@@ -1,5 +1,5 @@
 // 云函数入口文件
-const uuid = require('uuid/v4');
+const uuid = require('uuid').v4;
 const cloud = require('wx-server-sdk')
 
 // 初始化 cloud

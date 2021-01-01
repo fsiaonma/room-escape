@@ -35,9 +35,13 @@
       <view wx:if="{{item.price}}" class="item-price">价格：{{item.price}} / 位</view>
       <view wx:if="{{item.remark}}" class="item-remark">备注：{{item.remark}}</view>
       <view class="item-member-status">
-      {{item.member_detail.current_male_amount > 0 ? item.member_detail.current_male_amount + '男' : ''}}
-      {{item.member_detail.current_female_amount > 0 ? item.member_detail.current_female_amount + '女' : ''}}
+      {{item.member_detail.is_empty ? '（空车）' : ''}}
+
+      {{!item.member_detail.is_empty && item.member_detail.current_male_amount > 0 ? item.member_detail.current_male_amount + '男' : ''}}
+      {{!item.member_detail.is_empty && item.member_detail.current_female_amount > 0 ? item.member_detail.current_female_amount + '女' : ''}}
+
       {{item.member_detail.is_full ? '（封车）' : '='}}
+
       {{!item.member_detail.is_full && item.member_detail.wait_for_male_amount > 0 ? item.member_detail.wait_for_male_amount + '男' : ''}}
       {{!item.member_detail.is_full && item.member_detail.wait_for_female_amount > 0 ? item.member_detail.wait_for_female_amount + '女' : ''}}
       </view>

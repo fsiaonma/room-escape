@@ -17,9 +17,8 @@ exports.main = async (event, context) => {
 
   let baseMemberInfo = {};
   let leaderNickName;
-  let leaderGender;
 
-  if (teamType === '0') { // 自己发车
+  if (teamType === '0') { // 亲自上车
     const userRes = await db.collection('user').where({
       openid: wxContext.OPENID
     }).limit(1).get();
@@ -30,10 +29,8 @@ exports.main = async (event, context) => {
       avatarUrl: userInfo.avatarUrl
     };
     leaderNickName = event.leader_nick_name ? event.leader_nick_name : userInfo.nickName;
-    leaderGender = userInfo.gender;
   } else if (teamType === '1') { // 替人发车
     leaderNickName = event.leader_nick_name ? event.leader_nick_name : event.wechat;
-    leaderGender = event.leader_gender ? event.leader_gender : 1;
   }
 
   const teamRes = await db.collection('team').where({
@@ -41,9 +38,14 @@ exports.main = async (event, context) => {
   }).get();
   const teamInfo = teamRes.data[0];
 
-  const { member_list: memberList } = teamInfo;
-  memberList[0].nickName = leaderNickName;
-  memberList[0].gender = leaderGender;
+  const {
+    leader_nick_name: oldLeaderNickName,
+    member_list: memberList
+  } = teamInfo;
+  for (let i = 0; i < memberList.length; ++i) {
+    const reg = new RegExp(oldLeaderNickName, 'g');
+    memberList[i].nickName = memberList[i].nickName.replace(reg, leaderNickName);
+  }
 
   return await db.collection('team').where({
     _id: event.team_doc_id
@@ -58,9 +60,7 @@ exports.main = async (event, context) => {
       wechat: event.wechat,
       price: event.price,
       remark: event.remark,
-      team_type: event.team_type,
-      male_amount: event.male_amount,
-      female_amount: event.female_amount,
+      leader_nick_name: leaderNickName,
       script_types: event.script_types,
       member_list: memberList
     }

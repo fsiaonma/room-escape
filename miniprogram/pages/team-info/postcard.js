@@ -11,6 +11,7 @@ const wxml = (obj = {}) => {
         <text class="itemTime">时间：${obj.date} ${obj.time}</text>
         <text class="itemMember">人数：${(() => {
           let str = '';
+          str += obj.memberDetail.is_empty ? '（空车）' : '';
           str += obj.memberDetail.current_male_amount > 0 ? obj.memberDetail.current_male_amount + '男' : '';
           str += obj.memberDetail.current_female_amount > 0 ? obj.memberDetail.current_female_amount + '女' : '';
           str += obj.memberDetail.is_full ? '（封车）' : ' = ';

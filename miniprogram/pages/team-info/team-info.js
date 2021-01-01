@@ -78,14 +78,14 @@ Page({
           owner: result.owner,
           isOwner: result.owner === app.globalData.openid,
           btnType: (() => {
-            if (result.member_list.length > 0) {
-              if (result.owner === app.globalData.openid) {
-                return 'edit';
-              } else if (result.member_list.find(item => app.globalData && app.globalData.openid && item.openid === app.globalData.openid)) {
-                return 'left';
-              } else if (result.member_list.length < Number(result.male_amount) + Number(result.female_amount)) {
-                return 'join';
-              }
+            if (result.owner === app.globalData.openid) {
+              return 'edit';
+            } else if (result.member_list.length && result.member_list.find(item => app.globalData && app.globalData.openid && item.openid === app.globalData.openid)) {
+              return 'left';
+            } else if (result.member_list.length !== undefined && result.member_list.length < Number(result.male_amount) + Number(result.female_amount)) {
+              return 'join';
+            } else {
+              return '';
             }
           })(),
           topic: result.topic,
@@ -151,6 +151,12 @@ Page({
     if (this.data.isOwner && type === 'friend') {
       wx.navigateTo({
         url: `../coe-member/coe-member?team_id=${this.data.teamId}&member_id=${openid}`
+      });
+    }
+
+    if (type !== 'friend' && openid) {
+      wx.navigateTo({
+        url: `../user-info/user-info?openid=${openid}`
       });
     }
   },
@@ -311,9 +317,7 @@ Page({
 
   async getPostCard() {
     const self = this;
-    this.setData({
-      showPostCard: true
-    });
+    this.setData({ showPostCard: true });
     this.setData({ btnDisabled: true });
     wx.showLoading();
     wx.cloud.callFunction({
@@ -363,7 +367,7 @@ Page({
           });
         }
       });
-    })
+    });
   },
 
   hidePostcard() {

@@ -45,6 +45,7 @@ exports.main = async (event, context) => {
     const needTotal = Math.max((totalMaleAmount + totalFemaleAmount) - (currentMaleAmount + currentFemaleAmount), 0);
 
     teamData.member_detail = {
+      is_empty: currentMaleAmount <= 0 && currentFemaleAmount <= 0,
       is_full: needTotal === 0,
       current_male_amount: currentMaleAmount,
       current_female_amount: currentFemaleAmount,
@@ -52,8 +53,9 @@ exports.main = async (event, context) => {
       wait_for_female_amount: Math.max(Math.min(totalFemaleAmount - currentFemaleAmount, needTotal), 0)
     };
 
-    teamData.leader_nick_name = memberList[0].nickName;
-    teamData.leader_gender = memberList[0].gender;
+    if (!teamData.leader_nick_name) {
+      teamData.leader_nick_name = memberList[0] && memberList[0].nickName ? memberList[0].nickName : '车主';
+    }
 
     return teamData;
   } catch (e) {

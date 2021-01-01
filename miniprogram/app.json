@@ -1,10 +1,11 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/me/me",
+    "pages/user-info/user-info",
     "pages/team-info/team-info",
     "pages/coe-team/coe-team",
     "pages/coe-user/coe-user",
-    "pages/user-info/user-info",
     "pages/coe-member/coe-member"
   ],
   "window": {
@@ -25,7 +26,7 @@
       "selectedIconPath": "images/home-select.png",
       "iconPath": "images/home.png"
     }, {
-      "pagePath": "pages/user-info/user-info",
+      "pagePath": "pages/me/me",
       "text": "我的",
       "selectedIconPath": "images/me-select.png",
       "iconPath": "images/me.png"

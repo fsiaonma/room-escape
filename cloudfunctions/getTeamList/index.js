@@ -67,6 +67,7 @@ exports.main = async (event, context) => {
       const needTotal = Math.max((totalMaleAmount + totalFemaleAmount) - (currentMaleAmount + currentFemaleAmount), 0);
 
       teamList[i].member_detail = {
+        is_empty: currentMaleAmount <= 0 && currentFemaleAmount <= 0,
         is_full: needTotal === 0,
         current_male_amount: currentMaleAmount,
         current_female_amount: currentFemaleAmount,

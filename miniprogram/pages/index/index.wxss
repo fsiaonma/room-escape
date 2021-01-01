@@ -181,7 +181,7 @@ page {
   position: fixed;
   bottom: 0;
   width: 100% !important;
-  height: 120rpx !important;
-  line-height: 90rpx !important;
+  height: 100rpx !important;
+  line-height: 70rpx !important;
   background-color: #3a3030 !important;
 }

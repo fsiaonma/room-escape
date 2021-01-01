@@ -100,25 +100,41 @@ Page({
                 const result = [];
 
                 const memberList = item.member_list ? item.member_list : [];
+
+                let friendAmount = 1;
+                for (let i = 0; i < memberList.length; ++i) {
+                  const jMemberItem = memberList[i];
+                  if (jMemberItem.type === 'friend') {
+                    ++friendAmount;
+                  }
+                }
+
+                // 处理车主朋友逻辑
+                const ownerMember = memberList.find(mItem => mItem.openid === item.owner);
+                if (ownerMember) { // 亲自上车
+                  result.push({
+                    openid: ownerMember.openid,
+                    avatar: ownerMember.avatarUrl,
+                    nick_name: ownerMember.nickName,
+                    member_amount: friendAmount > 1 ? friendAmount : null
+                  });
+                } else { // 替人发车
+                  if (memberList[0]) {
+                    result.push({
+                      openid: memberList[0].openid,
+                      nick_name: item.leader_nick_name ? item.leader_nick_name : memberList[0].nickName, // TODO：过渡之后可以把这里兼容逻辑去掉
+                      member_amount: friendAmount > 1 ? (item.leader_nick_name ? friendAmount - 1 : friendAmount) : null // TODO：过渡之后可以把这里兼容逻辑去掉
+                    });
+                  }
+                }
+
                 for (let i = 0; i < memberList.length; ++i) {
                   const memberItem = memberList[i];
-
-                  let friendAmount;
-                  if (i === 0) {
-                    friendAmount = 1;
-                    for (let j = 0; j < memberList.length; ++j) {
-                      const jMemberItem = memberList[j];
-                      if (jMemberItem.type === 'friend') {
-                        ++friendAmount;
-                      }
-                    }
-                  }
-
-                  if (memberItem.type !== 'friend') {
+                  if (memberItem.type !== 'friend' && !result.find(item => item.openid === memberItem.openid)) {
                     result.push({
+                      openid: memberItem.openid,
                       avatar: memberItem.avatarUrl,
-                      nick_name: memberItem.nickName,
-                      member_amount: friendAmount > 1 ? friendAmount : null
+                      nick_name: memberItem.nickName
                     });
                   }
                 }

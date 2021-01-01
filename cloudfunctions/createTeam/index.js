@@ -1,4 +1,4 @@
-const uuid = require('uuid/v4');
+const uuid = require('uuid').v4;
 const cloud = require('wx-server-sdk');
 
 // 初始化 cloud
@@ -23,7 +23,9 @@ exports.main = async (event, context) => {
   let leaderNickName;
   let leaderGender;
 
-  if (teamType === '0') { // 自己发车
+  const memberList = [];
+
+  if (teamType === '0') { // 亲自上车
     const userRes = await db.collection('user').where({
       openid: wxContext.OPENID
     }).limit(1).get();
@@ -35,23 +37,21 @@ exports.main = async (event, context) => {
     leaderOpenId = wxContext.OPENID;
     leaderNickName = event.leader_nick_name ? event.leader_nick_name : userInfo.nickName;
     leaderGender = userInfo.gender;
+
+    // 自己发车需要自己上车
+    memberList.push({
+      ...baseMemberInfo,
+      openid: leaderOpenId,
+      nickName: leaderNickName,
+      gender: leaderGender
+    });
   } else if (teamType === '1') { // 替人发车
     leaderOpenId = uuid().replace(/-/g, '');
     leaderNickName = event.leader_nick_name ? event.leader_nick_name : event.wechat;
-    leaderGender = event.leader_gender ? event.leader_gender : 1;
   }
 
-  const memberList = [];
-
-  memberList.push({
-    ...baseMemberInfo,
-    openid: leaderOpenId,
-    nickName: leaderNickName,
-    gender: leaderGender
-  });
-
   if (initialMaleAmount > 0) {
-    const maleMemberAmount = leaderGender === 1 ? initialMaleAmount - 1 : initialMaleAmount;
+    const maleMemberAmount = teamType === '0' && leaderGender === 1 ? initialMaleAmount - 1 : initialMaleAmount;
     for (let i = 0; i < maleMemberAmount; ++i) {
       memberList.push({
         ...baseMemberInfo,
@@ -64,7 +64,7 @@ exports.main = async (event, context) => {
   }
 
   if (initialFemaleAmount > 0) {
-    const femaleMemberAmount = leaderGender === 2 ? initialFemaleAmount - 1 : initialFemaleAmount;
+    const femaleMemberAmount = teamType === '0' && leaderGender === 2 ? initialFemaleAmount - 1 : initialFemaleAmount;
     for (let i = 0; i < femaleMemberAmount; ++i) {
       memberList.push({
         ...baseMemberInfo,
@@ -89,6 +89,7 @@ exports.main = async (event, context) => {
       price: event.price,
       remark: event.remark,
       team_type: event.team_type,
+      leader_nick_name: leaderNickName,
       male_amount: event.male_amount,
       female_amount: event.female_amount,
       initial_male_amount: initialMaleAmount,

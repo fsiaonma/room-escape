@@ -1,0 +1,52 @@
+<view class="container">
+  <view class="weui-flex userinfo">
+    <view 
+      class="userinfo-avatar"
+      style="background-image: url({{avatarUrl}})"
+    ></view>
+    <view class="weui-flex userinfo-nickname-panel">
+      <view class="userinfo-nickname">{{nickName}}</view>
+      <image src="{{ genderIcon }}" class="userinfo-gender-icon"></image>
+    </view>
+    <view class="userinfo-city">地区：{{city}}</view>
+  </view>
+  <view class="user-profile">
+    <view class="user-profile-title">用户画像</view>
+    <view class="radar-panel">
+       <canvas
+        canvas-id="radarCanvas"
+        class="radar-canvas"
+      ></canvas>
+    </view>
+  </view>
+  <view class="team-list">
+    <view class="team-list-title">发起的车</view>
+    <view class="team-list-panel">
+      <view
+        wx:for="{{createTeamList}}"
+        wx:key="index"
+        class="weui-flex team-item"
+        bindtap="onTeamItemTap"
+        data-team-id="{{item._id}}"
+      >
+        <view class="team-topic">《{{ item.topic }}》</view>
+        <view class="team-date-time">{{ item.date }} {{ item.time }}</view>
+      </view>
+    </view>
+  </view>
+  <view class="team-list">
+    <view class="team-list-title">上了的车</view>
+    <view class="team-list-panel">
+      <view
+        wx:for="{{joinTeamList}}"
+        wx:key="index"
+        class="weui-flex team-item"
+        bindtap="onTeamItemTap"
+        data-team-id="{{item._id}}"
+      >
+        <view class="team-topic">《{{ item.topic }}》</view>
+        <view class="team-date-time">{{ item.date }} {{ item.time }}</view>
+      </view>
+    </view>
+  </view>
+</view>
