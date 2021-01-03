@@ -21,10 +21,10 @@ page {
   position: absolute;
   top: 50rpx;
   left: 36rpx;
-  width: 100rpx;
-  height: 100rpx;
+  width: 140rpx;
+  height: 140rpx;
   border-radius: 10rpx;
-  background-size: 100rpx 100rpx;
+  background-size: 140rpx 140rpx;
   background-color: white;
 }
 
@@ -38,8 +38,8 @@ page {
 
 .userinfo-nickname-panel {
   position: absolute;
-  left: 180rpx;
-  top: 45rpx;
+  left: 200rpx;
+  top: 50rpx;
 }
 
 .userinfo-nickname {
@@ -54,11 +54,24 @@ page {
   height: 50rpx;
 }
 
-.userinfo-city {
+.userinfo-wechat {
   position: absolute;
-  left: 180rpx;
+  left: 200rpx;
   top: 105rpx;
   color: #9c9c9c;
+}
+
+.userinfo-city {
+  position: absolute;
+  left: 200rpx;
+  top: 150rpx;
+  color: #9c9c9c;
+}
+
+.edit-user-btn {
+  margin-left: 10rpx;
+  color: #6175da;
+  font-weight: 400;
 }
 
 .user-profile {}

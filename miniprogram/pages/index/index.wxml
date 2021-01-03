@@ -15,6 +15,12 @@
   </view>
 </view>
 
+<!-- <city-picker codes="{{codes}}" data="{{citylist}}" bind:select="onCitySelect" style="margin-top: 120rpx;">
+  <view class="input-picker">
+    {{city}}
+  </view>
+</city-picker> -->
+
 <view class="team-list">
   <mp-loading show="{{teamLoading}}" type="circle" tips="加载中" ext-class="team-loading-tips"></mp-loading>
   <view wx:for="{{teamList}}" wx:key="index" wx:for-item="teamItem">

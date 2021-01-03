@@ -6,17 +6,6 @@
         <input value="{{wechat}}" bindchange="bindWeChangeNoChange"/>
       </mp-cell>
     </mp-cells>
-    <mp-cells title="我的标签">
-      <mp-checkbox-group prop="tagList" multi="{{true}}" bindchange="checkboxChange">
-        <mp-checkbox
-          wx:for="{{tagList}}"
-          wx:key="value"
-          label="{{item.name}}"
-          value="{{item.value}}"
-          checked="{{item.checked}}"
-        ></mp-checkbox>
-      </mp-checkbox-group>
-    </mp-cells>
   </mp-form>
   <view slot="button">
     <button type="primary" bindtap="onSaveInfo" class="save-btn">保存信息</button>

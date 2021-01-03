@@ -1,4 +1,5 @@
 import scriptTypesEnum from '../../common/enums/script-types';
+import { CityList } from '../../common/pca.js';
 
 const app = getApp()
 Page({
@@ -6,6 +7,11 @@ Page({
     logged: false,
     avatarUrl: '',
     nickName: '',
+
+    codes: [],
+    city: '广州',
+    citylist: CityList,
+
     teamLoading: false,
     teamList: [],
     takeSession: false,
@@ -27,6 +33,13 @@ Page({
         nickName: userInfo.nickName
       });
     }
+  },
+
+  onCitySelect(e) {
+    this.setData({
+      codes: e.detail.code,
+      city: e.detail.value
+    })
   },
 
   async onShow(options) {

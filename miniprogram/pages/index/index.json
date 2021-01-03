@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "mp-loading": "/miniprogram_npm/weui-miniprogram/loading/loading"
+    "mp-loading": "/miniprogram_npm/weui-miniprogram/loading/loading",
+    "city-picker": "../../components/wx-city-picker/index"
   }
 }

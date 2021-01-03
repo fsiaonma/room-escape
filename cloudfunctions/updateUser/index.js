@@ -8,7 +8,6 @@ cloud.init({
 
 exports.main = async (event, context) => {
   const {
-    user_info: userInfo,
     wechat,
     tag_list: tagList
   } = event;
@@ -16,18 +15,9 @@ exports.main = async (event, context) => {
   const db = cloud.database();
   const wxContext = cloud.getWXContext();
 
-  let updateData = {};
-  if (userInfo) {
-    updateData = {
-      ...updateData,
-      ...userInfo
-    }
-  }
+  const updateData = {};
   if (wechat) {
     updateData.wechat = wechat;
-  }
-  if (tagList) {
-    updateData.tag_list = tagList;
   }
 
   return await db.collection('user').where({

@@ -1,5 +1,3 @@
-/* miniprogram/pages/coe-user/coe-user.wxss */
-
 .save-btn {
   background-color: #3a3030 !important;
 }

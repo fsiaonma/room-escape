@@ -211,6 +211,28 @@ Page({
   },
 
   async onJoinTeam() {
+    if (!app.globalData.extra_user_info || !app.globalData.extra_user_info.wechat) {
+      wx.showModal({
+        title: '提示',
+        content: '完善微信号，方便车主找到你哦！',
+        confirmText: '前往完善',
+        cancelText: '直接上车',
+        success: async (res) => {
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '../coe-user/coe-user'
+            });
+          } else if (res.cancel) {
+            await this.joinTeam();
+          }
+        }
+      });
+    } else {
+      await this.joinTeam();
+    }
+  },
+
+  async joinTeam() {
     this.setData({ btnDisabled: true });
     wx.showLoading();
     wx.cloud.callFunction({

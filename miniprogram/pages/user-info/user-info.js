@@ -4,9 +4,12 @@ import scriptTypesEnum from '../../common/enums/script-types';
 const app = getApp();
 Page({
   data: {
+    openid: '',
+    isMe: false,
     avatarUrl: './user-unlogin.png',
     nickName: '',
     genderIcon: '',
+    wechat: '',
     city: '',
     createTeamList: [],
     joinTeamList: [],
@@ -19,6 +22,10 @@ Page({
     const openid = options.openid ? options.openid : app.globalData.openid
 
     if (openid) {
+      this.setData({
+        openid,
+        isMe: app.globalData.openid === openid
+      });
       wx.showLoading();
       wx.cloud.callFunction({
         name: 'getUserInfo',
@@ -31,7 +38,8 @@ Page({
             this.setData({
               avatarUrl: result.avatarUrl,
               nickName: result.nickName,
-              genderIcon: result.gender === 1 ? '/images/male.png' : '/images/female.png',
+              genderIcon: result.gender === 1 ? '/images/male.png' : result.gender === 2 ? '/images/female.png' : '',
+              wechat: result.wechat,
               city: result.city,
               createTeamList: result.create_team_list,
               joinTeamList: result.join_team_list,
@@ -47,6 +55,12 @@ Page({
         }
       });
     }
+  },
+
+  onEditUserInfo() {
+    wx.navigateTo({
+      url: '../coe-user/coe-user'
+    });
   },
 
   onTeamItemTap(event) {
