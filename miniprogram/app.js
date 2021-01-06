@@ -37,6 +37,7 @@ App({
   async init() {
     // 分享流量隔离
     if (this.shareTicket) {
+      wx.showLoading();
       const shareInfoRes = await new Promise(resolve => {
         wx.getShareInfo({
           shareTicket: this.shareTicket,
@@ -48,8 +49,10 @@ App({
           }
         });
       });
+      wx.hideLoading();
 
       if (shareInfoRes && shareInfoRes.cloudID) {
+        wx.showLoading();
         const groupInfoRes = await new Promise(resolve => {
           wx.cloud.callFunction({
             name: 'getGroupInfo',
@@ -64,6 +67,7 @@ App({
             }
           });
         });
+        wx.hideLoading();
 
         if (groupInfoRes && groupInfoRes.result) {
           this.globalData.openGId = groupInfoRes.result.openGId;

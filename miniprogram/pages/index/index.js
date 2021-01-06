@@ -9,6 +9,7 @@ Page({
     nickName: '',
 
     shop: '',
+    shopEnumIndex: 0,
     shopEnums: [],
     shopDisabled: false,
 
@@ -38,8 +39,8 @@ Page({
       });
     }
 
-    const shopId = options.scene ? options.scene : null;
-    
+    const shopId = options && options.scene ? options.scene : null;
+
     let shopEnums = [];
     if (app.globalData.shop_list && app.globalData.shop_list.length > 0) {
       shopEnums = app.globalData.shop_list;
@@ -48,6 +49,18 @@ Page({
     }
     this.setData({
       shopEnums,
+      shopEnumIndex: (() => {
+        let shopEnumIndex = 0;
+
+        for (let i = 0; i < shopEnums.length; ++i) {
+          if (shopEnums[i]._id === shopId) {
+            shopEnumIndex = i;
+            break;
+          }
+        }
+
+        return shopEnumIndex;
+      })(),
       shop: (() => {
         let shop = shopEnums[0].name;
 
@@ -73,7 +86,7 @@ Page({
   onShareAppMessage() {
     let title = '【剧本杀拼团】车队列表';
     let path = '/pages/index/index';
-    let imageUrl = 'https://726f-room-escape-beta-1fhboek7f90829a-1303996393.tcb.qcloud.la/share_images/all.png?sign=8ae63368120d05415a6dff4330e72eed&t=1609918791';
+    let imageUrl = 'https://726f-room-escape-prod-3qdhj-1303996393.tcb.qcloud.la/share_images/all.png?sign=9ca46e25e21e6b0c72d2cfecfa4daf51&t=1609951429';
 
     const shopItem = this.data.shopEnums.find(item => item.name === this.data.shop);
     if (shopItem && shopItem.name !== '所有店铺') {
@@ -127,7 +140,8 @@ Page({
     const index = e.detail.value;
     const shopItem = this.data.shopEnums[index];
     this.setData({
-      shop: shopItem.name
+      shop: shopItem.name,
+      shopEnumIndex: index
     });
     this.loadTeamList();
   },

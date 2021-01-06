@@ -12,6 +12,7 @@ Page({
     topic: '',
 
     shopEnumValue: '',
+    shopEnumIndex: 0,
     shopEnums: [{
       name: 'custom'
     }],
@@ -147,11 +148,6 @@ Page({
 
     this.setData({
       shopEnums,
-      shopEnumValue: shopEnums[0].name,
-      [`formData.shopEnumValue`]: shopEnums[0].name
-    });
-
-    this.setData({
       scriptTypeItems: (() => {
         return scriptTypesEnum.map(item => {
           item.checked = false;
@@ -186,6 +182,7 @@ Page({
     const shopItem = this.data.shopEnums[index];
     if (shopItem) {
       this.setData({
+        shopEnumIndex: index,
         shopEnumValue: shopItem.name,
         shop: '',
         address: shopItem.address,
@@ -347,6 +344,17 @@ Page({
           teamDocId: result._id,
           topic: result.topic,
           [`formData.topic`]: result.topic,
+          shopEnumIndex: (() => {
+            let shopEnumIndex = this.data.shopEnums.length - 1;
+            for (let i = 0; i < this.data.shopEnums.length; ++i) {
+              console.log(i, this.data.shopEnums[i].name, result.shop);
+              if (this.data.shopEnums[i].name === result.shop) {
+                shopEnumIndex = i;
+                break;
+              }
+            }
+            return shopEnumIndex;
+          })(),
           shopEnumValue: (() => {
             let shopEnumValue = '自定义';
             const shopItem = this.data.shopEnums.find(item => item.name === result.shop);

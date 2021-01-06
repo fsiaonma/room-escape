@@ -11,7 +11,7 @@
         mode="selector"
         range="{{shopEnums}}"
         range-key="name"
-        value="{{shopEnumValue}}"
+        value="{{shopEnumIndex}}"
         bindchange="bindShopChange"
       >
         <mp-cell prop="shopEnumValue">

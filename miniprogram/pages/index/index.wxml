@@ -17,7 +17,7 @@
         mode="selector"
         range="{{shopEnums}}"
         range-key="name"
-        value="{{shop}}"
+        value="{{shopEnumIndex}}"
         disabled="{{shopDisabled}}"
         bindchange="bindShopChange"
       >
