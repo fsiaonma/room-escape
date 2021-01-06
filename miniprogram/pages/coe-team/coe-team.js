@@ -10,7 +10,12 @@ Page({
     teamDocId: '',
 
     topic: '',
-    shop: '',
+
+    shopEnumValue: '',
+    shopEnums: [{
+      name: 'custom'
+    }],
+
     address: '',
     date: '',
     time: '',
@@ -38,6 +43,7 @@ Page({
 
     formData: {
       topic: '',
+      shopEnumValue: '',
       shop: '',
       date: '',
       time: '',
@@ -58,6 +64,11 @@ Page({
       rules: {
         required: false
       },
+    }, {
+      name: 'shopEnumValue',
+      rules: {
+        required: false
+      }
     }, {
       name: 'shop',
       rules: {
@@ -131,7 +142,15 @@ Page({
     }]
   },
 
-  onLoad(options) {
+  async onLoad(options) {
+    const shopEnums = await this.getShopList();
+
+    this.setData({
+      shopEnums,
+      shopEnumValue: shopEnums[0].name,
+      [`formData.shopEnumValue`]: shopEnums[0].name
+    });
+
     this.setData({
       scriptTypeItems: (() => {
         return scriptTypesEnum.map(item => {
@@ -151,7 +170,6 @@ Page({
 
     const { team_id: teamId } = options;
     if (teamId) {
-      this.setData({ teamId });
       this.getTeam(teamId);
     }
   },
@@ -161,6 +179,19 @@ Page({
       topic: e.detail.value,
       [`formData.topic`]: e.detail.value
     });
+  },
+
+  bindShopChange(e) {
+    const index = e.detail.value;
+    const shopItem = this.data.shopEnums[index];
+    if (shopItem) {
+      this.setData({
+        shopEnumValue: shopItem.name,
+        shop: '',
+        address: shopItem.address,
+        [`formData.shopEnumValue`]: shopItem.name
+      });
+    }
   },
 
   bindShopTap(e) {
@@ -277,7 +308,32 @@ Page({
     });
   },
 
+  async getShopList() {
+    return new Promise(reslove => {
+      wx.cloud.callFunction({
+        name: 'getShopList',
+        success: res => {
+          const { result } = res;
+          const shopEnums = [];
+          if (result && result.length > 0) {
+            for (let i = 0; i < result.length; ++i) {
+              shopEnums.push(result[i]);
+            }
+          }
+          shopEnums.push({
+            name: '自定义'
+          });
+          reslove(shopEnums);
+        }
+      });
+    });
+  },
+
   getTeam(teamId) {
+    if (!teamId) { return; }
+
+    this.setData({ teamId });
+
     wx.showLoading();
     wx.cloud.callFunction({
       name: 'getTeam',
@@ -291,6 +347,22 @@ Page({
           teamDocId: result._id,
           topic: result.topic,
           [`formData.topic`]: result.topic,
+          shopEnumValue: (() => {
+            let shopEnumValue = '自定义';
+            const shopItem = this.data.shopEnums.find(item => item.name === result.shop);
+            if (shopItem) {
+              shopEnumValue = shopItem.name;
+            }
+            return shopEnumValue;
+          })(),
+          [`formData.shopEnumValue`]: (() => {
+            let shopEnumValue = '自定义';
+            const shopItem = this.data.shopEnums.find(item => item.name === result.shop);
+            if (shopItem) {
+              shopEnumValue = shopItem.name;
+            }
+            return shopEnumValue;
+          })(),
           shop: result.shop,
           [`formData.shop`]: result.shop,
           address: result.address,
@@ -398,7 +470,7 @@ Page({
           name: 'createTeam',
           data: {
             topic: this.data.formData.topic,
-            shop: this.data.formData.shop,
+            shop: this.data.formData.shopEnumValue === '自定义' ? this.data.formData.shop : this.data.formData.shopEnumValue,
             address: this.data.address,
             date: this.data.formData.date,
             time: this.data.formData.time,
@@ -472,7 +544,7 @@ Page({
           data: {
             team_doc_id: this.data.teamDocId,
             topic: this.data.formData.topic,
-            shop: this.data.formData.shop,
+            shop: this.data.formData.shopEnumValue === '自定义' ? this.data.formData.shop : this.data.formData.shopEnumValue,
             address: this.data.address,
             date: this.data.formData.date,
             time: this.data.formData.time,

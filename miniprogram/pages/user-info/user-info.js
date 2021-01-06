@@ -63,6 +63,12 @@ Page({
     });
   },
 
+  copyWechat() {
+    wx.setClipboardData({
+      data: this.data.wechat
+    });
+  },
+
   onTeamItemTap(event) {
     const { teamId } = event.currentTarget.dataset;
     wx.navigateTo({

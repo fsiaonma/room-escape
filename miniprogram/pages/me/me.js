@@ -4,6 +4,7 @@ import scriptTypesEnum from '../../common/enums/script-types';
 const app = getApp();
 Page({
   data: {
+    openid: '',
     avatarUrl: './user-unlogin.png',
     nickName: '',
     genderIcon: '',
@@ -15,44 +16,61 @@ Page({
 
   async onLoad(options) {
     await app.init();
+    const openid = options.openid ? options.openid : app.globalData.openid;
+    await this.getUser(openid);
+  },
 
-    const openid = options.openid ? options.openid : app.globalData.openid
+  async onPullDownRefresh() {
+    const openid = this.data.openid;
+    await this.getUser(openid);
+    wx.stopPullDownRefresh();
+  },
 
-    if (openid) {
-      wx.showLoading();
-      wx.cloud.callFunction({
-        name: 'getUserInfo',
-        data: {
-          openid
-        },
-        success: res => {
-          const { result } = res;
-          if (result) {
-            this.setData({
-              avatarUrl: result.avatarUrl,
-              nickName: result.nickName,
-              genderIcon: result.gender === 1 ? '/images/male.png' : '/images/female.png',
-              city: result.city,
-              createTeamList: result.create_team_list,
-              joinTeamList: result.join_team_list,
-              profile: result.profile
-            });
-            this.renderRadar();
-          }
-          wx.hideLoading();
-        },
-        fail: err => {
-          console.log(err);
-          wx.hideLoading();
-        }
-      });
-    }
+  onEditUserInfo() {
+    wx.navigateTo({
+      url: '../coe-user/coe-user'
+    });
   },
 
   onTeamItemTap(event) {
     const { teamId } = event.currentTarget.dataset;
     wx.navigateTo({
       url: `../team-info/team-info?scene=${teamId}`
+    });
+  },
+
+  async getUser(openid) {
+    if (!openid) { return; }
+
+    this.setData({ openid });
+    
+    wx.showLoading();
+    wx.cloud.callFunction({
+      name: 'getUserInfo',
+      data: {
+        openid
+      },
+      success: res => {
+        const { result } = res;
+        if (result) {
+          this.setData({
+            avatarUrl: result.avatarUrl,
+            nickName: result.nickName,
+            genderIcon: result.gender === 1 ? '/images/male.png' : '/images/female.png',
+            wechat: result.wechat,
+            city: result.city,
+            createTeamList: result.create_team_list,
+            joinTeamList: result.join_team_list,
+            profile: result.profile
+          });
+          this.renderRadar();
+        }
+        wx.hideLoading();
+      },
+      fail: err => {
+        console.log(err);
+        wx.hideLoading();
+      }
     });
   },
 

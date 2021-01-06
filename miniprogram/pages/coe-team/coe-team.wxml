@@ -7,9 +7,23 @@
         </view>
         <input value="{{topic}}" bindinput="bindTopicChange"/>
       </mp-cell>
-      <mp-cell prop="shop" bindtap="bindShopTap">
+      <picker
+        mode="selector"
+        range="{{shopEnums}}"
+        range-key="name"
+        value="{{shopEnumValue}}"
+        bindchange="bindShopChange"
+      >
+        <mp-cell prop="shopEnumValue">
+          <view slot="title" class="weui-label">
+            <text class="required-icon">* </text><text>店铺</text>
+          </view>
+          <div class="weui-cell__bd">{{shopEnumValue}}</div>
+        </mp-cell>
+      </picker>
+      <mp-cell wx:if="{{shopEnumValue === '自定义'}}" prop="shop" bindtap="bindShopTap">
         <view slot="title" class="weui-label">
-          <text class="required-icon">* </text><text>店铺</text>
+          <text class="required-icon">* </text><text>地址</text>
         </view>
         <div class="weui-cell__bd">{{shop}}</div>
       </mp-cell>

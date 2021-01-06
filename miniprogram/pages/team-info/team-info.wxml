@@ -7,7 +7,9 @@
     <view class="item-date">日期：{{date}}</view>
     <view class="item-time">场次：{{time}}</view>
     <view class="item-shop">店铺：{{shop ? shop : '待定'}}</view>
-    <view class="item-address">地址：{{address ? address : '待定'}}</view>
+    <view class="item-address">地址：{{address ? address : '待定'}}
+      <a wx:if="{{address}}" href="javascipt:void(0)" bindtap="copyAddress" class="copy-text">复制</a>
+    </view>
     <view class="item-wechat">车主微信：{{wechat}}
       <a href="javascipt:void(0)" bindtap="copyWechat" class="copy-text">复制</a>
     </view>
@@ -82,7 +84,7 @@
       <button
         bindtap="gotoIndex"
         class="goto-index-btn"
-      >查看全部车队</button>
+      >查看所有车队</button>
     </view>
     <button
       wx:if="{{isOwner && !memberDetail.is_full}}"

@@ -13,7 +13,7 @@
         {{wechat}}
       </view>
       <a wx:if="{{isMe}}" href="javascipt:void(0)" bindtap="onEditUserInfo" class="edit-user-btn">编辑</a>
-      <a wx:elif="{{wechat}}" href="javascipt:void(0)" bindtap="onEditUserInfo" class="edit-user-btn">复制</a>
+      <a wx:elif="{{wechat}}" href="javascipt:void(0)" bindtap="copyWechat" class="edit-user-btn">复制</a>
     </view>
     <view class="userinfo-city">地区：{{city}}</view>
   </view>

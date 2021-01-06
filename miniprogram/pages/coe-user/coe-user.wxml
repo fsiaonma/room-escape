@@ -3,7 +3,7 @@
   <mp-form id="form" rules="{{rules}}" models="{{formData}}">
     <mp-cells title="基础信息">
       <mp-cell prop="wechat" title="微信号">
-        <input value="{{wechat}}" bindchange="bindWeChangeNoChange"/>
+        <input value="{{wechat}}" bindinput="bindWeChangeNoChange"/>
       </mp-cell>
     </mp-cells>
   </mp-form>

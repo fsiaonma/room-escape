@@ -8,6 +8,10 @@ Page({
     avatarUrl: '',
     nickName: '',
 
+    shop: '',
+    shopEnums: [],
+    shopDisabled: false,
+
     codes: [],
     city: '广州',
     citylist: CityList,
@@ -33,6 +37,61 @@ Page({
         nickName: userInfo.nickName
       });
     }
+
+    const shopId = options.scene ? options.scene : null;
+    
+    let shopEnums = [];
+    if (app.globalData.shop_list && app.globalData.shop_list.length > 0) {
+      shopEnums = app.globalData.shop_list;
+    } else {
+      shopEnums = await this.getShopList();
+    }
+    this.setData({
+      shopEnums,
+      shop: (() => {
+        let shop = shopEnums[0].name;
+
+        const targetShopItem = shopEnums.find(item => item._id === shopId);
+        if (targetShopItem) {
+          shop = targetShopItem.name;
+        }
+
+        return shop;
+      })(),
+      shopDisabled: shopEnums.length <= 1
+    });
+
+    await this.loadTeamList();
+  },
+
+  async onShow(options) {
+    if (this.data.shopEnums && this.data.shopEnums.length > 0) {
+      await this.loadTeamList();
+    }
+  },
+
+  onShareAppMessage() {
+    let title = '【剧本杀拼团】车队列表';
+    let path = '/pages/index/index';
+    let imageUrl = 'https://726f-room-escape-beta-1fhboek7f90829a-1303996393.tcb.qcloud.la/share_images/all.png?sign=8ae63368120d05415a6dff4330e72eed&t=1609918791';
+
+    const shopItem = this.data.shopEnums.find(item => item.name === this.data.shop);
+    if (shopItem && shopItem.name !== '所有店铺') {
+      title = `【${shopItem.name}】车队列表`
+      path = `/pages/index/index?scene=${shopItem._id}`;
+      imageUrl = shopItem.share_image;
+    }
+
+    return {
+      title,
+      path,
+      imageUrl
+    }
+  },
+
+  async onPullDownRefresh() {
+    await this.loadTeamList();
+    wx.stopPullDownRefresh();
   },
 
   onCitySelect(e) {
@@ -42,20 +101,35 @@ Page({
     })
   },
 
-  async onShow(options) {
-    await this.loadTeamList();
+  async getShopList() {
+    return new Promise(reslove => {
+      wx.cloud.callFunction({
+        name: 'getShopList',
+        success: res => {
+          const { result } = res;
+          const shopEnums = [];
+          shopEnums.push({
+            _id: 'all',
+            name: '所有店铺'
+          });
+          if (result && result.length > 0) {
+            for (let i = 0; i < result.length; ++i) {
+              shopEnums.push(result[i]);
+            }
+          }
+          reslove(shopEnums);
+        }
+      });
+    });
   },
 
-  onShareAppMessage() {
-    return {
-      title: `【拼团】最新车队列表`,
-      path: '/pages/index/index'
-    };
-  },
-
-  async onPullDownRefresh() {
-    await this.loadTeamList();
-    wx.stopPullDownRefresh();
+  bindShopChange(e) {
+    const index = e.detail.value;
+    const shopItem = this.data.shopEnums[index];
+    this.setData({
+      shop: shopItem.name
+    });
+    this.loadTeamList();
   },
 
   async loadTeamList() {
@@ -63,9 +137,14 @@ Page({
       teamLoading: true
     });
 
+    const queryData = {};
+    if (this.data.shop !== '所有店铺') {
+      queryData.shop = this.data.shop;
+    }
+
     wx.cloud.callFunction({
       name: 'getTeamList',
-      data: {},
+      data: queryData,
       success: res => {
         const teamList = res.result;
 

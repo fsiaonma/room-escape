@@ -9,6 +9,7 @@ cloud.init({
 exports.main = async (event, context) => {
   try {
     const {
+      shop,
       page = 1,
       size = 50
     } = event;
@@ -17,9 +18,14 @@ exports.main = async (event, context) => {
     const _ = db.command;
     const $ = db.command.aggregate;
 
-   	let query = db.collection('team').aggregate().match({
+    const matchData = {
       datetime: _.gte(Date.now())
-    }).sort({
+    };
+    if (shop) {
+      matchData.shop = _.eq(shop);
+    }
+
+    let query = db.collection('team').aggregate().match(matchData).sort({
       datetime: 1
     });
 

@@ -12,6 +12,18 @@
     <view class="userinfo-nickname-wrapper">
       {{nickName}}
     </view>
+    <view class="shop-picker">
+      <picker 
+        mode="selector"
+        range="{{shopEnums}}"
+        range-key="name"
+        value="{{shop}}"
+        disabled="{{shopDisabled}}"
+        bindchange="bindShopChange"
+      >
+        <div class="shop-item">{{shop}}</div>
+      </picker>
+    </view>
   </view>
 </view>
 

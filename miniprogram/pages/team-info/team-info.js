@@ -29,9 +29,14 @@ Page({
 
   async onLoad(options) {
     await app.init();
-    wx.showShareMenu();
+
+    wx.showShareMenu({
+      withShareTicket: true
+    });
+
     const teamId = options.scene ? options.scene : null;
     this.setData({ teamId });
+    
     await this.getTeam();
   },
 
@@ -55,6 +60,12 @@ Page({
     };
   },
 
+  copyAddress() {
+    wx.setClipboardData({
+      data: this.data.address
+    });
+  },
+
   copyWechat() {
     wx.setClipboardData({
       data: this.data.wechat
@@ -72,6 +83,25 @@ Page({
       },
       success: res => {
         const { result } = res;
+
+        // 流量隔离逻辑
+        if (app.globalData.shop_list && app.globalData.shop_list.length > 0) {
+          let shopEnumValue = '自定义';
+          const shopItem = app.globalData.shop_list.find(item => item.name === result.shop);
+          if (!shopItem) {
+            wx.showModal({
+              title: '提示',
+              content: '车队不是这个店的哦~~',
+              showCancel: false,
+              success(res) {
+                wx.switchTab({
+                  url: '../index/index'
+                });
+              }
+            });
+            return;
+          }
+        }
 
         this.setData({
           teamDocId: result._id,
