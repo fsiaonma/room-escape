@@ -44,7 +44,7 @@ exports.main = async (event, context) => {
   } = teamInfo;
   for (let i = 0; i < memberList.length; ++i) {
     const reg = new RegExp(oldLeaderNickName, 'g');
-    memberList[i].nickName = memberList[i].nickName.replace(reg, leaderNickName);
+    memberList[i].nickName = memberList[i].nickName ? memberList[i].nickName.replace(reg, leaderNickName) : '';
   }
 
   return await db.collection('team').where({

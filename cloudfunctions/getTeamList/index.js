@@ -11,7 +11,7 @@ exports.main = async (event, context) => {
     const {
       shop,
       page = 1,
-      size = 50
+      size = 100
     } = event;
 
   	const db = cloud.database();
