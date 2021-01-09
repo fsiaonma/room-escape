@@ -144,7 +144,12 @@ Page({
   },
 
   async onLoad(options) {
-    const shopEnums = await this.getShopList();
+    let shopEnums = [];
+    if (app.globalData.shop_list && app.globalData.shop_list.length > 0) {
+      shopEnums = app.globalData.shop_list;
+    } else {
+      shopEnums = await this.getShopList();
+    }
 
     this.setData({
       shopEnums,
@@ -180,6 +185,7 @@ Page({
   bindShopChange(e) {
     const index = e.detail.value;
     const shopItem = this.data.shopEnums[index];
+    this.setData({ address: '' });
     if (shopItem) {
       this.setData({
         shopEnumIndex: index,
@@ -191,7 +197,7 @@ Page({
     }
   },
 
-  bindShopTap(e) {
+  bindAddressTap(e) {
     wx.chooseLocation({
       success: (res) => {
         this.setData({

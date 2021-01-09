@@ -35,47 +35,6 @@ App({
   },
 
   async init() {
-    // 分享流量隔离
-    if (this.shareTicket) {
-      wx.showLoading();
-      const shareInfoRes = await new Promise(resolve => {
-        wx.getShareInfo({
-          shareTicket: this.shareTicket,
-          success: (res) => {
-            resolve(res);
-          },
-          fail: (err) => {
-            resolve(err)
-          }
-        });
-      });
-      wx.hideLoading();
-
-      if (shareInfoRes && shareInfoRes.cloudID) {
-        wx.showLoading();
-        const groupInfoRes = await new Promise(resolve => {
-          wx.cloud.callFunction({
-            name: 'getGroupInfo',
-            data: {
-              groupData: wx.cloud.CloudID(shareInfoRes.cloudID)
-            },
-            success(res) {
-              resolve(res);
-            },
-            error(err) {
-              resolve(err);
-            }
-          });
-        });
-        wx.hideLoading();
-
-        if (groupInfoRes && groupInfoRes.result) {
-          this.globalData.openGId = groupInfoRes.result.openGId;
-          this.globalData.shop_list = groupInfoRes.result.shop_list;
-        }
-      }
-    }
-
     // 用户授权
     if (!this.globalData.userInfo || Object.keys(this.globalData.userInfo).length <= 0) {
       // 授权
@@ -152,6 +111,51 @@ App({
       wx.hideLoading();
       if (userRes && userRes.result) {
         this.globalData.extra_user_info = userRes.result;
+      }
+    }
+  },
+
+  async initShopList() {
+    // 分享流量隔离
+    this.globalData.openGId = null;
+    this.globalData.shop_list = null;
+    if (this.shareTicket) {
+      wx.showLoading();
+      const shareInfoRes = await new Promise(resolve => {
+        wx.getShareInfo({
+          shareTicket: this.shareTicket,
+          success: (res) => {
+            resolve(res);
+          },
+          fail: (err) => {
+            resolve(err)
+          }
+        });
+      });
+      wx.hideLoading();
+
+      if (shareInfoRes && shareInfoRes.cloudID) {
+        wx.showLoading();
+        const groupInfoRes = await new Promise(resolve => {
+          wx.cloud.callFunction({
+            name: 'getGroupInfo',
+            data: {
+              groupData: wx.cloud.CloudID(shareInfoRes.cloudID)
+            },
+            success(res) {
+              resolve(res);
+            },
+            error(err) {
+              resolve(err);
+            }
+          });
+        });
+        wx.hideLoading();
+
+        if (groupInfoRes && groupInfoRes.result) {
+          this.globalData.openGId = groupInfoRes.result.openGId;
+          this.globalData.shop_list = groupInfoRes.result.shop_list;
+        }
       }
     }
   },

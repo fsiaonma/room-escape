@@ -4,14 +4,15 @@ import { CityList } from '../../common/pca.js';
 const app = getApp()
 Page({
   data: {
+    loaded: false,
     logged: false,
+
     avatarUrl: '',
     nickName: '',
 
     shop: '',
     shopEnumIndex: 0,
     shopEnums: [],
-    shopDisabled: false,
 
     codes: [],
     city: '广州',
@@ -39,46 +40,38 @@ Page({
       });
     }
 
-    const shopId = options && options.scene ? options.scene : null;
+    await this.initShopList();
 
-    let shopEnums = [];
-    if (app.globalData.shop_list && app.globalData.shop_list.length > 0) {
-      shopEnums = app.globalData.shop_list;
-    } else {
-      shopEnums = await this.getShopList();
-    }
+    const shopId = options && options.scene ? options.scene : null;
     this.setData({
-      shopEnums,
       shopEnumIndex: (() => {
         let shopEnumIndex = 0;
-
-        for (let i = 0; i < shopEnums.length; ++i) {
-          if (shopEnums[i]._id === shopId) {
+        for (let i = 0; i < this.data.shopEnums.length; ++i) {
+          if (this.data.shopEnums[i]._id === shopId) {
             shopEnumIndex = i;
             break;
           }
         }
-
         return shopEnumIndex;
       })(),
       shop: (() => {
-        let shop = shopEnums[0].name;
-
-        const targetShopItem = shopEnums.find(item => item._id === shopId);
+        let shop = this.data.shopEnums[0].name;
+        const targetShopItem = this.data.shopEnums.find(item => item._id === shopId);
         if (targetShopItem) {
           shop = targetShopItem.name;
         }
-
         return shop;
-      })(),
-      shopDisabled: shopEnums.length <= 1
+      })()
     });
+
+    this.setData({ loaded: true });
 
     await this.loadTeamList();
   },
 
   async onShow(options) {
-    if (this.data.shopEnums && this.data.shopEnums.length > 0) {
+    if (this.data.loaded) {
+      await this.initShopList();
       await this.loadTeamList();
     }
   },
@@ -112,6 +105,26 @@ Page({
       codes: e.detail.code,
       city: e.detail.value
     })
+  },
+
+  async initShopList() {
+    await app.initShopList();
+
+    let shopEnums = [];
+    if (app.globalData.shop_list && app.globalData.shop_list.length > 0) {
+      shopEnums = app.globalData.shop_list;
+    } else {
+      shopEnums = await this.getShopList();
+    }
+    
+    shopEnums.forEach(item => {
+      item.label = item.name;
+      if (item.team_amount && item.team_amount > 0) {
+        item.label = `${item.name} - ${item.team_amount}车`
+      }
+    });
+
+    this.setData({ shopEnums });
   },
 
   async getShopList() {

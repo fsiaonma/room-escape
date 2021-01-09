@@ -57,6 +57,15 @@ exports.main = async (event, context) => {
       teamData.leader_nick_name = memberList[0] && memberList[0].nickName ? memberList[0].nickName : '车主';
     }
 
+    // 请求店铺信息
+    const shopRes = await db.collection('shop').where({
+      name: teamData.shop
+    }).limit(1).get();
+    console.log(shopRes, teamData.shop);
+    if (shopRes && shopRes.data && shopRes.data[0]) {
+      teamData.shop_wechat = shopRes.data[0].wechat;
+    }
+
     return teamData;
   } catch (e) {
     return {

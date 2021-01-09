@@ -7,7 +7,10 @@
     <view class="item-date">日期：{{date}}</view>
     <view class="item-time">场次：{{time}}</view>
     <view class="item-shop">店铺：{{shop ? shop : '待定'}}</view>
-    <view class="item-address">地址：{{address ? address : '待定'}}
+    <view wx:if="{{shopWechat}}" class="item-shop">店家微信：{{shopWechat}}
+      <a href="javascipt:void(0)" bindtap="copyShopWechat" class="copy-text">复制</a>
+    </view>
+    <view class="item-address">店铺地址：{{address ? address : '待定'}}
       <a wx:if="{{address}}" href="javascipt:void(0)" bindtap="copyAddress" class="copy-text">复制</a>
     </view>
     <view class="item-wechat">车主微信：{{wechat}}

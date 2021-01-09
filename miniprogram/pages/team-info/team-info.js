@@ -16,6 +16,8 @@ Page({
     scriptTypes: '',
     topic: '',
     shop: '',
+    shopWechat: '',
+    address: '',
     date: '',
     time: '',
     price: '',
@@ -29,6 +31,7 @@ Page({
 
   async onLoad(options) {
     await app.init();
+    await app.initShopList();
 
     wx.showShareMenu({
       withShareTicket: true
@@ -60,6 +63,12 @@ Page({
     };
   },
 
+  copyShopWechat() {
+    wx.setClipboardData({
+      data: this.data.shopWechat
+    });
+  },
+
   copyAddress() {
     wx.setClipboardData({
       data: this.data.address
@@ -86,7 +95,6 @@ Page({
 
         // 流量隔离逻辑
         if (app.globalData.shop_list && app.globalData.shop_list.length > 0) {
-          let shopEnumValue = '自定义';
           const shopItem = app.globalData.shop_list.find(item => item.name === result.shop);
           if (!shopItem) {
             wx.showModal({
@@ -132,6 +140,7 @@ Page({
             return scriptTypes.join(',');
           })(),
           shop: result.shop,
+          shopWechat: result.shop_wechat,
           address: result.address,
           wechat: result.wechat,
           date: (() => {

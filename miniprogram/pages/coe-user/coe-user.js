@@ -78,7 +78,7 @@ Page({
               icon: 'success',
               duration: 2000
             });
-            await app.init();
+            await app.init(); // 强制刷新当前用户信息
             wx.navigateBack();
           },
           fail: err => {

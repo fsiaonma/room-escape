@@ -21,11 +21,11 @@
           <div class="weui-cell__bd">{{shopEnumValue}}</div>
         </mp-cell>
       </picker>
-      <mp-cell wx:if="{{shopEnumValue === '自定义'}}" prop="shop" bindtap="bindShopTap">
+      <mp-cell wx:if="{{shopEnumValue}}" prop="shop" bindtap="bindAddressTap">
         <view slot="title" class="weui-label">
           <text class="required-icon">* </text><text>地址</text>
         </view>
-        <div class="weui-cell__bd">{{shop}}</div>
+        <div class="weui-cell__bd">{{address}}</div>
       </mp-cell>
       <picker mode="date" value="{{date}}" bindchange="bindDateChange">
         <mp-cell mode="date" prop="date">

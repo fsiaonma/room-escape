@@ -16,9 +16,8 @@
       <picker 
         mode="selector"
         range="{{shopEnums}}"
-        range-key="name"
+        range-key="label"
         value="{{shopEnumIndex}}"
-        disabled="{{shopDisabled}}"
         bindchange="bindShopChange"
       >
         <div class="shop-item">{{shop}}</div>
