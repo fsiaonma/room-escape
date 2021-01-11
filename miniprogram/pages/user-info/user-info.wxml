@@ -9,8 +9,11 @@
       <image src="{{ genderIcon }}" class="userinfo-gender-icon"></image>
     </view>
     <view class="userinfo-wechat weui-flex">微信号：
-      <view>
+      <view wx:if="{{showWechat || isMe}}">
         {{wechat}}
+      </view>
+      <view wx:else>
+        车主才能查看微信
       </view>
       <a wx:if="{{isMe}}" href="javascipt:void(0)" bindtap="onEditUserInfo" class="edit-user-btn">编辑</a>
       <a wx:elif="{{wechat}}" href="javascipt:void(0)" bindtap="copyWechat" class="edit-user-btn">复制</a>

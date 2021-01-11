@@ -195,7 +195,7 @@ Page({
 
     if (type !== 'friend' && openid) {
       wx.navigateTo({
-        url: `../user-info/user-info?openid=${openid}`
+        url: `../user-info/user-info?openid=${openid}&show_wechat=${this.data.isOwner ? '1' : '0'}`
       });
     }
   },
@@ -255,14 +255,12 @@ Page({
         title: '提示',
         content: '完善微信号，方便车主找到你哦！',
         confirmText: '前往完善',
-        cancelText: '直接上车',
+        cancelText: '取消',
         success: async (res) => {
           if (res.confirm) {
             wx.navigateTo({
               url: '../coe-user/coe-user'
             });
-          } else if (res.cancel) {
-            await this.joinTeam();
           }
         }
       });

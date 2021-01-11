@@ -5,6 +5,7 @@ const app = getApp();
 Page({
   data: {
     openid: '',
+    showWechat: false,
     isMe: false,
     avatarUrl: './user-unlogin.png',
     nickName: '',
@@ -20,6 +21,10 @@ Page({
     await app.init();
 
     const openid = options.openid ? options.openid : app.globalData.openid
+
+    this.setData({
+      showWechat: options.show_wechat === '1' ? true : false
+    });
 
     if (openid) {
       this.setData({
