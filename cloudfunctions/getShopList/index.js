@@ -13,7 +13,7 @@ exports.main = async (event, context) => {
     const db = cloud.database();
     const _ = db.command;
 
-    const shopListRes = await db.collection('shop').aggregate().end();
+    const shopListRes = await db.collection('shop').aggregate().limit(200).end();
     let shopList = shopListRes.list;
 
     shopList.forEach(item => {
@@ -24,7 +24,7 @@ exports.main = async (event, context) => {
     const teamListRes = await db.collection('team').aggregate().match({
       datetime: _.gte(Date.now()),
       shop: _.in(shopList.map(item => item.name))
-    }).end();
+    }).limit(200).end();
     if (teamListRes && teamListRes.list && teamListRes.list.length > 0) {
       for (let i = 0; i < teamListRes.list.length; ++i) {
         const { shop: teamShop } = teamListRes.list[i];
