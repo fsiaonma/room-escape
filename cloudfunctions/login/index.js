@@ -38,7 +38,19 @@ exports.main = async (event, context) => {
       }
     });
   } else {
-    userInfo = result.data[0];
+    await db.collection('user').where({
+      openid: _.eq(wxContext.OPENID)
+    }).update({
+      // data 字段表示需新增的 JSON 数据
+      data: {
+        openid: wxContext.OPENID,
+        ...event.user_info
+      }
+    });
+    const updateRes = await db.collection('user').where({
+      openid: _.eq(wxContext.OPENID)
+    }).get();
+    userInfo = updateRes.data[0];
   }
 
   return {
