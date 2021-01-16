@@ -10,6 +10,7 @@ exports.main = async (event, context) => {
   try {
     const {
       shop,
+      date,
       page = 1,
       size = 100
     } = event;
@@ -21,9 +22,8 @@ exports.main = async (event, context) => {
     const matchData = {
       datetime: _.gte(Date.now())
     };
-    if (shop) {
-      matchData.shop = _.eq(shop);
-    }
+    if (shop) { matchData.shop = _.eq(shop); }
+    if (date) { matchData.date = _.eq(date); }
 
     let query = db.collection('team').aggregate().match(matchData).sort({
       datetime: 1

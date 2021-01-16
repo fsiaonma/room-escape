@@ -1,5 +1,5 @@
 import scriptTypesEnum from '../../common/enums/script-types';
-
+import utils from '../../utils/utils';
 import { wxml, style } from './postcard.js'
 
 const app = getApp();
@@ -143,20 +143,8 @@ Page({
           shopWechat: result.shop_wechat,
           address: result.address,
           wechat: result.wechat,
-          date: (() => {
-            const date = new Date(result.datetime);
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
-            return `${year}-${month}-${day}`;
-          })(),
-          time: (() => {
-            const date = new Date(result.datetime);
-            const hours = date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`;
-            const minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
-            const seconds = date.getSeconds() >= 10 ? date.getSeconds() : `0${date.getSeconds()}`;
-            return `${hours}:${minutes}:${seconds}`;
-          })(),
+          date: utils.formatDateTime(result.datetime, 'date'),
+          time: utils.formatDateTime(result.datetime, 'time'),
           price: result.price,
           remark: result.remark,
           memberDetail: result.member_detail,

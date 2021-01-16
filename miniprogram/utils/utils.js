@@ -142,6 +142,26 @@ export default {
     return value;
   },
 
+  formatDateTime(datetime, timeFormat) {
+    if (!datetime) { return; }
+
+    const dateObj = new Date(datetime);
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1;
+    const day = dateObj.getDate();
+    const hour = dateObj.getHours();
+    const minute = dateObj.getMinutes();
+    const second = dateObj.getSeconds();
+
+    if (timeFormat === 'datetime') {
+      return `${year}-${month >= 10 ? month : '0' + month}-${day >= 10 ? day : '0' + day} ${hour >= 10 ? hour : '0' + hour}:${minute >= 10 ? minute : '0' + minute}:${second >= 10 ? second : '0' + second}`
+    } else if (timeFormat === 'date') {
+      return `${year}-${month >= 10 ? month : '0' + month}-${day >= 10 ? day : '0' + day}`;
+    } else if (timeFormat === 'time') {
+      return `${hour >= 10 ? hour : '0' + hour}:${minute >= 10 ? minute : '0' + minute}:${second >= 10 ? second : '0' + second}`;
+    }
+  },
+
   /**
    * 对象深度复制
    * @param obj 复制的对象

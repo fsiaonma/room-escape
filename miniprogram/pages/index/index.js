@@ -1,4 +1,5 @@
 import scriptTypesEnum from '../../common/enums/script-types';
+import utils from '../../utils/utils';
 import { CityList } from '../../common/pca.js';
 
 const app = getApp()
@@ -14,9 +15,15 @@ Page({
     shopEnumIndex: 0,
     shopEnums: [],
 
+    date: '',
+    dateEnumIndex: 0,
+    dateEnums: [],
+
     codes: [],
     city: '广州',
     citylist: CityList,
+
+    currentDate: '',
 
     teamLoading: false,
     teamList: [],
@@ -41,6 +48,7 @@ Page({
     }
 
     await this.initShopList();
+    await this.initDateList();
 
     const shopId = options && options.scene ? options.scene : null;
     this.setData({
@@ -72,6 +80,7 @@ Page({
   async onShow(options) {
     if (this.data.loaded) {
       await this.initShopList();
+      await this.initDateList();
       await this.loadTeamList();
     }
   },
@@ -159,6 +168,39 @@ Page({
     this.loadTeamList();
   },
 
+  async initDateList() {
+    return new Promise(reslove => {
+      wx.cloud.callFunction({
+        name: 'getDateList',
+        success: res => {
+          const { result } = res;
+          const dateEnums = [ '所有时间' ];
+          if (result && result.length > 0) {
+            for (let i = 0; i < result.length; ++i) {
+              dateEnums.push(result[i]);
+            }
+          }
+          this.setData({
+            date: dateEnums[0],
+            dateEnumIndex: 0,
+            dateEnums
+          });
+          reslove(true);
+        }
+      });
+    });
+  },
+
+  bindDateChange(e) {
+    const index = e.detail.value;
+    const dateItem = this.data.dateEnums[index];
+    this.setData({
+      date: dateItem,
+      dateEnumIndex: index
+    });
+    this.loadTeamList();
+  },
+
   async loadTeamList() {
     this.setData({
       teamLoading: true
@@ -168,6 +210,9 @@ Page({
     if (this.data.shop !== '所有店铺') {
       queryData.shop = this.data.shop;
     }
+    if (this.data.date !== '所有时间') {
+      queryData.date = this.data.date;
+    }
 
     wx.cloud.callFunction({
       name: 'getTeamList',
@@ -175,9 +220,9 @@ Page({
       success: res => {
         const teamList = res.result;
 
-        let resTeamList = [];
+        let dtoTeamList = [];
         if (teamList && teamList.length > 0) {
-          const dtoTeamList = teamList.map(item => {
+          dtoTeamList = teamList.map(item => {
             return {
               team_id: item._id,
               owner: item.owner,
@@ -198,20 +243,8 @@ Page({
                 return scriptTypeList.join(',');
               })(),
               address: item.address,
-              date: (() => {
-                const date = new Date(item.datetime);
-                const year = date.getFullYear();
-                const month = date.getMonth() + 1;
-                const day = date.getDate();
-                return `${year}-${month}-${day}`;
-              })(),
-              time: (() => {
-                const date = new Date(item.datetime);
-                const hours = date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`;
-                const minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
-                const seconds = date.getSeconds() >= 10 ? date.getSeconds() : `0${date.getSeconds()}`;
-                return `${hours}:${minutes}:${seconds}`;
-              })(),
+              date: utils.formatDateTime(item.datetime, 'date'),
+              time: utils.formatDateTime(item.datetime, 'time'),
               price: item.price,
               remark: item.remark,
               member_detail: item.member_detail,
@@ -263,23 +296,23 @@ Page({
             }
           });
 
-          for (let i = 0; i < dtoTeamList.length; ++i) {
-            const { date: teamDate } = dtoTeamList[i];
+          // for (let i = 0; i < dtoTeamList.length; ++i) {
+          //   const { date: teamDate } = dtoTeamList[i];
 
-            if (!resTeamList.find(item => item.key === teamDate)) {
-              resTeamList.push({
-                key: teamDate,
-                list: []
-              })
-            }
+          //   if (!resTeamList.find(item => item.key === teamDate)) {
+          //     resTeamList.push({
+          //       key: teamDate,
+          //       list: []
+          //     })
+          //   }
 
-            const targetItem = resTeamList.find(item => item.key === teamDate);
-            targetItem.list.push(dtoTeamList[i]);
-          }
+          //   const targetItem = resTeamList.find(item => item.key === teamDate);
+          //   targetItem.list.push(dtoTeamList[i]);
+          // }
         }
 
         this.setData({
-          teamList: resTeamList,
+          teamList: dtoTeamList,
           teamLoading: false
         });
       },

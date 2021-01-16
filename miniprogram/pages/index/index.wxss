@@ -57,32 +57,50 @@ page {
 }
 
 .shop-picker {
-  line-height: 100rpx;
-  margin-right: 50rpx;
+  margin-right: 10rpx;
   margin-left: auto;
+  line-height: 100rpx;
   font-size: 37rpx;
   font-weight: bold;
   color: #fff;
+}
+
+.triangle {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.shop-triangle-panel {
+  padding-top: 35rpx;
+  margin-right: 20rpx;
+}
+
+.date-triangle-panel {
+  padding-top: 6rpx;
+  margin-left: 10rpx;
 }
 
 .team-loading-tips .weui-loadmore__tips {
   color: black;
 }
 
-.team-list {
-  margin-top: 110rpx;
-  margin-bottom: 120rpx;
-}
-
 .date-line {
-  margin-top: 50rpx;
-  margin-left: 36rpx;
-  margin-right: 36rpx;
-  text-align: left;
+  position: fixed;
+  top: 100rpx;
+  padding-top: 24rpx;
+  margin-left: 20rpx;
+  width: calc(100% - 40rpx);
+  z-index: 99;
   font-size: 32rpx;
   font-weight: 500;
   color: #712525;
   border-bottom: 1px solid #712525;
+  background-color: #fff;
+}
+
+.team-list {
+  margin-top: 180rpx;
+  margin-bottom: 120rpx;
 }
 
 .team-item {

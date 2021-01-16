@@ -210,9 +210,10 @@ Page({
   },
 
   bindDateChange(e) {
+    const formatDateStr = utils.formatDateTime(e.detail.value, 'date');
     this.setData({
-      date: e.detail.value,
-      [`formData.date`]: e.detail.value
+      date: formatDateStr,
+      [`formData.date`]: formatDateStr
     });
   },
 
@@ -353,7 +354,6 @@ Page({
           shopEnumIndex: (() => {
             let shopEnumIndex = this.data.shopEnums.length - 1;
             for (let i = 0; i < this.data.shopEnums.length; ++i) {
-              console.log(i, this.data.shopEnums[i].name, result.shop);
               if (this.data.shopEnums[i].name === result.shop) {
                 shopEnumIndex = i;
                 break;
@@ -381,36 +381,12 @@ Page({
           [`formData.shop`]: result.shop,
           address: result.address,
           [`formData.address`]: result.address,
-          date: (() => {
-            const date = new Date(result.datetime);
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
-            return `${year}-${month}-${day}`;
-          })(),
-          [`formData.date`]: (() => {
-            const date = new Date(result.datetime);
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
-            return `${year}-${month}-${day}`;
-          })(),
-          time: (() => {
-            const date = new Date(result.datetime);
-            const hours = date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`;
-            const minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
-            const seconds = date.getSeconds() >= 10 ? date.getSeconds() : `0${date.getSeconds()}`;
-            return `${hours}:${minutes}:${seconds}`;
-          })(),
+          date: utils.formatDateTime(result.datetime, 'date'),
+          [`formData.date`]: utils.formatDateTime(result.datetime, 'date'),
+          time: utils.formatDateTime(result.datetime, 'time'),
+          [`formData.time`]: utils.formatDateTime(result.datetime, 'time'),
           wechat: result.wechat,
           [`formData.wechat`]: result.wechat,
-          [`formData.time`]: (() => {
-            const date = new Date(result.datetime);
-            const hours = date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`;
-            const minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
-            const seconds = date.getSeconds() >= 10 ? date.getSeconds() : `0${date.getSeconds()}`;
-            return `${hours}:${minutes}:${seconds}`;
-          })(),
           price: result.price,
           [`formData.price`]: result.price,
           remark: result.remark,
