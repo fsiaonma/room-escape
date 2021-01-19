@@ -20,13 +20,13 @@
         value="{{shopEnumIndex}}"
         bindchange="bindShopChange"
       >
-        <div class="shop-item">
+        <div class="shop-item weui-flex">
           <view>{{shop === '所有店铺' ? '选择店铺' : shop}}</view>
+          <view class="shop-triangle-panel">
+            <image src="./asserts/shop-triangle.png" class="triangle"></image>
+          </view>
         </div>
       </picker>
-    </view>
-    <view class="shop-triangle-panel">
-      <image src="./asserts/shop-triangle.png" class="triangle"></image>
     </view>
   </view>
 </view>
@@ -44,11 +44,13 @@
     value="{{dateEnumIndex}}"
     bindchange="bindDateChange"
   >
-    <view>{{date === '所有时间' ? '选择时间' : date}}</view>
+    <view class="date-item weui-flex">
+      {{date === '所有时间' ? '选择时间' : date}}
+      <view class="date-triangle-panel">
+        <image src="./asserts/date-triangle.png" class="triangle"></image>
+      </view>
+    </view>
   </picker>
-  <view class="date-triangle-panel">
-    <image src="./asserts/date-triangle.png" class="triangle"></image>
-  </view>
 </view>
 
 <view class="team-list">
@@ -62,11 +64,10 @@
   >
     <view class="weui-flex item-title">
       <view class="item-topic">{{item.topic ? item.topic : '待定'}}</view>
-      <view class="item-script-types">【{{item.script_types}}】</view>
+      <view wx:if="{{item.script_types}}" class="item-script-types">【{{item.script_types}}】</view>
     </view>
     <view class="item-date">日期：{{item.date}} {{item.time}}</view>
     <view class="item-shop">店铺：{{item.shop ? item.shop : '待定'}}</view>
-    <view wx:if="{{item.price}}" class="item-price">价格：{{item.price}} / 位</view>
     <view wx:if="{{item.remark}}" class="item-remark">备注：{{item.remark}}</view>
     <view class="item-member-status">
     {{item.member_detail.is_empty ? '（空车）' : ''}}
@@ -83,7 +84,6 @@
       <view class="item-member-tile">队员：</view>
       <view wx:for="{{item.member_list}}" wx:key="index" class="item-member weui-flex">
         <view wx:if="{{item.avatar}}" style="background-image: url({{item.avatar}})" class="item-member-avatar"></view>
-        <view wx:elif="{{item.nick_name}}" class="item-member-nick-name">{{item.nick_name}}</view>
         <view wx:if="{{item.member_amount}}" class="item-member-amount"> x {{item.member_amount}}</view>
       </view>
     </view>

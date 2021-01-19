@@ -266,7 +266,7 @@ Page({
                 if (ownerMember) { // 亲自上车
                   result.push({
                     openid: ownerMember.openid,
-                    avatar: ownerMember.avatarUrl,
+                    avatar: ownerMember.avatarUrl ? ownerMember.avatarUrl : (ownerMember.gender === 2 ? './asserts/female.png' : './asserts/male.png'),
                     nick_name: ownerMember.nickName,
                     member_amount: friendAmount > 1 ? friendAmount : null
                   });
@@ -274,18 +274,20 @@ Page({
                   if (memberList[0]) {
                     result.push({
                       openid: memberList[0].openid,
+                      avatar: './asserts/friend-avatar.png',
                       nick_name: item.leader_nick_name ? item.leader_nick_name : memberList[0].nickName, // TODO：过渡之后可以把这里兼容逻辑去掉
                       member_amount: friendAmount > 1 ? (item.leader_nick_name ? friendAmount - 1 : friendAmount) : null // TODO：过渡之后可以把这里兼容逻辑去掉
                     });
                   }
                 }
 
+                // 处理其他成员
                 for (let i = 0; i < memberList.length; ++i) {
                   const memberItem = memberList[i];
                   if (memberItem.type !== 'friend' && !result.find(item => item.openid === memberItem.openid)) {
                     result.push({
                       openid: memberItem.openid,
-                      avatar: memberItem.avatarUrl,
+                      avatar: memberItem.avatarUrl ? memberItem.avatarUrl : (memberItem.gender === 2 ? './asserts/female.png' : './asserts/male.png'),
                       nick_name: memberItem.nickName
                     });
                   }

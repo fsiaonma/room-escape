@@ -54,7 +54,6 @@ exports.main = async (event, context) => {
   }
 
   return {
-    event,
     openid: wxContext.OPENID,
     appid: wxContext.APPID,
     unionid: wxContext.UNIONID,

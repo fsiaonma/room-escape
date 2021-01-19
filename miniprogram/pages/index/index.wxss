@@ -71,8 +71,8 @@ page {
 }
 
 .shop-triangle-panel {
-  padding-top: 35rpx;
-  margin-right: 20rpx;
+  margin-right: 15rpx;
+  margin-left: 15rpx;
 }
 
 .date-triangle-panel {
@@ -87,15 +87,21 @@ page {
 .date-line {
   position: fixed;
   top: 100rpx;
-  padding-top: 24rpx;
-  margin-left: 20rpx;
-  width: calc(100% - 40rpx);
+  padding-top: 12rpx;
+  padding-left: 24rpx;
+  width: 100%;
+  height: 60rpx;
   z-index: 99;
   font-size: 32rpx;
   font-weight: 500;
   color: #712525;
   border-bottom: 1px solid #712525;
-  background-color: #fff;
+  background-color: #fffdef;
+}
+
+.date-item {
+  position: absolute;
+  right: 50rpx;
 }
 
 .team-list {
@@ -113,13 +119,14 @@ page {
 }
 
 .item-title {
-  margin-bottom: 15rpx;
+  margin-bottom: 10rpx;
   line-height: 60rpx;
 }
 
 .item-topic {
   font-size: 40rpx;
   font-weight: 500;
+  max-width: 400rpx;
 }
 
 .item-script-types {
