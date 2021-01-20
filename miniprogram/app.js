@@ -150,7 +150,6 @@ App({
             }
           });
         });
-        console.log(groupInfoRes);
         wx.hideLoading();
 
         if (groupInfoRes && groupInfoRes.result) {
