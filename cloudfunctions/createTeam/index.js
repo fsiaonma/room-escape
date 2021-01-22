@@ -11,6 +11,15 @@ exports.main = async (event, context) => {
 	const db = cloud.database();
   const wxContext = cloud.getWXContext();
 
+  try {
+    await cloud.openapi.security.msgSecCheck({
+      content: JSON.stringify(event)
+    });
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+
   const {
     initial_male_amount: initialMaleAmount,
     initial_female_amount: initialFemaleAmount,

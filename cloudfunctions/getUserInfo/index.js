@@ -28,8 +28,6 @@ exports.main = async (event, context) => {
       datetime: 1
     }).skip(0).limit(35).end();
 
-    console.log(openid, teamListRes)
-
     if (teamListRes && teamListRes.list && teamListRes.list.length > 0) {
       const teamList = teamListRes.list;
 
@@ -52,7 +50,6 @@ exports.main = async (event, context) => {
         }
 
         if (item.script_types && item.script_types.length > 0) {
-          console.log(item.script_types);
           item.script_types.forEach(typeItem => {
             scriptTypesProfile[typeItem] = scriptTypesProfile[typeItem] !== undefined ? scriptTypesProfile[typeItem] + 2 : '';
           });

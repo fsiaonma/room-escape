@@ -50,7 +50,6 @@ exports.main = async (event, context) => {
     for (let i = 0; i < teamList.length; ++i) {
       // 整理朋友非朋友数据
       const { member_list: memberList } = teamList[i];
-      console.log(memberList);
       for (let j = 0; j < memberList.length; ++j) {
         if (memberList[j].type !== 'friend') {
           const memberInfo = memberInfoList.find(item => item.openid === memberList[j].openid);
