@@ -12,7 +12,7 @@
     <view class="userinfo-nickname-wrapper">
       {{nickName}}
     </view>
-    <view class="shop-picker">
+    <view wx:if="{{ shop }}" class="shop-picker">
       <picker 
         mode="selector"
         range="{{shopEnums}}"
@@ -21,7 +21,7 @@
         bindchange="bindShopChange"
       >
         <div class="shop-item weui-flex">
-          <view>{{shop === '所有店铺' ? '选择店铺' : shop}}</view>
+          {{shop === '所有店铺' ? '选择店铺' : shop}}
           <view class="shop-triangle-panel">
             <image src="./asserts/shop-triangle.png" class="triangle"></image>
           </view>
@@ -84,7 +84,7 @@
       <view class="item-member-tile">队员：</view>
       <view wx:for="{{item.member_list}}" wx:key="index" class="item-member weui-flex">
         <image src="{{item.avatar}}" class="item-member-avatar"></image>
-        <view wx:if="{{item.member_amount}}" class="item-member-amount"> x {{item.member_amount}}</view>
+        <view wx:if="{{item.member_amount}}" class="item-member-amount">x{{item.member_amount}}</view>
       </view>
     </view>
     <image wx:if="{{item.member_detail.is_full}}" src="./asserts/full.png" class="full-icon"></image>

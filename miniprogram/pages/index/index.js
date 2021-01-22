@@ -253,7 +253,7 @@ Page({
 
                 const memberList = item.member_list ? item.member_list : [];
 
-                let friendAmount = 1;
+                let friendAmount = 0;
                 for (let i = 0; i < memberList.length; ++i) {
                   const jMemberItem = memberList[i];
                   if (jMemberItem.type === 'friend') {
@@ -262,21 +262,18 @@ Page({
                 }
 
                 // 处理车主朋友逻辑
-                const ownerMember = memberList.find(mItem => mItem.openid === item.owner);
-                if (ownerMember) { // 亲自上车
-                  result.push({
-                    openid: ownerMember.openid,
-                    avatar: ownerMember.avatarUrl ? ownerMember.avatarUrl : (ownerMember.gender === 2 ? './asserts/female.png' : './asserts/male.png'),
-                    nick_name: ownerMember.nickName,
-                    member_amount: friendAmount > 1 ? friendAmount : null
-                  });
-                } else { // 替人发车
-                  if (memberList[0]) {
+                if (friendAmount) {
+                  const ownerMember = memberList.find(mItem => mItem.openid === item.owner);
+                  if (ownerMember) { // 车主在车上
                     result.push({
-                      openid: memberList[0].openid,
+                      openid: ownerMember.openid,
+                      avatar: ownerMember.avatarUrl ? ownerMember.avatarUrl : (ownerMember.gender === 2 ? './asserts/female.png' : './asserts/male.png'),
+                      member_amount: friendAmount + 1
+                    });
+                  } else { // 车主不在车上
+                    result.push({
                       avatar: './asserts/friend-avatar.png',
-                      nick_name: item.leader_nick_name ? item.leader_nick_name : memberList[0].nickName, // TODO：过渡之后可以把这里兼容逻辑去掉
-                      member_amount: friendAmount > 1 ? (item.leader_nick_name ? friendAmount - 1 : friendAmount) : null // TODO：过渡之后可以把这里兼容逻辑去掉
+                      member_amount: friendAmount
                     });
                   }
                 }
