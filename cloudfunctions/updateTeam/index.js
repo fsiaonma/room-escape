@@ -7,6 +7,15 @@ cloud.init({
 });
 
 exports.main = async (event, context) => {
+  try {
+    await cloud.openapi.security.msgSecCheck({
+      content: JSON.stringify(event)
+    });
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+
   const db = cloud.database();
   const wxContext = cloud.getWXContext();
 

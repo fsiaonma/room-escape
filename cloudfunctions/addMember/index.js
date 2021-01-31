@@ -11,6 +11,15 @@ cloud.init({
 // 云函数入口函数
 exports.main = async (event, context) => {
   try {
+    await cloud.openapi.security.msgSecCheck({
+      content: JSON.stringify(event)
+    });
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+  
+  try {
     const {
       team_id: teamId,
       member_nick_name: memberNickName,

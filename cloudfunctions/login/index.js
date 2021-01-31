@@ -16,6 +16,15 @@ cloud.init({
  * 
  */
 exports.main = async (event, context) => {
+  try {
+    await cloud.openapi.security.msgSecCheck({
+      content: JSON.stringify(event)
+    });
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+
   // 获取 WX Context (微信调用上下文)，包括 OPENID、APPID、及 UNIONID（需满足 UNIONID 获取条件）等信息
   const wxContext = cloud.getWXContext()
 
